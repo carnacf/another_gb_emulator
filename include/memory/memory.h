@@ -18,8 +18,8 @@ public:
 
     FORCEINLINE void write16(uint16_t index, uint16_t val)
     {
-        memoryMap[index] = low(val);
-        memoryMap[index + 1] = high(val); 
+        memoryMap[index] = utils::low(val);
+        memoryMap[index + 1] = utils::high(val); 
     }
 
     FORCEINLINE uint16_t read16(uint16_t index)
