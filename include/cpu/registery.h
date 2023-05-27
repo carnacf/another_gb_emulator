@@ -1,8 +1,10 @@
 #pragma once
 
-#include "..\utils\global.h"
+#include "utils\global.h"
 
 #include <cstdint>
+#include <cassert>
+#include <string>
 
 namespace cpu
 {
@@ -24,19 +26,6 @@ public:
         L = 6,
         H = 7
     };
-
-    Registers operator++(int)
-    {
-        Registers old = *this;
-        incrementPC();
-        return old;
-    }
-
-    Registers& operator++()
-    {
-        incrementPC();
-        return *this;
-    }
 
     template<Names NAME>
     void write16(uint16_t val)
@@ -77,36 +66,40 @@ public:
     }
 
     template<uint8_t v>
-    static Names valueToName()
+    static constexpr Names valueToName()
     {
-        if constexpr (v == 0x111)
+        if constexpr (v == 0b111)
         {
             return A;
         }
-        else if constexpr (v == 0x000)
+        else if constexpr (v == 0b000)
         {
             return B;
         }
-        else if constexpr (v == 0x001)
+        else if constexpr (v == 0b001)
         {
             return C;
         }
-        else if constexpr (v == 0x010)
+        else if constexpr (v == 0b010)
         {
             return D;
         }
-        else if constexpr (v == 0x011)
+        else if constexpr (v == 0b011)
         {
             return E;
         }
-        else if constexpr (v == 0x100)
+        else if constexpr (v == 0b100)
         {
             return H;
         }
-        else if constexpr (v == 0x101)
+        else if constexpr (v == 0b101)
         {
             return L;
         }
+
+        assert(false);
+        return A;
+        
     }
 
     static std::string register8ToStr(Names reg)
