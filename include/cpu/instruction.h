@@ -44,25 +44,10 @@ private:
     std::string ld_BC_A_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
 
     template<uint8_t opcode>
-    int ld_r_r_8(uint16_t opA, uint16_t opB)
-    {
-        m_registers.incrementPC();
-
-        constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
-        uint8_t A = m_registers.read8<operands.first>();
-        m_registers.write8<operands.second>(A);
-
-        return 1;
-    }
+    int ld_r_r_8(uint16_t opA, uint16_t opB);
 
     template<uint8_t opcode>
-    std::string ld_r_r_8_dis(uint8_t opCode, uint16_t opA, uint16_t opB)
-    {
-        constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
-
-        return std::to_string(opCode) + " : LD" + Registers::register8ToStr(operands.first) + ", " +
-            Registers::register8ToStr(operands.second) + "; \n";
-    }
+    std::string ld_r_r_8_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
 
 private:
     Registers& m_registers;
@@ -75,3 +60,5 @@ private:
     Disassembly m_cbInstructionSetDisassembly[255];
 };
 }
+
+#include "instruction-impl.hpp"
