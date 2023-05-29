@@ -1,13 +1,5 @@
 #pragma once
 
-#include "utils/global.h"
-
-#include "registery.h"
-
-#include <string>
-
-class Memory;
-
 namespace cpu
 {
     template<uint8_t opcode>
@@ -29,5 +21,26 @@ namespace cpu
 
         return std::to_string(opCode) + " : LD" + Registers::register8ToStr(operands.first) + ", " +
             Registers::register8ToStr(operands.second) + "; \n";
+    }
+
+    template<uint8_t opcode>
+    inline int Instructions::ld_r_HL(uint16_t opA, uint16_t opB)
+    {
+        m_register.incrementPC();
+
+        constexpr Registers::Names opA = opAFromOpCode<opcode>();
+        uint16_t hl = m_registers.read16<HL>();
+        uint8_t val = m_memory.read8(hl);
+        m_registers.write8<opA>(val);
+
+        return 2;
+    }
+
+    template<uint8_t opcode>
+    inline std::string Instructions::ld_r_HL_dis(uint8_t opCode, uint16_t opA, uint16_t opB)
+    {
+        constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
+
+        return std::to_string(opCode) + " : LD" + Registers::register8ToStr(operands.first) + ", (HL); \n";
     }
 }
