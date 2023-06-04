@@ -60,9 +60,14 @@ public:
         return registers[NAME];
     }
 
+    uint16_t getPC() const
+    {
+        return m_pc;
+    }
+
     void incrementPC()
     {
-        pc++;
+        m_pc++;
     }
 
     template<uint8_t v>
@@ -127,8 +132,8 @@ public:
         }
     }
 private:
-  uint8_t registers[8];
-  uint16_t sp;
-  uint16_t pc;
+  uint8_t m_registers[8];
+  uint16_t m_sp;
+  uint16_t m_pc;
 };
 }
