@@ -54,6 +54,12 @@ private:
 
     template<uint8_t opcode>
     std::string ld_r_HL_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
+
+    template<uint8_t opcode>
+    int ld_HL_r(uint16_t opA, uint16_t opB);
+
+    template<uint8_t opcode>
+    std::string ld_HL_r_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
 private:
     Registers& m_registers;
     Memory& m_memory;

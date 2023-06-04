@@ -99,14 +99,14 @@ namespace cpu
         m_instructionSet[0x6D] = &Instructions::ld_r_r_8<0x6D>;
         m_instructionSet[0x6E] = &Instructions::ld_r_HL<0x6E>;
         m_instructionSet[0x6F] = &Instructions::ld_r_r_8<0x6F>;
-        m_instructionSet[0x70] = &Instructions::ld_r_HL<0x70>;
-        m_instructionSet[0x71] = &Instructions::ld_r_HL<0x71>;
-        m_instructionSet[0x72] = &Instructions::ld_r_HL<0x72>;
-        m_instructionSet[0x73] = &Instructions::ld_r_HL<0x73>;
-        m_instructionSet[0x74] = &Instructions::ld_r_HL<0x74>;
-        m_instructionSet[0x75] = &Instructions::ld_r_HL<0x75>;
-        m_instructionSet[0x76] = &Instructions::ld_r_HL<0x76>;
-        m_instructionSet[0x77] = &Instructions::ld_r_HL<0x77>;
+        m_instructionSet[0x70] = &Instructions::ld_HL_r<0x70>;
+        m_instructionSet[0x71] = &Instructions::ld_HL_r<0x71>;
+        m_instructionSet[0x72] = &Instructions::ld_HL_r<0x72>;
+        m_instructionSet[0x73] = &Instructions::ld_HL_r<0x73>;
+        m_instructionSet[0x74] = &Instructions::ld_HL_r<0x74>;
+        m_instructionSet[0x75] = &Instructions::ld_HL_r<0x75>;
+        
+        m_instructionSet[0x77] = &Instructions::ld_HL_r<0x77>;
         m_instructionSet[0x78] = &Instructions::ld_r_r_8<0x78>;
         m_instructionSet[0x79] = &Instructions::ld_r_r_8<0x79>;
         m_instructionSet[0x7A] = &Instructions::ld_r_r_8<0x7A>;
@@ -175,14 +175,14 @@ namespace cpu
         m_instructionSetDisassembly[0x6D] = &Instructions::ld_r_r_8_dis<0x6D>;
         m_instructionSetDisassembly[0x6E] = &Instructions::ld_r_HL_dis<0x6E>;
         m_instructionSetDisassembly[0x6F] = &Instructions::ld_r_r_8_dis<0x6F>;
-        m_instructionSetDisassembly[0x70] = &Instructions::ld_r_HL_dis<0x70>;
-        m_instructionSetDisassembly[0x71] = &Instructions::ld_r_HL_dis<0x71>;
-        m_instructionSetDisassembly[0x72] = &Instructions::ld_r_HL_dis<0x72>;
-        m_instructionSetDisassembly[0x73] = &Instructions::ld_r_HL_dis<0x73>;
-        m_instructionSetDisassembly[0x74] = &Instructions::ld_r_HL_dis<0x74>;
-        m_instructionSetDisassembly[0x75] = &Instructions::ld_r_HL_dis<0x75>;
-        m_instructionSetDisassembly[0x76] = &Instructions::ld_r_HL_dis<0x76>;
-        m_instructionSetDisassembly[0x77] = &Instructions::ld_r_HL_dis<0x77>;
+        m_instructionSetDisassembly[0x70] = &Instructions::ld_HL_r_dis<0x70>;
+        m_instructionSetDisassembly[0x71] = &Instructions::ld_HL_r_dis<0x71>;
+        m_instructionSetDisassembly[0x72] = &Instructions::ld_HL_r_dis<0x72>;
+        m_instructionSetDisassembly[0x73] = &Instructions::ld_HL_r_dis<0x73>;
+        m_instructionSetDisassembly[0x74] = &Instructions::ld_HL_r_dis<0x74>;
+        m_instructionSetDisassembly[0x75] = &Instructions::ld_HL_r_dis<0x75>;
+        
+        m_instructionSetDisassembly[0x77] = &Instructions::ld_HL_r_dis<0x77>;
         m_instructionSetDisassembly[0x78] = &Instructions::ld_r_r_8_dis<0x78>;
         m_instructionSetDisassembly[0x79] = &Instructions::ld_r_r_8_dis<0x79>;
         m_instructionSetDisassembly[0x7A] = &Instructions::ld_r_r_8_dis<0x7A>;

@@ -3,7 +3,7 @@
 namespace cpu
 {
     template<uint8_t opcode>
-    inline int Instructions::ld_r_r_8(uint16_t opA, uint16_t opB)
+    inline int Instructions::ld_r_r_8(uint16_t, uint16_t)
     {
         m_registers.incrementPC();
 
@@ -15,7 +15,7 @@ namespace cpu
     }
 
     template<uint8_t opcode>
-    inline std::string Instructions::ld_r_r_8_dis(uint8_t opCode, uint16_t opA, uint16_t opB)
+    inline std::string Instructions::ld_r_r_8_dis(uint8_t, uint16_t, uint16_t)
     {
         constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
 
@@ -24,7 +24,7 @@ namespace cpu
     }
 
     template<uint8_t opcode>
-    inline int Instructions::ld_r_HL(uint16_t opA, uint16_t opB)
+    inline int Instructions::ld_r_HL(uint16_t, uint16_t)
     {
         m_register.incrementPC();
 
@@ -37,10 +37,31 @@ namespace cpu
     }
 
     template<uint8_t opcode>
-    inline std::string Instructions::ld_r_HL_dis(uint8_t opCode, uint16_t opA, uint16_t opB)
+    inline std::string Instructions::ld_r_HL_dis(uint8_t, uint16_t, uint16_t)
     {
         constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
 
         return std::to_string(opCode) + " : LD" + Registers::register8ToStr(operands.first) + ", (HL); \n";
+    }
+
+    template<uint8_t opcode>
+    int Instructions::ld_HL_r(uint16_t, uint16_t)
+    {
+        m_register.incrementPC();
+
+        constexpr Registers::Names opB = opBFromOpCode<opcode>();
+        uint16_t hl = m_registers.read16<HL>();
+        uint8_t val = m_registers.read8<opB>(val);
+        m_memory.write8(hl, val);
+
+        return 2;
+    }
+
+    template<uint8_t opcode>
+    std::string Instructions::ld_HL_r_dis(uint8_t, uint16_t, uint16_t)
+    {
+        constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
+
+        return std::to_string(opCode) + " : LD (HL), " + Registers::register8ToStr(operands.first) + "; \n";
     }
 }
