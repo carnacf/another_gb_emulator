@@ -24,6 +24,28 @@ namespace cpu
     }
 
     template<uint8_t opcode>
+    int Instructions::ld_r_n_8(uint16_t, uint16_t)
+    {
+        m_registers.incrementPC();
+
+        uint8_t immediate = m_memory.read8(m_registers.getPC());
+        m_registers.incrementPC();
+
+        constexpr Registers::Names opA = opAFromOpCode<opcode>();
+        m_registers.write8<opA>(immediate);
+
+        return 2;
+    }
+
+    template<uint8_t opcode>
+    std::string Instructions::ld_r_n_8_dis(uint8_t, uint16_t, uint16_t)
+    {
+        constexpr Registers::Names opA = opAFromOpCode<opcode>();
+
+        return std::to_string(opCode) + " : LD" + Registers::register8ToStr(opA) + ", n; \n";
+    }
+
+    template<uint8_t opcode>
     inline int Instructions::ld_r_HL(uint16_t, uint16_t)
     {
         m_register.incrementPC();

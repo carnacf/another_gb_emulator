@@ -50,6 +50,14 @@ namespace cpu
     {
         std::fill_n(m_instructionSet, 255, &Instructions::unhandled);
         m_instructionSet[0x03] = &Instructions::ld_BC_A;
+        
+        m_instructionSet[0x06] = &Instructions::ld_r_n_8<0x06>;
+        m_instructionSet[0x0E] = &Instructions::ld_r_n_8<0x0E>;
+        m_instructionSet[0x16] = &Instructions::ld_r_n_8<0x16>;
+        m_instructionSet[0x1E] = &Instructions::ld_r_n_8<0x1E>;
+        m_instructionSet[0x26] = &Instructions::ld_r_n_8<0x26>;
+        m_instructionSet[0x2E] = &Instructions::ld_r_n_8<0x2E>;
+        m_instructionSet[0x3E] = &Instructions::ld_r_n_8<0x3E>;
 
         m_instructionSet[0x40] = &Instructions::ld_r_r_8<0x40>;
         m_instructionSet[0x41] = &Instructions::ld_r_r_8<0x41>;
@@ -126,6 +134,14 @@ namespace cpu
     {
         std::fill_n(m_instructionSetDisassembly, 255, &Instructions::unhandledDisassembly);
         m_instructionSetDisassembly[0x03] = &Instructions::ld_BC_A_dis;
+
+        m_instructionSetDisassembly[0x06] = &Instructions::ld_r_n_8_dis<0x06>;
+        m_instructionSetDisassembly[0x0E] = &Instructions::ld_r_n_8_dis<0x0E>;
+        m_instructionSetDisassembly[0x16] = &Instructions::ld_r_n_8_dis<0x16>;
+        m_instructionSetDisassembly[0x1E] = &Instructions::ld_r_n_8_dis<0x1E>;
+        m_instructionSetDisassembly[0x26] = &Instructions::ld_r_n_8_dis<0x26>;
+        m_instructionSetDisassembly[0x2E] = &Instructions::ld_r_n_8_dis<0x2E>;
+        m_instructionSetDisassembly[0x3E] = &Instructions::ld_r_n_8_dis<0x3E>;
 
         m_instructionSetDisassembly[0x40] = &Instructions::ld_r_r_8_dis<0x40>;
         m_instructionSetDisassembly[0x41] = &Instructions::ld_r_r_8_dis<0x41>;
