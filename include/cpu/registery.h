@@ -154,6 +154,6 @@ public:
 private:
   uint8_t m_registers[8];
   uint16_t m_sp;
-  uint16_t m_pc;
+  uint16_t m_pc = 0;
 };
 }
