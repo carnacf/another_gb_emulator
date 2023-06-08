@@ -56,6 +56,13 @@ private:
     std::string ld_r_n_8_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
 
     template<uint8_t opcode>
+    int ld_HL_n_8(uint16_t opA, uint16_t opB);
+
+    template<uint8_t opcode>
+    std::string ld_HL_n_8_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
+
+
+    template<uint8_t opcode>
     int ld_r_HL(uint16_t opA, uint16_t opB);
 
     template<uint8_t opcode>

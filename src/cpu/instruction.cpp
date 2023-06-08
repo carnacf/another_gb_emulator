@@ -57,6 +57,7 @@ namespace cpu
         m_instructionSet[0x1E] = &Instructions::ld_r_n_8<0x1E>;
         m_instructionSet[0x26] = &Instructions::ld_r_n_8<0x26>;
         m_instructionSet[0x2E] = &Instructions::ld_r_n_8<0x2E>;
+        m_instructionSet[0x36] = &Instructions::ld_HL_n_8<0x36>;
         m_instructionSet[0x3E] = &Instructions::ld_r_n_8<0x3E>;
 
         m_instructionSet[0x40] = &Instructions::ld_r_r_8<0x40>;
@@ -141,6 +142,7 @@ namespace cpu
         m_instructionSetDisassembly[0x1E] = &Instructions::ld_r_n_8_dis<0x1E>;
         m_instructionSetDisassembly[0x26] = &Instructions::ld_r_n_8_dis<0x26>;
         m_instructionSetDisassembly[0x2E] = &Instructions::ld_r_n_8_dis<0x2E>;
+        m_instructionSetDisassembly[0x36] = &Instructions::ld_HL_n_8_dis<0x36>;
         m_instructionSetDisassembly[0x3E] = &Instructions::ld_r_n_8_dis<0x3E>;
 
         m_instructionSetDisassembly[0x40] = &Instructions::ld_r_r_8_dis<0x40>;
