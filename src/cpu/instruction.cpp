@@ -1,4 +1,6 @@
 #include "instruction.h"
+#include "instruction.h"
+#include "instruction.h"
 
 #include "registery.h"
 #include "memory.h"
@@ -49,11 +51,14 @@ namespace cpu
     void Instructions::fillInstructionSet()
     {
         std::fill_n(m_instructionSet, 255, &Instructions::unhandled);
-        m_instructionSet[0x03] = &Instructions::ld_BC_A;
+        m_instructionSet[0x02] = &Instructions::ld_r16_A<Registers::BC>;
         
         m_instructionSet[0x06] = &Instructions::ld_r_n_8<0x06>;
+        m_instructionSet[0x0A] = &Instructions::ld_A_r16<Registers::BC>;
         m_instructionSet[0x0E] = &Instructions::ld_r_n_8<0x0E>;
+        m_instructionSet[0x12] = &Instructions::ld_r16_A<Registers::DE>;
         m_instructionSet[0x16] = &Instructions::ld_r_n_8<0x16>;
+        m_instructionSet[0x1A] = &Instructions::ld_A_r16<Registers::DE>;
         m_instructionSet[0x1E] = &Instructions::ld_r_n_8<0x1E>;
         m_instructionSet[0x26] = &Instructions::ld_r_n_8<0x26>;
         m_instructionSet[0x2E] = &Instructions::ld_r_n_8<0x2E>;
@@ -134,11 +139,14 @@ namespace cpu
     void Instructions::fillInstructionSetDisassembly()
     {
         std::fill_n(m_instructionSetDisassembly, 255, &Instructions::unhandledDisassembly);
-        m_instructionSetDisassembly[0x03] = &Instructions::ld_BC_A_dis;
+        m_instructionSetDisassembly[0x02] = &Instructions::ld_r16_A_dis<Registers::BC>;
 
         m_instructionSetDisassembly[0x06] = &Instructions::ld_r_n_8_dis<0x06>;
+        m_instructionSetDisassembly[0x0A] = &Instructions::ld_A_r16_dis<Registers::BC>;
         m_instructionSetDisassembly[0x0E] = &Instructions::ld_r_n_8_dis<0x0E>;
+        m_instructionSetDisassembly[0x12] = &Instructions::ld_r16_A_dis<Registers::DE>;
         m_instructionSetDisassembly[0x16] = &Instructions::ld_r_n_8_dis<0x16>;
+        m_instructionSetDisassembly[0x1A] = &Instructions::ld_A_r16_dis<Registers::DE>;
         m_instructionSetDisassembly[0x1E] = &Instructions::ld_r_n_8_dis<0x1E>;
         m_instructionSetDisassembly[0x26] = &Instructions::ld_r_n_8_dis<0x26>;
         m_instructionSetDisassembly[0x2E] = &Instructions::ld_r_n_8_dis<0x2E>;
@@ -234,21 +242,6 @@ namespace cpu
     std::string Instructions::unhandledDisassembly(uint8_t opCode, uint16_t, uint16_t)
     {
         return std::to_string(opCode) +  " : Not handled yet;\n";
-    }
-
-    int Instructions::ld_BC_A(uint16_t, uint16_t)
-    {
-        m_registers.incrementPC();
-
-        uint8_t A = m_registers.read8<Registers::A>();
-        m_registers.write8<Registers::BC>(A);
-
-        return 2;
-    }
-
-    std::string Instructions::ld_BC_A_dis(uint8_t opCode, uint16_t, uint16_t)
-    {
-        return std::to_string(opCode) +  " : LD (BC), A;\n";
     }
     
 }

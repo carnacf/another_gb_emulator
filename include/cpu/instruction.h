@@ -40,39 +40,41 @@ private:
     int unhandled(uint16_t, uint16_t);
     std::string unhandledDisassembly(uint8_t opcode, uint16_t, uint16_t);
 
-    int ld_BC_A(uint16_t opA, uint16_t opB);
-    std::string ld_BC_A_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
-
     template<uint8_t opcode>
     int ld_r_r_8(uint16_t opA, uint16_t opB);
-
     template<uint8_t opcode>
     std::string ld_r_r_8_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
 
     template<uint8_t opcode>
     int ld_r_n_8(uint16_t opA, uint16_t opB);
-
     template<uint8_t opcode>
     std::string ld_r_n_8_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
 
     template<uint8_t opcode>
     int ld_HL_n_8(uint16_t opA, uint16_t opB);
-
     template<uint8_t opcode>
     std::string ld_HL_n_8_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
 
-
     template<uint8_t opcode>
     int ld_r_HL(uint16_t opA, uint16_t opB);
-
     template<uint8_t opcode>
     std::string ld_r_HL_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
 
     template<uint8_t opcode>
     int ld_HL_r(uint16_t opA, uint16_t opB);
-
     template<uint8_t opcode>
     std::string ld_HL_r_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
+
+    template<Registers::Names NAME>
+    int ld_A_r16(uint16_t opA, uint16_t opB);
+    template<Registers::Names NAME>
+    std::string ld_A_r16_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
+
+    template<Registers::Names NAME>
+    int ld_r16_A(uint16_t opA, uint16_t opB);
+    template<Registers::Names NAME>
+    std::string ld_r16_A_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
+
 private:
     Registers& m_registers;
     Memory& m_memory;

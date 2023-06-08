@@ -106,4 +106,41 @@ namespace cpu
 
         return std::to_string(opCode) + " : LD (HL), " + Registers::register8ToStr(operands.first) + "; \n";
     }
+
+    template<Registers::Names NAME>
+    int Instructions::ld_A_r16(uint16_t, uint16_t)
+    {
+        m_registers.incrementPC();
+        uint16_t addr = m_registers.read16<NAME>();
+        uint8_t val = m_memory.read8(addr);
+
+        m_registers.write8<Registers::A>(val);
+
+        return 2;
+    }
+
+    template<Registers::Names NAME>
+    std::string Instructions::ld_A_r16_dis(uint8_t, uint16_t, uint16_t)
+    {
+        return std::to_string(opCode) + " : LD, A, (" + Registers::register16ToStr(NAME) + "); \n";
+    }
+
+    template<Registers::Names NAME>
+    int Instructions::ld_r16_A(uint16_t opA, uint16_t opB)
+    {
+        m_register.incrementPC();
+
+        constexpr Registers::Names opB = opBFromOpCode<opcode>();
+        uint16_t hl = m_registers.read16<HL>();
+        uint8_t val = m_registers.read8<opB>(val);
+        m_memory.write8(hl, val);
+
+        return 2;
+    }
+
+    template<Registers::Names NAME>
+    std::string Instructions::ld_r16_A_dis(uint8_t opCode, uint16_t opA, uint16_t opB)
+    {
+        return std::to_string(opCode) + " : LD, (" + Registers::register16ToStr(NAME) + "), A; \n";
+    }
 }

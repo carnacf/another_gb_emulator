@@ -130,6 +130,26 @@ public:
         default:
             break;
         }
+
+        return "";
+    }
+
+    static std::string register16ToStr(Names reg)
+    {
+        switch (reg)
+        {
+        case AF:
+            return "AF";
+        case BC:
+            return "BC";
+        case DE:
+            return "DE";
+        case HL:
+            return "HL";
+        default:
+            break;
+        }
+        return "";
     }
 private:
   uint8_t m_registers[8];
