@@ -19,7 +19,7 @@ namespace cpu
     {
         constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
 
-        return std::to_string(opcode) + " : LD" + Registers::register8ToStr(operands.first) + ", " +
+        return std::to_string(opcode) + " : LD " + Registers::register8ToStr(operands.first) + ", " +
             Registers::register8ToStr(operands.second) + "; \n";
     }
 
@@ -42,7 +42,7 @@ namespace cpu
     {
         constexpr Registers::Names opA = opAFromOpCode<opcode>();
 
-        return std::to_string(opcode) + " : LD" + Registers::register8ToStr(opA) + ", n; \n";
+        return std::to_string(opcode) + " : LD " + Registers::register8ToStr(opA) + ", n; \n";
     }
 
     template<uint8_t opcode>
@@ -83,7 +83,7 @@ namespace cpu
     {
         constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
 
-        return std::to_string(opcode) + " : LD" + Registers::register8ToStr(operands.first) + ", (HL); \n";
+        return std::to_string(opcode) + " : LD " + Registers::register8ToStr(operands.first) + ", (HL); \n";
     }
 
     template<uint8_t opcode>
@@ -122,7 +122,7 @@ namespace cpu
     template<Registers::Names NAME>
     std::string Instructions::ld_A_r16_dis(uint8_t opCode, uint16_t, uint16_t)
     {
-        return std::to_string(opCode) + " : LD, A, (" + Registers::register16ToStr(NAME) + "); \n";
+        return std::to_string(opCode) + " : LD A, (" + Registers::register16ToStr(NAME) + "); \n";
     }
 
     template<Registers::Names NAME>
@@ -140,6 +140,6 @@ namespace cpu
     template<Registers::Names NAME>
     std::string Instructions::ld_r16_A_dis(uint8_t opCode, uint16_t opA, uint16_t opB)
     {
-        return std::to_string(opCode) + " : LD, (" + Registers::register16ToStr(NAME) + "), A; \n";
+        return std::to_string(opCode) + " : LD (" + Registers::register16ToStr(NAME) + "), A; \n";
     }
 }
