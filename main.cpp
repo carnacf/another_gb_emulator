@@ -11,16 +11,15 @@ int main(int argc, char* argv[])
 {
     auto fileName = argv[0];
 
-    cpu::Registers registery;
     Memory memory;
-    cpu::Instructions instructions(registery, memory);
-
-    std::ifstream file(fileName, std::ios::binary);
-    if(!file.is_open())
+    if (!memory.loadROM(fileName))
     {
         return 0;
     }
+
+    cpu::Registers registery;
+    cpu::Instructions instructions(registery, memory);
     
-    file.close();
+
     return 1;
 }
