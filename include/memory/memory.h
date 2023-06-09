@@ -4,6 +4,7 @@
 #include "utils/utils.h"
 
 #include <fstream>
+#include <algorithm>
 
 class Memory
 {
@@ -31,16 +32,16 @@ public:
 
     bool loadROM(const char* filename)
     {
-        std::basic_ifstream<uint8_t> file(filename, std::ios::binary | std::ios::ate);
+        std::ifstream file(filename, std::ios::binary | std::ios::ate);
         if (!file.is_open())
         {
             return false;
         }
 
-        size_t size = file.tellg();
+        size_t size = std::min((size_t) file.tellg(), (size_t) 0x7FFF);
         file.seekg(0, std::ios::beg);
 
-        bool readSuccess = file.read(m_memoryMap, size).good();
+        bool readSuccess = file.read(reinterpret_cast<char*>(m_memoryMap), size).good();
         file.close();
 
         return readSuccess;
