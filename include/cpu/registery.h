@@ -36,28 +36,28 @@ public:
     template<Names NAME>
     void write16(uint8_t val1, uint8_t val2)
     {
-        registers[NAME] = val1;
-        registers[NAME + 1] = val2;
+        m_registers[NAME] = val1;
+        m_registers[NAME + 1] = val2;
     }
 
     template<Names NAME>
     void write8(uint8_t val1)
     {
-        registers[NAME] = val1;
+        m_registers[NAME] = val1;
     }
   
     template<Names NAME>
     uint16_t read16()
     {
         static_assert(NAME == AF || NAME == BC || NAME == DE || NAME == HL);
-        return (uint16_t) ((((uint16_t) registers[NAME]) << 8) & registers[NAME + 1]);
+        return (uint16_t) ((((uint16_t) m_registers[NAME]) << 8) & m_registers[NAME + 1]);
     }
 
     template<Names NAME>
     uint8_t read8()
     {
         static_assert(NAME >= F && NAME <= H);
-        return registers[NAME];
+        return m_registers[NAME];
     }
 
     uint16_t getPC() const
@@ -102,9 +102,7 @@ public:
             return L;
         }
 
-        assert(false);
         return A;
-        
     }
 
     static std::string register8ToStr(Names reg)

@@ -223,19 +223,10 @@ namespace cpu
     {
         std::fill_n(m_cbInstructionSetDisassembly, 255, &Instructions::unhandledDisassembly);
     }
-    
-    template<bool disassemble>
-    void Instructions::execute(uint8_t opCode)
-    {
-        m_instructionSet[opCode]();
-        if constexpr (disassemble)
-        {
-            std::cout << m_instructionSetDisassembly[opCode]();
-        }
-    }
 
     int Instructions::unhandled(uint16_t, uint16_t) 
     {
+        m_registers.incrementPC();
         return 1;
     }
 

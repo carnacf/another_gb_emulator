@@ -27,8 +27,17 @@ public:
     Instructions() = delete;
     Instructions(Registers& regist, Memory& mem);
 
-    template<bool disassemble = false>
-    void execute(uint8_t opCode);
+    template<bool disassemble>
+    int execute(uint8_t opCode)
+    {
+        int numberOfCycles = (this->*m_instructionSet[opCode])(0, 0);
+        if constexpr (disassemble)
+        {
+            std::cout << (this->*m_instructionSetDisassembly[opCode])(opCode, 0, 0);
+        }
+
+        return numberOfCycles;
+    }
 
 private:
     void fillInstructionSet();
