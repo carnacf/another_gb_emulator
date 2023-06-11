@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.21)
 
 project(anothergbemulator)
 
@@ -17,6 +17,10 @@ target_include_directories(anothergbemulator
 		${PROJECT_SOURCE_DIR}/include/utils
 )
 
+add_subdirectory(tests)
+
 add_executable(app main.cpp)
 
 target_link_libraries(app PRIVATE anothergbemulator)
+
+
