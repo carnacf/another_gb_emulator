@@ -8,56 +8,66 @@
 
 namespace cpu
 {
+
 class Registers 
 {
 public:
-    enum Names 
+    enum class Names 
+    {
+        A = 0,
+        F = 1,
+        B = 2,
+        C = 3,
+        D = 4,
+        E = 5,
+        H = 6,
+        L = 7
+    };
+    static constexpr Names A = Names::A;
+    static constexpr Names F = Names::F;
+    static constexpr Names B = Names::B;
+    static constexpr Names C = Names::C;
+    static constexpr Names D = Names::D;
+    static constexpr Names E = Names::E;
+    static constexpr Names H = Names::H;
+    static constexpr Names L = Names::L;
+
+    enum class Paired
     {
         AF = 0,
-        F = 0,
-        A = 1,
         BC = 2,
-        C = 2,
-        B = 3,
         DE = 4,
-        E = 4,
-        D = 5,
-        HL = 6,
-        L = 6,
-        H = 7
+        HL = 6
     };
 
-    template<Names NAME>
+    static constexpr Paired AF = Paired::AF;
+    static constexpr Paired BC = Paired::BC;
+    static constexpr Paired DE = Paired::DE;
+    static constexpr Paired HL = Paired::HL;
+
+    template<Paired NAME>
     void write16(uint16_t val)
     {
-        write16<NAME>(low(val), high(val));
-    }
-
-    template<Names NAME>
-    void write16(uint8_t val1, uint8_t val2)
-    {
-        m_registers[NAME] = val1;
-        m_registers[NAME + 1] = val2;
+        m_registers[(int)NAME] = high(val);
+        m_registers[(int)NAME + 1] = low(val);
     }
 
     template<Names NAME>
     void write8(uint8_t val1)
     {
-        m_registers[NAME] = val1;
+        m_registers[(int)NAME] = val1;
     }
   
-    template<Names NAME>
+    template<Paired NAME>
     uint16_t read16()
     {
-        static_assert(NAME == AF || NAME == BC || NAME == DE || NAME == HL);
-        return (uint16_t) ((((uint16_t) m_registers[NAME]) << 8) & m_registers[NAME + 1]);
+        return utils::to16(m_registers[(int)NAME], m_registers[(int)NAME + 1]);
     }
 
     template<Names NAME>
     uint8_t read8()
     {
-        static_assert(NAME >= F && NAME <= H);
-        return m_registers[NAME];
+        return m_registers[(int)NAME];
     }
 
     uint16_t getPC() const
@@ -71,59 +81,59 @@ public:
     }
 
     template<uint8_t v>
-    static constexpr Names valueToName()
+    static constexpr Names opFieldToName()
     {
         if constexpr (v == 0b111)
         {
-            return A;
+            return Names::A;
         }
         else if constexpr (v == 0b000)
         {
-            return B;
+            return Names::B;
         }
         else if constexpr (v == 0b001)
         {
-            return C;
+            return Names::C;
         }
         else if constexpr (v == 0b010)
         {
-            return D;
+            return Names::D;
         }
         else if constexpr (v == 0b011)
         {
-            return E;
+            return Names::E;
         }
         else if constexpr (v == 0b100)
         {
-            return H;
+            return Names::H;
         }
         else if constexpr (v == 0b101)
         {
-            return L;
+            return Names::L;
         }
 
-        return A;
+        return Names::A;
     }
 
     static std::string register8ToStr(Names reg)
     {
         switch (reg)
         {
-        case F:
+        case Names::F:
             return "F";
-        case A:
+        case Names::A:
             return "A";
-        case C:
+        case Names::C:
             return "C";
-        case B:
+        case Names::B:
             return "B";
-        case E:
+        case Names::E:
             return "E";
-        case D:
+        case Names::D:
             return "D";
-        case L:
+        case Names::L:
             return "L";
-        case H:
+        case Names::H:
             return "H";
         default:
             break;
@@ -132,17 +142,17 @@ public:
         return "";
     }
 
-    static std::string register16ToStr(Names reg)
+    static std::string register16ToStr(Paired reg)
     {
         switch (reg)
         {
-        case AF:
+        case Paired::AF:
             return "AF";
-        case BC:
+        case Paired::BC:
             return "BC";
-        case DE:
+        case Paired::DE:
             return "DE";
-        case HL:
+        case Paired::HL:
             return "HL";
         default:
             break;
@@ -152,6 +162,6 @@ public:
 private:
   uint8_t m_registers[8];
   uint16_t m_sp;
-  uint16_t m_pc = 0;
+  uint16_t m_pc = 0; // TODO: add reset method
 };
 }

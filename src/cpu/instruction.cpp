@@ -17,7 +17,7 @@ namespace cpu
             constexpr uint8_t opAMask = 0b0011'1000;
             constexpr uint8_t opA = (opAMask & opcode) >> 3;
 
-            return Registers::valueToName<opA>();
+            return Registers::opFieldToName<opA>();
         }
 
         template<uint8_t opcode>
@@ -26,7 +26,7 @@ namespace cpu
             constexpr uint8_t opBMask = 0b0000'0111;
             constexpr uint8_t opB = opBMask & opcode;
 
-            return Registers::valueToName<opB>();
+            return Registers::opFieldToName<opB>();
         }
 
         template<uint8_t opcode>

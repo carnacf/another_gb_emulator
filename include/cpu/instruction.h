@@ -74,14 +74,14 @@ private:
     template<uint8_t opcode>
     std::string ld_HL_r_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
 
-    template<Registers::Names NAME>
+    template<Registers::Paired NAME>
     int ld_A_r16(uint16_t opA, uint16_t opB);
-    template<Registers::Names NAME>
+    template<Registers::Paired NAME>
     std::string ld_A_r16_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
 
-    template<Registers::Names NAME>
+    template<Registers::Paired NAME>
     int ld_r16_A(uint16_t opA, uint16_t opB);
-    template<Registers::Names NAME>
+    template<Registers::Paired NAME>
     std::string ld_r16_A_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
 
 private:
