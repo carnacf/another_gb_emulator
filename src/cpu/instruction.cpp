@@ -129,6 +129,9 @@ namespace cpu
         m_instructionSet[0x7D] = &Instructions::ld_r_r_8<0x7D>;
         m_instructionSet[0x7E] = &Instructions::ld_r_HL<0x7E>;
         m_instructionSet[0x7F] = &Instructions::ld_r_r_8<0x7F>;
+
+        m_instructionSet[0xEA] = &Instructions::ld_nn_A;
+        m_instructionSet[0xFA] = &Instructions::ld_A_nn;
     }
 
     void Instructions::fillCbInstructionSet()
@@ -217,6 +220,9 @@ namespace cpu
         m_instructionSetDisassembly[0x7D] = &Instructions::ld_r_r_8_dis<0x7D>;
         m_instructionSetDisassembly[0x7E] = &Instructions::ld_r_HL_dis<0x7E>;
         m_instructionSetDisassembly[0x7F] = &Instructions::ld_r_r_8_dis<0x7F>;
+        
+        m_instructionSetDisassembly[0xEA] = &Instructions::ld_nn_A_dis;
+        m_instructionSetDisassembly[0xFA] = &Instructions::ld_A_nn_dis;
     }
 
     void Instructions::fillCbInstructionSetDisassembly()
@@ -235,4 +241,38 @@ namespace cpu
         return std::to_string(opCode) +  " : Not handled yet;\n";
     }
     
+    int Instructions::ld_A_nn(uint16_t opA, uint16_t opB)
+    {
+        m_registers.incrementPC();
+        
+        uint16_t nn = m_memory.read16(m_registers.getPC());
+        m_registers.incrementPC();
+        m_registers.incrementPC();
+
+        uint8_t val = m_memory.read8(nn);
+        m_registers.write8<Registers::A>(val);
+        return 4;
+    }
+    std::string Instructions::ld_A_nn_dis(uint8_t, uint16_t, uint16_t)
+    {
+        return "LD A, nn;\n";
+    }
+
+    int Instructions::ld_nn_A(uint16_t opA, uint16_t opB)
+    {
+        m_registers.incrementPC();
+
+        uint16_t nn = m_memory.read16(m_registers.getPC());
+        m_registers.incrementPC();
+        m_registers.incrementPC();
+
+        uint8_t a = m_registers.read8<Registers::A>();
+        m_memory.write8(nn, a);
+
+        return 4;
+    }
+    std::string Instructions::ld_nn_A_dis(uint8_t, uint16_t, uint16_t)
+    {
+        return "LD nn, A;";
+    }
 }

@@ -27,7 +27,7 @@ public:
 
     FORCEINLINE uint16_t read16(uint16_t index)
     {
-        return (uint16_t) ((((uint16_t) m_memoryMap[index + 1]) << 8) & m_memoryMap[index]);
+        return utils::to16(m_memoryMap[index + 1], m_memoryMap[index]);
     }
 
     bool loadROM(const char* filename)

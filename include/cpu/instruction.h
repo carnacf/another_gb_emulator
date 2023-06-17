@@ -84,6 +84,12 @@ private:
     template<Registers::Paired NAME>
     std::string ld_r16_A_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
 
+    int ld_A_nn(uint16_t opA, uint16_t opB);
+    std::string ld_A_nn_dis(uint8_t, uint16_t, uint16_t);
+
+    int ld_nn_A(uint16_t opA, uint16_t opB);
+    std::string ld_nn_A_dis(uint8_t, uint16_t, uint16_t);
+
 private:
     Registers& m_registers;
     Memory& m_memory;
