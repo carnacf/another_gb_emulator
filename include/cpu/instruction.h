@@ -102,6 +102,17 @@ private:
     int ldh_an_A(uint16_t opA, uint16_t opB);
     std::string ldh_an_A_dis(uint8_t, uint16_t, uint16_t);
 
+    int ld_HLd_A(uint16_t, uint16_t);
+    std::string ld_HLd_A_dis(uint8_t, uint16_t, uint16_t);
+
+    int ld_A_HLd(uint16_t, uint16_t);
+    std::string ld_A_HLd_dis(uint8_t, uint16_t, uint16_t);
+
+    int ld_HLi_A(uint16_t, uint16_t);
+    std::string ld_HLi_A_dis(uint8_t, uint16_t, uint16_t);
+
+    int ld_A_HLi(uint16_t, uint16_t);
+    std::string ld_A_HLi_dis(uint8_t, uint16_t, uint16_t);
 private:
     Registers& m_registers;
     Memory& m_memory;

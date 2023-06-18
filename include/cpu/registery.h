@@ -48,8 +48,8 @@ public:
     template<Paired NAME>
     void write16(uint16_t val)
     {
-        m_registers[(int)NAME] = high(val);
-        m_registers[(int)NAME + 1] = low(val);
+        m_registers[(int)NAME] = utils::high(val);
+        m_registers[(int)NAME + 1] = utils::low(val);
     }
 
     template<Names NAME>

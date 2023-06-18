@@ -60,9 +60,13 @@ namespace cpu
         m_instructionSet[0x16] = &Instructions::ld_r_n_8<0x16>;
         m_instructionSet[0x1A] = &Instructions::ld_A_r16<Registers::DE>;
         m_instructionSet[0x1E] = &Instructions::ld_r_n_8<0x1E>;
+        m_instructionSet[0x22] = &Instructions::ld_HLi_A;
         m_instructionSet[0x26] = &Instructions::ld_r_n_8<0x26>;
+        m_instructionSet[0x2A] = &Instructions::ld_A_HLi;
         m_instructionSet[0x2E] = &Instructions::ld_r_n_8<0x2E>;
+        m_instructionSet[0x32] = &Instructions::ld_HLd_A;
         m_instructionSet[0x36] = &Instructions::ld_HL_n_8<0x36>;
+        m_instructionSet[0x3A] = &Instructions::ld_A_HLd;
         m_instructionSet[0x3E] = &Instructions::ld_r_n_8<0x3E>;
 
         m_instructionSet[0x40] = &Instructions::ld_r_r_8<0x40>;
@@ -156,9 +160,13 @@ namespace cpu
         m_instructionSetDisassembly[0x16] = &Instructions::ld_r_n_8_dis<0x16>;
         m_instructionSetDisassembly[0x1A] = &Instructions::ld_A_r16_dis<Registers::DE>;
         m_instructionSetDisassembly[0x1E] = &Instructions::ld_r_n_8_dis<0x1E>;
+        m_instructionSetDisassembly[0x22] = &Instructions::ld_HLi_A_dis;
         m_instructionSetDisassembly[0x26] = &Instructions::ld_r_n_8_dis<0x26>;
+        m_instructionSetDisassembly[0x2A] = &Instructions::ld_A_HLi_dis;
         m_instructionSetDisassembly[0x2E] = &Instructions::ld_r_n_8_dis<0x2E>;
+        m_instructionSetDisassembly[0x32] = &Instructions::ld_HLd_A_dis;
         m_instructionSetDisassembly[0x36] = &Instructions::ld_HL_n_8_dis<0x36>;
+        m_instructionSetDisassembly[0x3A] = &Instructions::ld_A_HLd_dis;
         m_instructionSetDisassembly[0x3E] = &Instructions::ld_r_n_8_dis<0x3E>;
 
         m_instructionSetDisassembly[0x40] = &Instructions::ld_r_r_8_dis<0x40>;
@@ -353,5 +361,74 @@ namespace cpu
     std::string Instructions::ldh_an_A_dis(uint8_t, uint16_t, uint16_t)
     {
         return "LDH (n), A;\n";
+    }
+
+    int Instructions::ld_HLd_A(uint16_t, uint16_t)
+    {
+        m_registers.incrementPC();
+
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        uint8_t val = m_memory.read8(hl);
+
+        m_registers.write16<Registers::HL>(--hl);
+        m_registers.write8<Registers::A>(val);
+
+        return 2;
+
+    }
+    std::string Instructions::ld_HLd_A_dis(uint8_t, uint16_t, uint16_t)
+    {
+        return "LD (HL-), A;\n";
+    }
+        
+    int Instructions::ld_A_HLd(uint16_t, uint16_t)
+    {
+        m_registers.incrementPC();
+
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        uint8_t a = m_registers.read8<Registers::A>();
+        m_memory.write8(hl, a);
+
+        m_registers.write16<Registers::HL>(--hl);
+
+        return 2;
+    }
+    std::string Instructions::ld_A_HLd_dis(uint8_t, uint16_t, uint16_t)
+    {
+        return "LD A, (HL-);\n";
+    }
+        
+    int Instructions::ld_HLi_A(uint16_t, uint16_t)
+    {
+        m_registers.incrementPC();
+
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        uint8_t val = m_memory.read8(hl);
+
+        m_registers.write16<Registers::HL>(++hl);
+        m_registers.write8<Registers::A>(val);
+
+        return 2;
+    }
+    std::string Instructions::ld_HLi_A_dis(uint8_t, uint16_t, uint16_t)
+    {
+        return "LD (HL+), A;\n";
+    }
+    
+    int Instructions::ld_A_HLi(uint16_t, uint16_t)
+    {
+        m_registers.incrementPC();
+
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        uint8_t a = m_registers.read8<Registers::A>();
+        m_memory.write8(hl, a);
+
+        m_registers.write16<Registers::HL>(++hl);
+
+        return 2;
+    }
+    std::string Instructions::ld_A_HLi_dis(uint8_t, uint16_t, uint16_t)
+    {
+        return "LD A, (HL+);\n";
     }
 }
