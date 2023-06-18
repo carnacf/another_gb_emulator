@@ -131,8 +131,10 @@ namespace cpu
         m_instructionSet[0x7F] = &Instructions::ld_r_r_8<0x7F>;
 
 
+        m_instructionSet[0xE0] = &Instructions::ldh_an_A;
         m_instructionSet[0xE2] = &Instructions::ldh_aC_A;
         m_instructionSet[0xEA] = &Instructions::ld_nn_A;
+        m_instructionSet[0xF0] = &Instructions::ldh_A_an;
         m_instructionSet[0xF2] = &Instructions::ldh_A_aC;
         m_instructionSet[0xFA] = &Instructions::ld_A_nn;
     }
@@ -224,8 +226,10 @@ namespace cpu
         m_instructionSetDisassembly[0x7E] = &Instructions::ld_r_HL_dis<0x7E>;
         m_instructionSetDisassembly[0x7F] = &Instructions::ld_r_r_8_dis<0x7F>;
         
+        m_instructionSetDisassembly[0xE0] = &Instructions::ldh_an_A_dis;
         m_instructionSetDisassembly[0xE2] = &Instructions::ldh_aC_A_dis;
         m_instructionSetDisassembly[0xEA] = &Instructions::ld_nn_A_dis;
+        m_instructionSetDisassembly[0xF0] = &Instructions::ldh_A_an_dis;
         m_instructionSetDisassembly[0xF2] = &Instructions::ldh_A_aC_dis;
         m_instructionSetDisassembly[0xFA] = &Instructions::ld_A_nn_dis;
     }
@@ -313,5 +317,41 @@ namespace cpu
     std::string Instructions::ldh_aC_A_dis(uint8_t, uint16_t, uint16_t)
     {
         return "LDH (C), A;\n";
+    }
+
+    int Instructions::ldh_A_an(uint16_t opA, uint16_t opB)
+    {
+        m_registers.incrementPC();
+
+        uint8_t n = m_memory.read8(m_registers.getPC());
+        m_registers.incrementPC();
+        uint16_t addr = utils::to16(0xFF, n);
+
+        uint8_t val = m_memory.read8(addr);
+        m_registers.write8<Registers::A>(val);
+
+        return 3;
+    }
+    std::string Instructions::ldh_A_an_dis(uint8_t, uint16_t, uint16_t)
+    {
+        return "LDH A, (n);\n";
+    }
+
+    int Instructions::ldh_an_A(uint16_t opA, uint16_t opB)
+    {
+        m_registers.incrementPC();
+
+        uint8_t n = m_memory.read8(m_registers.getPC());
+        m_registers.incrementPC();
+        uint16_t addr = utils::to16(0xFF, n);
+
+        uint8_t a = m_registers.read8<Registers::A>();
+
+        m_memory.write8(addr, a);
+        return 3;
+    }
+    std::string Instructions::ldh_an_A_dis(uint8_t, uint16_t, uint16_t)
+    {
+        return "LDH (n), A;\n";
     }
 }

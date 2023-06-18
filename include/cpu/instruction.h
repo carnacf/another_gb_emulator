@@ -95,6 +95,13 @@ private:
 
     int ldh_aC_A(uint16_t opA, uint16_t opB);
     std::string ldh_aC_A_dis(uint8_t, uint16_t, uint16_t);
+
+    int ldh_A_an(uint16_t opA, uint16_t opB);
+    std::string ldh_A_an_dis(uint8_t, uint16_t, uint16_t);
+
+    int ldh_an_A(uint16_t opA, uint16_t opB);
+    std::string ldh_an_A_dis(uint8_t, uint16_t, uint16_t);
+
 private:
     Registers& m_registers;
     Memory& m_memory;
