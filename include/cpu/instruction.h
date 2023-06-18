@@ -113,6 +113,14 @@ private:
 
     int ld_A_HLi(uint16_t, uint16_t);
     std::string ld_A_HLi_dis(uint8_t, uint16_t, uint16_t);
+
+    template<Registers::Paired NAME>
+    int ld_rr_nn(uint16_t, uint16_t);
+    template<Registers::Paired NAME>
+    std::string ld_rr_nn_dis(uint8_t, uint16_t, uint16_t);
+    
+    int ld_SP_rr(uint16_t, uint16_t);
+    std::string ld_SP_rr_dis(uint8_t, uint16_t, uint16_t);
 private:
     Registers& m_registers;
     Memory& m_memory;

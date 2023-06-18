@@ -51,19 +51,23 @@ namespace cpu
     void Instructions::fillInstructionSet()
     {
         std::fill_n(m_instructionSet, 255, &Instructions::unhandled);
-        m_instructionSet[0x02] = &Instructions::ld_r16_A<Registers::BC>;
         
+        m_instructionSet[0x01] = &Instructions::ld_rr_nn<Registers::BC>;
+        m_instructionSet[0x02] = &Instructions::ld_r16_A<Registers::BC>;
         m_instructionSet[0x06] = &Instructions::ld_r_n_8<0x06>;
         m_instructionSet[0x0A] = &Instructions::ld_A_r16<Registers::BC>;
         m_instructionSet[0x0E] = &Instructions::ld_r_n_8<0x0E>;
+        m_instructionSet[0x11] = &Instructions::ld_rr_nn<Registers::DE>;
         m_instructionSet[0x12] = &Instructions::ld_r16_A<Registers::DE>;
         m_instructionSet[0x16] = &Instructions::ld_r_n_8<0x16>;
         m_instructionSet[0x1A] = &Instructions::ld_A_r16<Registers::DE>;
         m_instructionSet[0x1E] = &Instructions::ld_r_n_8<0x1E>;
+        m_instructionSet[0x21] = &Instructions::ld_rr_nn<Registers::HL>;
         m_instructionSet[0x22] = &Instructions::ld_HLi_A;
         m_instructionSet[0x26] = &Instructions::ld_r_n_8<0x26>;
         m_instructionSet[0x2A] = &Instructions::ld_A_HLi;
         m_instructionSet[0x2E] = &Instructions::ld_r_n_8<0x2E>;
+        m_instructionSet[0x31] = &Instructions::ld_SP_rr;
         m_instructionSet[0x32] = &Instructions::ld_HLd_A;
         m_instructionSet[0x36] = &Instructions::ld_HL_n_8<0x36>;
         m_instructionSet[0x3A] = &Instructions::ld_A_HLd;
@@ -151,19 +155,23 @@ namespace cpu
     void Instructions::fillInstructionSetDisassembly()
     {
         std::fill_n(m_instructionSetDisassembly, 255, &Instructions::unhandledDisassembly);
+       
+        m_instructionSetDisassembly[0x01] = &Instructions::ld_rr_nn_dis<Registers::BC>;
         m_instructionSetDisassembly[0x02] = &Instructions::ld_r16_A_dis<Registers::BC>;
-
         m_instructionSetDisassembly[0x06] = &Instructions::ld_r_n_8_dis<0x06>;
         m_instructionSetDisassembly[0x0A] = &Instructions::ld_A_r16_dis<Registers::BC>;
         m_instructionSetDisassembly[0x0E] = &Instructions::ld_r_n_8_dis<0x0E>;
+        m_instructionSetDisassembly[0x11] = &Instructions::ld_rr_nn_dis<Registers::DE>;
         m_instructionSetDisassembly[0x12] = &Instructions::ld_r16_A_dis<Registers::DE>;
         m_instructionSetDisassembly[0x16] = &Instructions::ld_r_n_8_dis<0x16>;
         m_instructionSetDisassembly[0x1A] = &Instructions::ld_A_r16_dis<Registers::DE>;
         m_instructionSetDisassembly[0x1E] = &Instructions::ld_r_n_8_dis<0x1E>;
+        m_instructionSetDisassembly[0x21] = &Instructions::ld_rr_nn_dis<Registers::HL>;
         m_instructionSetDisassembly[0x22] = &Instructions::ld_HLi_A_dis;
         m_instructionSetDisassembly[0x26] = &Instructions::ld_r_n_8_dis<0x26>;
         m_instructionSetDisassembly[0x2A] = &Instructions::ld_A_HLi_dis;
         m_instructionSetDisassembly[0x2E] = &Instructions::ld_r_n_8_dis<0x2E>;
+        m_instructionSetDisassembly[0x31] = &Instructions::ld_SP_rr_dis;
         m_instructionSetDisassembly[0x32] = &Instructions::ld_HLd_A_dis;
         m_instructionSetDisassembly[0x36] = &Instructions::ld_HL_n_8_dis<0x36>;
         m_instructionSetDisassembly[0x3A] = &Instructions::ld_A_HLd_dis;
@@ -430,5 +438,22 @@ namespace cpu
     std::string Instructions::ld_A_HLi_dis(uint8_t, uint16_t, uint16_t)
     {
         return "LD A, (HL+);\n";
+    }
+
+    int Instructions::ld_SP_rr(uint16_t, uint16_t)
+    {
+        m_registers.incrementPC();
+
+        uint16_t val = m_memory.read16(m_registers.getPC());
+        m_registers.incrementPC();
+        m_registers.incrementPC();
+
+        m_registers.setSP(val);
+
+        return 3;
+    }
+    std::string Instructions::ld_SP_rr_dis(uint8_t, uint16_t, uint16_t)
+    {
+        return "LD rr, SP;\n";
     }
 }

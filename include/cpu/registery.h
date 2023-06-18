@@ -74,10 +74,14 @@ public:
     {
         return m_pc;
     }
-
     void incrementPC()
     {
         m_pc++;
+    }
+
+    void setSP(uint16_t sp)
+    {
+        m_sp = sp;
     }
 
     template<uint8_t v>

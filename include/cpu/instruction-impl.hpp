@@ -142,4 +142,23 @@ namespace cpu
     {
         return std::to_string(opCode) + " : LD (" + Registers::register16ToStr(NAME) + "), A; \n";
     }
+
+    template<Registers::Paired NAME>
+    int Instructions::ld_rr_nn(uint16_t, uint16_t)
+    {
+        m_registers.incrementPC();
+
+        uint16_t val = m_memory.read16(m_registers.getPC());
+        m_registers.incrementPC();
+        m_registers.incrementPC();
+
+        m_registers.write16<NAME>(val);
+
+        return 3;
+    }
+    template<Registers::Paired NAME>
+    std::string Instructions::ld_rr_nn_dis(uint8_t opCode, uint16_t, uint16_t)
+    {
+        return std::to_string(opCode) + " : LD rr, " + m_registers.register16ToStr(NAME) + ";\n";
+    }
 }
