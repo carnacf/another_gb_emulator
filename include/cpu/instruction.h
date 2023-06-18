@@ -90,6 +90,11 @@ private:
     int ld_nn_A(uint16_t opA, uint16_t opB);
     std::string ld_nn_A_dis(uint8_t, uint16_t, uint16_t);
 
+    int ldh_A_aC(uint16_t opA, uint16_t opB);
+    std::string ldh_A_aC_dis(uint8_t, uint16_t, uint16_t);
+
+    int ldh_aC_A(uint16_t opA, uint16_t opB);
+    std::string ldh_aC_A_dis(uint8_t, uint16_t, uint16_t);
 private:
     Registers& m_registers;
     Memory& m_memory;
