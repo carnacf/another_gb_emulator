@@ -144,6 +144,7 @@ namespace cpu
         m_instructionSet[0xE2] = &Instructions::ldh_aC_A;
         m_instructionSet[0xEA] = &Instructions::ld_nn_A;
         m_instructionSet[0xF0] = &Instructions::ldh_A_an;
+        m_instructionSet[0xF9] = &Instructions::ld_SP_HL;
         m_instructionSet[0xF2] = &Instructions::ldh_A_aC;
         m_instructionSet[0xFA] = &Instructions::ld_A_nn;
     }
@@ -248,6 +249,7 @@ namespace cpu
         m_instructionSetDisassembly[0xE2] = &Instructions::ldh_aC_A_dis;
         m_instructionSetDisassembly[0xEA] = &Instructions::ld_nn_A_dis;
         m_instructionSetDisassembly[0xF0] = &Instructions::ldh_A_an_dis;
+        m_instructionSetDisassembly[0xF9] = &Instructions::ld_SP_HL_dis;
         m_instructionSetDisassembly[0xF2] = &Instructions::ldh_A_aC_dis;
         m_instructionSetDisassembly[0xFA] = &Instructions::ld_A_nn_dis;
     }
@@ -475,5 +477,19 @@ namespace cpu
     std::string Instructions::ld_nn_SP_dis(uint8_t, uint16_t, uint16_t)
     {
         return "LD SP, rr;\n";
+    }
+
+    int Instructions::ld_SP_HL(uint16_t, uint16_t)
+    {
+        m_registers.incrementPC();
+
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        m_registers.setSP(hl);
+
+        return 2;
+    }
+    std::string Instructions::ld_SP_HL_dis(uint8_t, uint16_t, uint16_t)
+    {
+        return "LD SP, HL;\n";
     }
 }

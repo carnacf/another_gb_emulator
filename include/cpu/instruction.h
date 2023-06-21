@@ -124,6 +124,10 @@ private:
 
     int ld_nn_SP(uint16_t, uint16_t);
     std::string ld_nn_SP_dis(uint8_t, uint16_t, uint16_t);
+
+    int ld_SP_HL(uint16_t, uint16_t);
+    std::string ld_SP_HL_dis(uint8_t, uint16_t, uint16_t);
+
 private:
     Registers& m_registers;
     Memory& m_memory;
