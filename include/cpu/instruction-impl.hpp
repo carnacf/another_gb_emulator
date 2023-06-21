@@ -161,4 +161,23 @@ namespace cpu
     {
         return std::to_string(opCode) + " : LD rr, " + m_registers.register16ToStr(NAME) + ";\n";
     }
+
+    template<Registers::Paired NAME>
+    int Instructions::push(uint16_t, uint16_t)
+    {
+        m_registers.incrementPC();
+
+        uint16_t val = m_registers.read16<NAME>();
+        m_registers.setSP(--m_registers.getSP());
+        m_registers.setSP(--m_registers.getSP());
+        m_memory.write16(m_registers.getSP(), val);
+
+        return 4;
+    }
+    template<Registers::Paired NAME>
+    std::string Instructions::push_dis(uint8_t opCode, uint16_t, uint16_t)
+    {
+        return std::to_string(opCode) + " : POP " + m_registers.register16ToStr(NAME) + ";\n";
+    }
+
 }

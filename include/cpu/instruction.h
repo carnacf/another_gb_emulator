@@ -49,6 +49,7 @@ private:
     int unhandled(uint16_t, uint16_t);
     std::string unhandledDisassembly(uint8_t opcode, uint16_t, uint16_t);
 
+    // 8bit Loads
     template<uint8_t opcode>
     int ld_r_r_8(uint16_t opA, uint16_t opB);
     template<uint8_t opcode>
@@ -114,6 +115,7 @@ private:
     int ld_A_HLi(uint16_t, uint16_t);
     std::string ld_A_HLi_dis(uint8_t, uint16_t, uint16_t);
 
+    // 16bits loads
     template<Registers::Paired NAME>
     int ld_rr_nn(uint16_t, uint16_t);
     template<Registers::Paired NAME>
@@ -127,6 +129,11 @@ private:
 
     int ld_SP_HL(uint16_t, uint16_t);
     std::string ld_SP_HL_dis(uint8_t, uint16_t, uint16_t);
+
+    template<Registers::Paired NAME>
+    int push(uint16_t, uint16_t);
+    template<Registers::Paired NAME>
+    std::string push_dis(uint8_t, uint16_t, uint16_t);
 
 private:
     Registers& m_registers;
