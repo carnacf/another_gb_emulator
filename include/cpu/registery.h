@@ -78,7 +78,11 @@ public:
     {
         m_pc++;
     }
-
+    
+    uint16_t getSP() const
+    {
+        return m_sp;
+    }
     void setSP(uint16_t sp)
     {
         m_sp = sp;

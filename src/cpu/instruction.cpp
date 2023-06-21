@@ -55,6 +55,7 @@ namespace cpu
         m_instructionSet[0x01] = &Instructions::ld_rr_nn<Registers::BC>;
         m_instructionSet[0x02] = &Instructions::ld_r16_A<Registers::BC>;
         m_instructionSet[0x06] = &Instructions::ld_r_n_8<0x06>;
+        m_instructionSet[0x08] = &Instructions::ld_nn_SP;
         m_instructionSet[0x0A] = &Instructions::ld_A_r16<Registers::BC>;
         m_instructionSet[0x0E] = &Instructions::ld_r_n_8<0x0E>;
         m_instructionSet[0x11] = &Instructions::ld_rr_nn<Registers::DE>;
@@ -159,6 +160,7 @@ namespace cpu
         m_instructionSetDisassembly[0x01] = &Instructions::ld_rr_nn_dis<Registers::BC>;
         m_instructionSetDisassembly[0x02] = &Instructions::ld_r16_A_dis<Registers::BC>;
         m_instructionSetDisassembly[0x06] = &Instructions::ld_r_n_8_dis<0x06>;
+        m_instructionSetDisassembly[0x08] = &Instructions::ld_nn_SP_dis;
         m_instructionSetDisassembly[0x0A] = &Instructions::ld_A_r16_dis<Registers::BC>;
         m_instructionSetDisassembly[0x0E] = &Instructions::ld_r_n_8_dis<0x0E>;
         m_instructionSetDisassembly[0x11] = &Instructions::ld_rr_nn_dis<Registers::DE>;
@@ -455,5 +457,23 @@ namespace cpu
     std::string Instructions::ld_SP_rr_dis(uint8_t, uint16_t, uint16_t)
     {
         return "LD rr, SP;\n";
+    }
+
+    int Instructions::ld_nn_SP(uint16_t, uint16_t)
+    {
+        m_registers.incrementPC();
+
+        uint16_t addr = m_memory.read16(m_registers.getPC());
+        m_registers.incrementPC();
+        m_registers.incrementPC();
+
+        m_memory.write16(addr, m_registers.getSP());
+
+        return 5;
+    }
+
+    std::string Instructions::ld_nn_SP_dis(uint8_t, uint16_t, uint16_t)
+    {
+        return "LD SP, rr;\n";
     }
 }
