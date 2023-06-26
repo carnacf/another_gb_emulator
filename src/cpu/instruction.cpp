@@ -6,6 +6,7 @@
 #include "memory.h"
 
 #include <utility>
+#include <limits>
 
 namespace cpu
 {
@@ -153,6 +154,7 @@ namespace cpu
         m_instructionSet[0xF1] = &Instructions::pop<Registers::AF>;
         m_instructionSet[0xF2] = &Instructions::ldh_A_aC;
         m_instructionSet[0xF5] = &Instructions::push<Registers::AF>;
+        m_instructionSet[0xF8] = &Instructions::ld_HL_SP_r8;
         m_instructionSet[0xF9] = &Instructions::ld_SP_HL;
         m_instructionSet[0xFA] = &Instructions::ld_A_nn;
     }
@@ -266,6 +268,7 @@ namespace cpu
         m_instructionSetDisassembly[0xF1] = &Instructions::pop_dis<Registers::AF>;
         m_instructionSetDisassembly[0xF2] = &Instructions::ldh_A_aC_dis;
         m_instructionSetDisassembly[0xF5] = &Instructions::push_dis<Registers::AF>;
+        m_instructionSetDisassembly[0xF8] = &Instructions::ld_HL_SP_r8_dis;
         m_instructionSetDisassembly[0xF9] = &Instructions::ld_SP_HL_dis;
         m_instructionSetDisassembly[0xFA] = &Instructions::ld_A_nn_dis;
     }
@@ -464,7 +467,6 @@ namespace cpu
 
         return 5;
     }
-
     std::string Instructions::ld_nn_SP_dis(uint8_t, uint16_t, uint16_t)
     {
         return "LD SP, rr;\n";
@@ -480,5 +482,28 @@ namespace cpu
     std::string Instructions::ld_SP_HL_dis(uint8_t, uint16_t, uint16_t)
     {
         return "LD SP, HL;\n";
+    }
+
+    int Instructions::ld_HL_SP_r8(uint16_t, uint16_t)
+    {
+        m_registers.incrementPC();
+
+        int32_t val = (int32_t) m_memory.read8(m_registers.getPC());
+        int32_t result = (int32_t) m_registers.getSP() + val;
+        bool overflow = result > std::numeric_limits<uint16_t>::max() ||
+            result < std::numeric_limits<uint16_t>::lowest();
+
+        m_registers.write16<Registers::HL>((uint16_t) result);
+
+        m_registers.enableFlag(Registers::Flag::zero, false);
+        m_registers.enableFlag(Registers::Flag::substract, false);
+        m_registers.enableFlag(Registers::Flag::half_carry, overflow);
+        m_registers.enableFlag(Registers::Flag::carry, overflow);
+
+        return 3;
+    }
+    std::string Instructions::ld_HL_SP_r8_dis(uint8_t, uint16_t, uint16_t)
+    {
+        return "LD HL, SP + r8;\n";
     }
 }

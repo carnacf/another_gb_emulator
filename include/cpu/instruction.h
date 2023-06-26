@@ -131,6 +131,9 @@ private:
     int ld_SP_HL(uint16_t, uint16_t);
     std::string ld_SP_HL_dis(uint8_t, uint16_t, uint16_t);
 
+    int ld_HL_SP_r8(uint16_t, uint16_t);
+    std::string ld_HL_SP_r8_dis(uint8_t, uint16_t, uint16_t);
+
     template<Registers::Paired NAME>
     int push(uint16_t, uint16_t);
     template<Registers::Paired NAME>
