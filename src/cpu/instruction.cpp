@@ -277,7 +277,6 @@ namespace cpu
 
     int Instructions::unhandled(uint16_t, uint16_t) 
     {
-        m_registers.incrementPC();
         return 1;
     }
     std::string Instructions::unhandledDisassembly(uint8_t opCode, uint16_t, uint16_t)
@@ -287,8 +286,6 @@ namespace cpu
     
     int Instructions::ld_A_nn(uint16_t opA, uint16_t opB)
     {
-        m_registers.incrementPC();
-        
         uint16_t nn = m_memory.read16(m_registers.getPC());
         m_registers.incrementPC();
         m_registers.incrementPC();
@@ -304,8 +301,6 @@ namespace cpu
 
     int Instructions::ld_nn_A(uint16_t opA, uint16_t opB)
     {
-        m_registers.incrementPC();
-
         uint16_t nn = m_memory.read16(m_registers.getPC());
         m_registers.incrementPC();
         m_registers.incrementPC();
@@ -322,8 +317,6 @@ namespace cpu
 
     int Instructions::ldh_A_aC(uint16_t opA, uint16_t opB)
     {
-        m_registers.incrementPC();
-
         uint8_t c = m_registers.read8<Registers::C>();
         uint16_t addr = utils::to16(0xFF, c);
         
@@ -339,8 +332,6 @@ namespace cpu
 
     int Instructions::ldh_aC_A(uint16_t opA, uint16_t opB)
     {
-        m_registers.incrementPC();
-
         uint8_t c = m_registers.read8<Registers::C>();
         uint16_t addr = utils::to16(0xFF, c);
 
@@ -357,8 +348,6 @@ namespace cpu
 
     int Instructions::ldh_A_an(uint16_t opA, uint16_t opB)
     {
-        m_registers.incrementPC();
-
         uint8_t n = m_memory.read8(m_registers.getPC());
         m_registers.incrementPC();
         uint16_t addr = utils::to16(0xFF, n);
@@ -375,8 +364,6 @@ namespace cpu
 
     int Instructions::ldh_an_A(uint16_t opA, uint16_t opB)
     {
-        m_registers.incrementPC();
-
         uint8_t n = m_memory.read8(m_registers.getPC());
         m_registers.incrementPC();
         uint16_t addr = utils::to16(0xFF, n);
@@ -393,8 +380,6 @@ namespace cpu
 
     int Instructions::ld_HLd_A(uint16_t, uint16_t)
     {
-        m_registers.incrementPC();
-
         uint16_t hl = m_registers.read16<Registers::HL>();
         uint8_t val = m_memory.read8(hl);
 
@@ -411,8 +396,6 @@ namespace cpu
         
     int Instructions::ld_A_HLd(uint16_t, uint16_t)
     {
-        m_registers.incrementPC();
-
         uint16_t hl = m_registers.read16<Registers::HL>();
         uint8_t a = m_registers.read8<Registers::A>();
         m_memory.write8(hl, a);
@@ -428,8 +411,6 @@ namespace cpu
         
     int Instructions::ld_HLi_A(uint16_t, uint16_t)
     {
-        m_registers.incrementPC();
-
         uint16_t hl = m_registers.read16<Registers::HL>();
         uint8_t val = m_memory.read8(hl);
 
@@ -445,8 +426,6 @@ namespace cpu
     
     int Instructions::ld_A_HLi(uint16_t, uint16_t)
     {
-        m_registers.incrementPC();
-
         uint16_t hl = m_registers.read16<Registers::HL>();
         uint8_t a = m_registers.read8<Registers::A>();
         m_memory.write8(hl, a);
@@ -462,8 +441,6 @@ namespace cpu
 
     int Instructions::ld_SP_rr(uint16_t, uint16_t)
     {
-        m_registers.incrementPC();
-
         uint16_t val = m_memory.read16(m_registers.getPC());
         m_registers.incrementPC();
         m_registers.incrementPC();
@@ -479,8 +456,6 @@ namespace cpu
 
     int Instructions::ld_nn_SP(uint16_t, uint16_t)
     {
-        m_registers.incrementPC();
-
         uint16_t addr = m_memory.read16(m_registers.getPC());
         m_registers.incrementPC();
         m_registers.incrementPC();
@@ -497,8 +472,6 @@ namespace cpu
 
     int Instructions::ld_SP_HL(uint16_t, uint16_t)
     {
-        m_registers.incrementPC();
-
         uint16_t hl = m_registers.read16<Registers::HL>();
         m_registers.setSP(hl);
 

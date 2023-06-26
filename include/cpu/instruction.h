@@ -30,6 +30,7 @@ public:
     template<bool disassemble>
     int execute(uint8_t opCode)
     {
+        m_registers.incrementPC();
         int numberOfCycles = (this->*m_instructionSet[opCode])(0, 0);
         if constexpr (disassemble)
         {
