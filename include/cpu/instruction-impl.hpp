@@ -177,7 +177,27 @@ namespace cpu
     template<Registers::Paired NAME>
     std::string Instructions::push_dis(uint8_t opCode, uint16_t, uint16_t)
     {
-        return std::to_string(opCode) + " : POP " + m_registers.register16ToStr(NAME) + ";\n";
+        return std::to_string(opCode) + " : PUSH " + m_registers.register16ToStr(NAME) + ";\n";
     }
 
+    template<Registers::Paired NAME>
+    int Instructions::pop(uint16_t, uint16_t)
+    {
+        m_registers.incrementPC();
+
+        uint16_t sp = m_registers.getSP();
+        uint16_t val = m_memory.read16(sp);
+
+        sp++;
+        sp++;
+        m_registers.setSP(sp);
+
+        m_registers.write16<NAME>(val);
+        return 3;                                                                                                                                                                                            
+    }
+    template<Registers::Paired NAME>
+    std::string Instructions::pop_dis(uint8_t, uint16_t, uint16_t)
+    {
+        return std::to_string(opCode) + " : POP " + m_registers.register16ToStr(NAME) + ";\n";
+    }
 }

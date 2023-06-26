@@ -140,16 +140,20 @@ namespace cpu
         m_instructionSet[0x7F] = &Instructions::ld_r_r_8<0x7F>;
 
 
+        m_instructionSet[0xC1] = &Instructions::pop<Registers::BC>;
         m_instructionSet[0xC5] = &Instructions::push<Registers::BC>;
+        m_instructionSet[0xD1] = &Instructions::pop<Registers::DE>;
         m_instructionSet[0xD5] = &Instructions::push<Registers::DE>;
         m_instructionSet[0xE0] = &Instructions::ldh_an_A;
+        m_instructionSet[0xE1] = &Instructions::pop<Registers::HL>;
         m_instructionSet[0xE2] = &Instructions::ldh_aC_A;
         m_instructionSet[0xE5] = &Instructions::push<Registers::HL>;
         m_instructionSet[0xEA] = &Instructions::ld_nn_A;
         m_instructionSet[0xF0] = &Instructions::ldh_A_an;
-        m_instructionSet[0xF9] = &Instructions::ld_SP_HL;
+        m_instructionSet[0xF1] = &Instructions::pop<Registers::AF>;
         m_instructionSet[0xF2] = &Instructions::ldh_A_aC;
         m_instructionSet[0xF5] = &Instructions::push<Registers::AF>;
+        m_instructionSet[0xF9] = &Instructions::ld_SP_HL;
         m_instructionSet[0xFA] = &Instructions::ld_A_nn;
     }
 
@@ -249,16 +253,20 @@ namespace cpu
         m_instructionSetDisassembly[0x7E] = &Instructions::ld_r_HL_dis<0x7E>;
         m_instructionSetDisassembly[0x7F] = &Instructions::ld_r_r_8_dis<0x7F>;
         
+        m_instructionSetDisassembly[0xC1] = &Instructions::pop_dis<Registers::BC>;
         m_instructionSetDisassembly[0xC5] = &Instructions::push_dis<Registers::BC>;
+        m_instructionSetDisassembly[0xD1] = &Instructions::pop_dis<Registers::DE>;
         m_instructionSetDisassembly[0xD5] = &Instructions::push_dis<Registers::DE>;
         m_instructionSetDisassembly[0xE0] = &Instructions::ldh_an_A_dis;
+        m_instructionSetDisassembly[0xE1] = &Instructions::pop_dis<Registers::HL>;
         m_instructionSetDisassembly[0xE2] = &Instructions::ldh_aC_A_dis;
         m_instructionSetDisassembly[0xE5] = &Instructions::push_dis<Registers::HL>;
         m_instructionSetDisassembly[0xEA] = &Instructions::ld_nn_A_dis;
         m_instructionSetDisassembly[0xF0] = &Instructions::ldh_A_an_dis;
+        m_instructionSetDisassembly[0xF1] = &Instructions::pop_dis<Registers::AF>;
+        m_instructionSetDisassembly[0xF2] = &Instructions::ldh_A_aC_dis;
         m_instructionSetDisassembly[0xF5] = &Instructions::push_dis<Registers::AF>;
         m_instructionSetDisassembly[0xF9] = &Instructions::ld_SP_HL_dis;
-        m_instructionSetDisassembly[0xF2] = &Instructions::ldh_A_aC_dis;
         m_instructionSetDisassembly[0xFA] = &Instructions::ld_A_nn_dis;
     }
 
