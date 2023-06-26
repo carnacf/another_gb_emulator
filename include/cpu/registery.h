@@ -1,6 +1,7 @@
 #pragma once
 
-#include "utils\global.h"
+#include "utils/global.h"
+#include "utils/utils.h"
 
 #include <cstdint>
 #include <cassert>
@@ -39,11 +40,30 @@ public:
         DE = 4,
         HL = 6
     };
-
     static constexpr Paired AF = Paired::AF;
     static constexpr Paired BC = Paired::BC;
     static constexpr Paired DE = Paired::DE;
     static constexpr Paired HL = Paired::HL;
+
+    enum class Flag : std::uint8_t
+    {
+        carry = 0b0001'0000,
+        half_carry = 0b0010'0000,
+        substract = 0b0100'0000,
+        zero = 0b1000'0000
+    };
+
+    void enableFlag(Flag f, bool enabled)
+    {
+        if (!enabled)
+        {
+            write8<F>(read8<F>() & ~(uint8_t)f);
+        }
+        else
+        {
+            write8<F>(read8<F>() | (uint8_t)f);
+        }
+    }
 
     template<Paired NAME>
     void write16(uint16_t val)
@@ -168,8 +188,8 @@ public:
         return "";
     }
 private:
-  uint8_t m_registers[8];
-  uint16_t m_sp;
-  uint16_t m_pc = 0; // TODO: add reset method
+    uint8_t m_registers[8] = {};
+    uint16_t m_sp = 0;
+    uint16_t m_pc = 0; // TODO: add reset method
 };
 }
