@@ -486,19 +486,19 @@ namespace cpu
 
     int Instructions::ld_HL_SP_r8(uint16_t, uint16_t)
     {
+        int8_t val = (int8_t) m_memory.read8(m_registers.getPC());
         m_registers.incrementPC();
-
-        int32_t val = (int32_t) m_memory.read8(m_registers.getPC());
-        int32_t result = (int32_t) m_registers.getSP() + val;
-        bool overflow = result > std::numeric_limits<uint16_t>::max() ||
-            result < std::numeric_limits<uint16_t>::lowest();
+        
+        uint16_t result = m_registers.getSP() + val;
 
         m_registers.write16<Registers::HL>((uint16_t) result);
 
-        m_registers.enableFlag(Registers::Flag::zero, false);
-        m_registers.enableFlag(Registers::Flag::substract, false);
-        m_registers.enableFlag(Registers::Flag::half_carry, overflow);
-        m_registers.enableFlag(Registers::Flag::carry, overflow);
+        m_registers.resetFlags();
+
+        bool hc = ((val ^ m_registers.getSP() ^ result) & 0x10) == 0x10;
+        bool c = ((val ^ m_registers.getSP() ^ result) & 0x100) == 0x100;
+        m_registers.setFlag(Registers::Flag::H, hc);
+        m_registers.setFlag(Registers::Flag::C, c);
 
         return 3;
     }
