@@ -73,21 +73,21 @@ std::vector<test> getTestCases()
 	using flag = cpu::Registers::Flag;
 	return 
 	{
-		{ {{flag::carry, true}}, 0x10},
-		{ {{flag::half_carry, true}}, 0x20},
-		{ {{flag::substract, true}}, 0x40},
-		{ {{flag::zero, true}}, 0x80},
+		{ {{flag::C, true}}, 0x10},
+		{ {{flag::H, true}}, 0x20},
+		{ {{flag::N, true}}, 0x40},
+		{ {{flag::Z, true}}, 0x80},
 		
-		{ {{flag::carry, true}, {flag::carry, false}}, 0},
-		{ {{flag::half_carry, true}, {flag::half_carry, false}}, 0},
-		{ {{flag::substract, true}, {flag::substract, false}}, 0},
-		{ {{flag::zero, true}, {flag::zero, false}}, 0},
+		{ {{flag::C, true}, {flag::C, false}}, 0},
+		{ {{flag::H, true}, {flag::H, false}}, 0},
+		{ {{flag::N, true}, {flag::N, false}}, 0},
+		{ {{flag::Z, true}, {flag::Z, false}}, 0},
 		
-		{ { {flag::carry, true}, {flag::half_carry, true}, 
-		{flag::substract, true}, {flag::zero, true}}, 0xF0},
+		{ { {flag::C, true}, {flag::H, true}, 
+		{flag::N, true}, {flag::Z, true}}, 0xF0},
 
-		{ { {flag::carry, true}, {flag::half_carry, true},
-		{flag::substract, true}, {flag::carry, false}}, 0x60}
+		{ { {flag::C, true}, {flag::H, true},
+		{flag::N, true}, {flag::C, false}}, 0x60}
 	};
 }
 
@@ -102,7 +102,7 @@ TEST_P(FlagsTests, editFlags)
 	cpu::Registers r;
 	for (auto [flag, enabled] : param.operations)
 	{
-		r.enableFlag(flag, enabled);
+		r.setFlag(flag, enabled);
 	}
 
 	EXPECT_EQ(param.reusltingFlag, r.read8<cpu::Registers::F>());

@@ -47,22 +47,26 @@ public:
 
     enum class Flag : std::uint8_t
     {
-        carry = 0b0001'0000,
-        half_carry = 0b0010'0000,
-        substract = 0b0100'0000,
-        zero = 0b1000'0000
+        C = 0b0001'0000,
+        H = 0b0010'0000,
+        N = 0b0100'0000,
+        Z = 0b1000'0000
     };
 
-    void enableFlag(Flag f, bool enabled)
+    void setFlag(Flag f, bool enabled)
     {
         if (!enabled)
         {
-            write8<F>(read8<F>() & ~(uint8_t)f);
+            m_registers[(int)F] &= ~(uint8_t)f;
         }
         else
         {
-            write8<F>(read8<F>() | (uint8_t)f);
+            m_registers[(int)F] |= (uint8_t)f;
         }
+    }
+    void resetFlags()
+    {
+        m_registers[(int)F] = 0;
     }
 
     template<Paired NAME>
