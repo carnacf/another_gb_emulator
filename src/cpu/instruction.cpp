@@ -145,6 +145,7 @@ namespace cpu
         m_instructionSet[0x83] = &Instructions::add<Registers::E>;
         m_instructionSet[0x84] = &Instructions::add<Registers::H>;
         m_instructionSet[0x85] = &Instructions::add<Registers::L>;
+        m_instructionSet[0x86] = &Instructions::add_HL;
 
 
         m_instructionSet[0xC1] = &Instructions::pop<Registers::BC>;
@@ -266,6 +267,7 @@ namespace cpu
         m_instructionSetDisassembly[0x83] = &Instructions::add_dis<Registers::E>;
         m_instructionSetDisassembly[0x84] = &Instructions::add_dis<Registers::H>;
         m_instructionSetDisassembly[0x85] = &Instructions::add_dis<Registers::L>;
+        m_instructionSetDisassembly[0x86] = &Instructions::add_HL_dis;
 
         m_instructionSetDisassembly[0xC1] = &Instructions::pop_dis<Registers::BC>;
         m_instructionSetDisassembly[0xC5] = &Instructions::push_dis<Registers::BC>;
@@ -517,5 +519,23 @@ namespace cpu
     std::string Instructions::ld_HL_SP_r8_dis(uint8_t, uint16_t, uint16_t)
     {
         return "LD HL, SP + r8;\n";
+    }
+
+    int Instructions::add_HL(uint16_t, uint16_t)
+    {
+        uint8_t a = m_registers.read8<Registers::A>();
+        
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        uint8_t b = m_memory.read8(hl);
+        uint8_t res = a + b;
+
+        m_registers.write8<Registers::A>(res);
+        updateFlagsAdd(a, b, res);
+
+        return 2;
+    }
+    std::string Instructions::add_HL_dis(uint8_t opCode, uint16_t, uint16_t)
+    {
+        return std::to_string(opCode) + " : ADD (HL);\n";
     }
 }
