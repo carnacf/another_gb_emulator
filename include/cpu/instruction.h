@@ -156,6 +156,7 @@ private:
         m_registers.setFlag(Registers::Flag::Z, res == 0);
     }
 
+    void add(int a, int b);
     template<Registers::Names NAME>
     int add_r(uint16_t, uint16_t);
     template<Registers::Names NAME>
@@ -167,6 +168,7 @@ private:
     int add_n(uint16_t, uint16_t);
     std::string add_n_dis(uint8_t, uint16_t, uint16_t);
 
+    void addc(int a, int b);
     template<Registers::Names NAME>
     int adc_r(uint16_t, uint16_t);
     template<Registers::Names NAME>

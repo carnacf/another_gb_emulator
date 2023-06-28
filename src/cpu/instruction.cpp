@@ -1,6 +1,4 @@
 #include "instruction.h"
-#include "instruction.h"
-#include "instruction.h"
 
 #include "registery.h"
 #include "memory.h"
@@ -539,17 +537,22 @@ namespace cpu
         return "LD HL, SP + r8;\n";
     }
 
-    int Instructions::add_HL(uint16_t, uint16_t)
+    void Instructions::add(int a, int b)
     {
-        uint8_t a = m_registers.read8<Registers::A>();
-        
-        uint16_t hl = m_registers.read16<Registers::HL>();
-        uint8_t b = m_memory.read8(hl);
         int res = a + b;
         int carryBits = a ^ b ^ res;
 
         m_registers.write8<Registers::A>(res);
         updateFlagsAdd(carryBits, res);
+    }
+
+    int Instructions::add_HL(uint16_t, uint16_t)
+    {
+        int a = (int8_t) m_registers.read8<Registers::A>();
+        
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        int b = (int8_t) m_memory.read8(hl);
+        add(a, b);
 
         return 2;
     }
@@ -564,16 +567,22 @@ namespace cpu
 
         int b = (int8_t) m_memory.read8(m_registers.getPC());
         m_registers.incrementPC();
-        int res = a + b;
-        int carryBits = a ^ b ^ res;
-
-        m_registers.write8<Registers::A>(res);
-        updateFlagsAdd(carryBits, res);
+        add(a, b);
 
         return 2;
     }
     std::string Instructions::add_n_dis(uint8_t opCode, uint16_t, uint16_t)
     {
         return std::to_string(opCode) + " : ADD n;\n";
+    }
+    
+    void cpu::Instructions::addc(int a, int b)
+    {
+        int carryFlag = m_registers.isSetFlag(Registers::Flag::C) ? 1 : 0;
+        int res = a + b + carryFlag;
+        int carryBits = a ^ b ^ carryFlag ^ res;
+
+        m_registers.write8<Registers::A>(res);
+        updateFlagsAdd(carryBits, res);
     }
 }

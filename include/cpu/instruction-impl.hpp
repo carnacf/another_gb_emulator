@@ -190,11 +190,7 @@ namespace cpu
     {
         int a = (int8_t) m_registers.read8<Registers::A>();
         int b = (int8_t) m_registers.read8<NAME>();
-        int res = a + b;
-        int carryBits = a ^ b ^ res;
-
-        m_registers.write8<Registers::A>(res);
-        updateFlagsAdd(carryBits, res);
+        add(a, b);
 
         return 1;
     }
@@ -209,12 +205,7 @@ namespace cpu
     {
         int a = (int8_t) m_registers.read8<Registers::A>();
         int b = (int8_t) m_registers.read8<NAME>();
-        int carryFlag = m_registers.isSetFlag(Registers::Flag::C) ? 1 : 0;
-        int res = a + b + carryFlag;
-        int carryBits = a ^ b ^ carryFlag ^ res;
-
-        m_registers.write8<Registers::A>(res);
-        updateFlagsAdd(carryBits, res);
+        addc(a, b);
 
         return 1;
     }
