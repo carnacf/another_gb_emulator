@@ -53,7 +53,7 @@ public:
         Z = 0b1000'0000
     };
 
-    void setFlag(Flag f, bool enabled)
+    void setFlag(Flag f, bool enabled = true)
     {
         if (!enabled)
         {
@@ -63,6 +63,10 @@ public:
         {
             m_registers[(int)F] |= (uint8_t)f;
         }
+    }
+    bool isSetFlag(Flag f)
+    {
+        return (m_registers[(int)F] & (uint8_t)f) == (uint8_t)f;
     }
     void resetFlags()
     {
