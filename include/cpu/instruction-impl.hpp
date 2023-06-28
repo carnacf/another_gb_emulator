@@ -186,7 +186,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int Instructions::add(uint16_t, uint16_t)
+    int Instructions::add_r(uint16_t, uint16_t)
     {
         int a = (int8_t) m_registers.read8<Registers::A>();
         int b = (int8_t) m_registers.read8<NAME>();
@@ -199,13 +199,13 @@ namespace cpu
         return 1;
     }
     template<Registers::Names NAME>
-    std::string Instructions::add_dis(uint8_t opCode, uint16_t, uint16_t)
+    std::string Instructions::add_r_dis(uint8_t opCode, uint16_t, uint16_t)
     {
         return std::to_string(opCode) + " : ADD " + m_registers.register8ToStr(NAME) + ";\n";
     }
 
     template<Registers::Names NAME>
-    int Instructions::adc(uint16_t, uint16_t)
+    int Instructions::adc_r(uint16_t, uint16_t)
     {
         int a = (int8_t) m_registers.read8<Registers::A>();
         int b = (int8_t) m_registers.read8<NAME>();
@@ -219,7 +219,7 @@ namespace cpu
         return 1;
     }
     template<Registers::Names NAME>
-    std::string Instructions::adc_dis(uint8_t opCode, uint16_t, uint16_t)
+    std::string Instructions::adc_r_dis(uint8_t opCode, uint16_t, uint16_t)
     {
         return std::to_string(opCode) + " : ADC " + m_registers.register8ToStr(NAME) + ";\n";
     }

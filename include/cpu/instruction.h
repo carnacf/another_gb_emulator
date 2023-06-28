@@ -157,9 +157,9 @@ private:
     }
 
     template<Registers::Names NAME>
-    int add(uint16_t, uint16_t);
+    int add_r(uint16_t, uint16_t);
     template<Registers::Names NAME>
-    std::string add_dis(uint8_t, uint16_t, uint16_t);
+    std::string add_r_dis(uint8_t, uint16_t, uint16_t);
     
     int add_HL(uint16_t, uint16_t);
     std::string add_HL_dis(uint8_t, uint16_t, uint16_t);
@@ -168,9 +168,9 @@ private:
     std::string add_n_dis(uint8_t, uint16_t, uint16_t);
 
     template<Registers::Names NAME>
-    int adc(uint16_t, uint16_t);
+    int adc_r(uint16_t, uint16_t);
     template<Registers::Names NAME>
-    std::string adc_dis(uint8_t, uint16_t, uint16_t);
+    std::string adc_r_dis(uint8_t, uint16_t, uint16_t);
 private:
     Registers& m_registers;
     Memory& m_memory;
