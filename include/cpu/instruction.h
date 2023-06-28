@@ -168,11 +168,17 @@ private:
     int add_n(uint16_t, uint16_t);
     std::string add_n_dis(uint8_t, uint16_t, uint16_t);
 
-    void addc(int a, int b);
+    void adc(int a, int b);
     template<Registers::Names NAME>
     int adc_r(uint16_t, uint16_t);
     template<Registers::Names NAME>
     std::string adc_r_dis(uint8_t, uint16_t, uint16_t);
+
+    int adc_HL(uint16_t, uint16_t);
+    std::string adc_HL_dis(uint8_t, uint16_t, uint16_t);
+
+    int adc_n(uint16_t, uint16_t);
+    std::string adc_n_dis(uint8_t, uint16_t, uint16_t);
 private:
     Registers& m_registers;
     Memory& m_memory;

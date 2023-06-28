@@ -151,12 +151,14 @@ namespace cpu
         m_instructionSet[0x8B] = &Instructions::adc_r<Registers::E>;
         m_instructionSet[0x8C] = &Instructions::adc_r<Registers::H>;
         m_instructionSet[0x8D] = &Instructions::adc_r<Registers::L>;
+        m_instructionSet[0x8E] = &Instructions::adc_HL;
         m_instructionSet[0x8F] = &Instructions::adc_r<Registers::A>;
 
 
         m_instructionSet[0xC1] = &Instructions::pop<Registers::BC>;
         m_instructionSet[0xC5] = &Instructions::push<Registers::BC>;
         m_instructionSet[0xC6] = &Instructions::add_n;
+        m_instructionSet[0xCE] = &Instructions::adc_n;
         m_instructionSet[0xD1] = &Instructions::pop<Registers::DE>;
         m_instructionSet[0xD5] = &Instructions::push<Registers::DE>;
         m_instructionSet[0xE0] = &Instructions::ldh_an_A;
@@ -282,11 +284,13 @@ namespace cpu
         m_instructionSetDisassembly[0x8B] = &Instructions::adc_r_dis<Registers::E>;
         m_instructionSetDisassembly[0x8C] = &Instructions::adc_r_dis<Registers::H>;
         m_instructionSetDisassembly[0x8D] = &Instructions::adc_r_dis<Registers::L>;
+        m_instructionSetDisassembly[0x8E] = &Instructions::adc_HL_dis;
         m_instructionSetDisassembly[0x8F] = &Instructions::adc_r_dis<Registers::A>;
 
         m_instructionSetDisassembly[0xC1] = &Instructions::pop_dis<Registers::BC>;
         m_instructionSetDisassembly[0xC5] = &Instructions::push_dis<Registers::BC>;
         m_instructionSetDisassembly[0xC6] = &Instructions::add_n_dis;
+        m_instructionSetDisassembly[0xCE] = &Instructions::adc_n_dis;
         m_instructionSetDisassembly[0xD1] = &Instructions::pop_dis<Registers::DE>;
         m_instructionSetDisassembly[0xD5] = &Instructions::push_dis<Registers::DE>;
         m_instructionSetDisassembly[0xE0] = &Instructions::ldh_an_A_dis;
@@ -576,7 +580,7 @@ namespace cpu
         return std::to_string(opCode) + " : ADD n;\n";
     }
     
-    void cpu::Instructions::addc(int a, int b)
+    void cpu::Instructions::adc(int a, int b)
     {
         int carryFlag = m_registers.isSetFlag(Registers::Flag::C) ? 1 : 0;
         int res = a + b + carryFlag;
@@ -584,5 +588,35 @@ namespace cpu
 
         m_registers.write8<Registers::A>(res);
         updateFlagsAdd(carryBits, res);
+    }
+
+    int Instructions::adc_HL(uint16_t, uint16_t)
+    {
+        int a = (int8_t)m_registers.read8<Registers::A>();
+
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        int b = (int8_t)m_memory.read8(hl);
+        adc(a, b);
+
+        return 2;
+    }
+    std::string Instructions::adc_HL_dis(uint8_t opCode, uint16_t, uint16_t)
+    {
+        return std::to_string(opCode) + " : ADC (HL);\n";
+    }
+
+    int Instructions::adc_n(uint16_t, uint16_t)
+    {
+        int a = (int8_t)m_registers.read8<Registers::A>();
+
+        int b = (int8_t)m_memory.read8(m_registers.getPC());
+        m_registers.incrementPC();
+        adc(a, b);
+
+        return 2;
+    }
+    std::string Instructions::adc_n_dis(uint8_t opCode, uint16_t, uint16_t)
+    {
+        return std::to_string(opCode) + " : ADC n;\n";
     }
 }

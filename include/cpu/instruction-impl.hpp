@@ -205,7 +205,7 @@ namespace cpu
     {
         int a = (int8_t) m_registers.read8<Registers::A>();
         int b = (int8_t) m_registers.read8<NAME>();
-        addc(a, b);
+        adc(a, b);
 
         return 1;
     }
