@@ -184,4 +184,22 @@ namespace cpu
     {
         return std::to_string(opCode) + " : POP " + m_registers.register16ToStr(NAME) + ";\n";
     }
+
+    template<Registers::Names NAME>
+    int Instructions::add(uint16_t, uint16_t)
+    {
+        uint8_t a = m_registers.read8<Registers::A>();
+        uint8_t b = m_registers.read8<NAME>();
+        uint8_t res = a + b;
+
+        m_registers.write8<Registers::A>(res);
+        updateFlagsAdd(a, b, res);
+
+        return 1;
+    }
+    template<Registers::Names NAME>
+    std::string Instructions::add_dis(uint8_t opCode, uint16_t, uint16_t)
+    {
+        return std::to_string(opCode) + " : ADD " + m_registers.register8ToStr(NAME) + ";\n";
+    }
 }

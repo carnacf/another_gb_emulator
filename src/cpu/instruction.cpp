@@ -139,6 +139,12 @@ namespace cpu
         m_instructionSet[0x7D] = &Instructions::ld_r_r_8<0x7D>;
         m_instructionSet[0x7E] = &Instructions::ld_r_HL<0x7E>;
         m_instructionSet[0x7F] = &Instructions::ld_r_r_8<0x7F>;
+        m_instructionSet[0x80] = &Instructions::add<Registers::B>;
+        m_instructionSet[0x81] = &Instructions::add<Registers::C>;
+        m_instructionSet[0x82] = &Instructions::add<Registers::D>;
+        m_instructionSet[0x83] = &Instructions::add<Registers::E>;
+        m_instructionSet[0x84] = &Instructions::add<Registers::H>;
+        m_instructionSet[0x85] = &Instructions::add<Registers::L>;
 
 
         m_instructionSet[0xC1] = &Instructions::pop<Registers::BC>;
@@ -254,7 +260,13 @@ namespace cpu
         m_instructionSetDisassembly[0x7D] = &Instructions::ld_r_r_8_dis<0x7D>;
         m_instructionSetDisassembly[0x7E] = &Instructions::ld_r_HL_dis<0x7E>;
         m_instructionSetDisassembly[0x7F] = &Instructions::ld_r_r_8_dis<0x7F>;
-        
+        m_instructionSetDisassembly[0x80] = &Instructions::add_dis<Registers::B>;
+        m_instructionSetDisassembly[0x81] = &Instructions::add_dis<Registers::C>;
+        m_instructionSetDisassembly[0x82] = &Instructions::add_dis<Registers::D>;
+        m_instructionSetDisassembly[0x83] = &Instructions::add_dis<Registers::E>;
+        m_instructionSetDisassembly[0x84] = &Instructions::add_dis<Registers::H>;
+        m_instructionSetDisassembly[0x85] = &Instructions::add_dis<Registers::L>;
+
         m_instructionSetDisassembly[0xC1] = &Instructions::pop_dis<Registers::BC>;
         m_instructionSetDisassembly[0xC5] = &Instructions::push_dis<Registers::BC>;
         m_instructionSetDisassembly[0xD1] = &Instructions::pop_dis<Registers::DE>;

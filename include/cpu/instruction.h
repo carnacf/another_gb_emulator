@@ -144,6 +144,22 @@ private:
     template<Registers::Paired NAME>
     std::string pop_dis(uint8_t, uint16_t, uint16_t);
 
+    // 8-bit arithmetic and logical instructions
+    void updateFlagsAdd(uint8_t a, uint8_t b, uint8_t res)
+    {
+        m_registers.resetFlags();
+
+        bool hc = ((a ^ b ^ res) & 0x10) == 0x10;
+        bool c = ((a ^ b ^ res) & 0x100) == 0x100;
+        m_registers.setFlag(Registers::Flag::H, hc);
+        m_registers.setFlag(Registers::Flag::C, c);
+        m_registers.setFlag(Registers::Flag::Z, res == 0);
+    }
+
+    template<Registers::Names NAME>
+    int add(uint16_t, uint16_t);
+    template<Registers::Names NAME>
+    std::string add_dis(uint8_t, uint16_t, uint16_t);
 private:
     Registers& m_registers;
     Memory& m_memory;
