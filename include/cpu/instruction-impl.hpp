@@ -188,12 +188,13 @@ namespace cpu
     template<Registers::Names NAME>
     int Instructions::add(uint16_t, uint16_t)
     {
-        uint8_t a = m_registers.read8<Registers::A>();
-        uint8_t b = m_registers.read8<NAME>();
-        uint8_t res = a + b;
+        int a = (int8_t) m_registers.read8<Registers::A>();
+        int b = (int8_t) m_registers.read8<NAME>();
+        int res = a + b;
+        int carryBits = a ^ b ^ res;
 
         m_registers.write8<Registers::A>(res);
-        updateFlagsAdd(a, b, res);
+        updateFlagsAdd(carryBits, res);
 
         return 1;
     }
@@ -201,5 +202,25 @@ namespace cpu
     std::string Instructions::add_dis(uint8_t opCode, uint16_t, uint16_t)
     {
         return std::to_string(opCode) + " : ADD " + m_registers.register8ToStr(NAME) + ";\n";
+    }
+
+    template<Registers::Names NAME>
+    int Instructions::adc(uint16_t, uint16_t)
+    {
+        int a = (int8_t) m_registers.read8<Registers::A>();
+        int b = (int8_t) m_registers.read8<NAME>();
+        int carryFlag = m_registers.isSetFlag(Registers::Flag::C) ? 1 : 0;
+        int res = a + b + carryFlag;
+        int carryBits = a ^ b ^ carryFlag ^ res;
+
+        m_registers.write8<Registers::A>(res);
+        updateFlagsAdd(carryBits, res);
+
+        return 1;
+    }
+    template<Registers::Names NAME>
+    std::string Instructions::adc_dis(uint8_t opCode, uint16_t, uint16_t)
+    {
+        return std::to_string(opCode) + " : ADC " + m_registers.register8ToStr(NAME) + ";\n";
     }
 }

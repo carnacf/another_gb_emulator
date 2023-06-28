@@ -146,10 +146,19 @@ namespace cpu
         m_instructionSet[0x84] = &Instructions::add<Registers::H>;
         m_instructionSet[0x85] = &Instructions::add<Registers::L>;
         m_instructionSet[0x86] = &Instructions::add_HL;
+        m_instructionSet[0x87] = &Instructions::add<Registers::A>;
+        m_instructionSet[0x88] = &Instructions::adc<Registers::B>;
+        m_instructionSet[0x89] = &Instructions::adc<Registers::C>;
+        m_instructionSet[0x8A] = &Instructions::adc<Registers::D>;
+        m_instructionSet[0x8B] = &Instructions::adc<Registers::E>;
+        m_instructionSet[0x8C] = &Instructions::adc<Registers::H>;
+        m_instructionSet[0x8D] = &Instructions::adc<Registers::L>;
+        m_instructionSet[0x8F] = &Instructions::adc<Registers::A>;
 
 
         m_instructionSet[0xC1] = &Instructions::pop<Registers::BC>;
         m_instructionSet[0xC5] = &Instructions::push<Registers::BC>;
+        m_instructionSet[0xC6] = &Instructions::add_n;
         m_instructionSet[0xD1] = &Instructions::pop<Registers::DE>;
         m_instructionSet[0xD5] = &Instructions::push<Registers::DE>;
         m_instructionSet[0xE0] = &Instructions::ldh_an_A;
@@ -268,9 +277,18 @@ namespace cpu
         m_instructionSetDisassembly[0x84] = &Instructions::add_dis<Registers::H>;
         m_instructionSetDisassembly[0x85] = &Instructions::add_dis<Registers::L>;
         m_instructionSetDisassembly[0x86] = &Instructions::add_HL_dis;
+        m_instructionSetDisassembly[0x87] = &Instructions::add_dis<Registers::A>;
+        m_instructionSetDisassembly[0x88] = &Instructions::adc_dis<Registers::B>;
+        m_instructionSetDisassembly[0x89] = &Instructions::adc_dis<Registers::C>;
+        m_instructionSetDisassembly[0x8A] = &Instructions::adc_dis<Registers::D>;
+        m_instructionSetDisassembly[0x8B] = &Instructions::adc_dis<Registers::E>;
+        m_instructionSetDisassembly[0x8C] = &Instructions::adc_dis<Registers::H>;
+        m_instructionSetDisassembly[0x8D] = &Instructions::adc_dis<Registers::L>;
+        m_instructionSetDisassembly[0x8F] = &Instructions::adc_dis<Registers::A>;
 
         m_instructionSetDisassembly[0xC1] = &Instructions::pop_dis<Registers::BC>;
         m_instructionSetDisassembly[0xC5] = &Instructions::push_dis<Registers::BC>;
+        m_instructionSetDisassembly[0xC6] = &Instructions::add_n_dis;
         m_instructionSetDisassembly[0xD1] = &Instructions::pop_dis<Registers::DE>;
         m_instructionSetDisassembly[0xD5] = &Instructions::push_dis<Registers::DE>;
         m_instructionSetDisassembly[0xE0] = &Instructions::ldh_an_A_dis;
@@ -527,15 +545,35 @@ namespace cpu
         
         uint16_t hl = m_registers.read16<Registers::HL>();
         uint8_t b = m_memory.read8(hl);
-        uint8_t res = a + b;
+        int res = a + b;
+        int carryBits = a ^ b ^ res;
 
         m_registers.write8<Registers::A>(res);
-        updateFlagsAdd(a, b, res);
+        updateFlagsAdd(carryBits, res);
 
         return 2;
     }
     std::string Instructions::add_HL_dis(uint8_t opCode, uint16_t, uint16_t)
     {
         return std::to_string(opCode) + " : ADD (HL);\n";
+    }
+
+    int Instructions::add_n(uint16_t, uint16_t)
+    {
+        int a = (int8_t) m_registers.read8<Registers::A>();
+
+        int b = (int8_t) m_memory.read8(m_registers.getPC());
+        m_registers.incrementPC();
+        int res = a + b;
+        int carryBits = a ^ b ^ res;
+
+        m_registers.write8<Registers::A>(res);
+        updateFlagsAdd(carryBits, res);
+
+        return 2;
+    }
+    std::string Instructions::add_n_dis(uint8_t opCode, uint16_t, uint16_t)
+    {
+        return std::to_string(opCode) + " : ADD n;\n";
     }
 }

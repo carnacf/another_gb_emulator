@@ -145,12 +145,12 @@ private:
     std::string pop_dis(uint8_t, uint16_t, uint16_t);
 
     // 8-bit arithmetic and logical instructions
-    void updateFlagsAdd(uint8_t a, uint8_t b, uint8_t res)
+    void updateFlagsAdd(int carryBits, uint8_t res)
     {
         m_registers.resetFlags();
 
-        bool hc = ((a ^ b ^ res) & 0x10) == 0x10;
-        bool c = ((a ^ b ^ res) & 0x100) == 0x100;
+        bool hc = (carryBits & 0x10) == 0x10;
+        bool c = (carryBits & 0x100) == 0x100;
         m_registers.setFlag(Registers::Flag::H, hc);
         m_registers.setFlag(Registers::Flag::C, c);
         m_registers.setFlag(Registers::Flag::Z, res == 0);
@@ -160,8 +160,17 @@ private:
     int add(uint16_t, uint16_t);
     template<Registers::Names NAME>
     std::string add_dis(uint8_t, uint16_t, uint16_t);
+    
     int add_HL(uint16_t, uint16_t);
     std::string add_HL_dis(uint8_t, uint16_t, uint16_t);
+
+    int add_n(uint16_t, uint16_t);
+    std::string add_n_dis(uint8_t, uint16_t, uint16_t);
+
+    template<Registers::Names NAME>
+    int adc(uint16_t, uint16_t);
+    template<Registers::Names NAME>
+    std::string adc_dis(uint8_t, uint16_t, uint16_t);
 private:
     Registers& m_registers;
     Memory& m_memory;
