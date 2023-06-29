@@ -1,4 +1,5 @@
 #pragma once
+#include "instruction_utils.h"
 
 namespace cpu
 {
@@ -10,15 +11,6 @@ namespace cpu
         m_registers.write8<operands.second>(A);
 
         return 1;
-    }
-
-    template<uint8_t opcode>
-    std::string Executor::ld_r_r_8_dis(uint8_t opCode)
-    {
-        constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
-
-        return std::to_string(opcode) + " : LD " + Registers::register8ToStr(operands.first) + ", " +
-            Registers::register8ToStr(operands.second) + "; \n";
     }
 
     template<uint8_t opcode>
@@ -34,14 +26,6 @@ namespace cpu
     }
 
     template<uint8_t opcode>
-    std::string Executor::ld_r_n_8_dis(uint8_t opCode)
-    {
-        constexpr Registers::Names opA = opAFromOpCode<opcode>();
-
-        return std::to_string(opcode) + " : LD " + Registers::register8ToStr(opA) + ", n; \n";
-    }
-
-    template<uint8_t opcode>
     int Executor::ld_HL_n_8()
     {
         uint16_t addr = m_registers.read16<Registers::HL>();
@@ -51,12 +35,6 @@ namespace cpu
         m_memory.write8(addr, immediate);
 
         return 3;
-    }
-
-    template<uint8_t opcode>
-    std::string Executor::ld_HL_n_8_dis(uint8_t opCode)
-    {
-        return std::to_string(opcode) + " : LD (HL), n; \n";
     }
 
     template<uint8_t opcode>
@@ -71,14 +49,6 @@ namespace cpu
     }
 
     template<uint8_t opcode>
-    inline std::string Executor::ld_r_HL_dis(uint8_t opCode)
-    {
-        constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
-
-        return std::to_string(opcode) + " : LD " + Registers::register8ToStr(operands.first) + ", (HL); \n";
-    }
-
-    template<uint8_t opcode>
     int Executor::ld_HL_r()
     {
         constexpr Registers::Names opB = opBFromOpCode<opcode>();
@@ -87,14 +57,6 @@ namespace cpu
         m_memory.write8(hl, val);
 
         return 2;
-    }
-
-    template<uint8_t opcode>
-    std::string Executor::ld_HL_r_dis(uint8_t opCode)
-    {
-        constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
-
-        return std::to_string(opcode) + " : LD (HL), " + Registers::register8ToStr(operands.first) + "; \n";
     }
 
     template<Registers::Paired NAME>
@@ -109,12 +71,6 @@ namespace cpu
     }
 
     template<Registers::Paired NAME>
-    std::string Executor::ld_A_r16_dis(uint8_t opCode)
-    {
-        return std::to_string(opCode) + " : LD A, (" + Registers::register16ToStr(NAME) + "); \n";
-    }
-
-    template<Registers::Paired NAME>
     int Executor::ld_r16_A()
     {
         uint16_t addr = m_registers.read16<NAME>();
@@ -122,12 +78,6 @@ namespace cpu
         m_memory.write8(addr, val);
 
         return 2;
-    }
-
-    template<Registers::Paired NAME>
-    std::string Executor::ld_r16_A_dis(uint8_t opCode)
-    {
-        return std::to_string(opCode) + " : LD (" + Registers::register16ToStr(NAME) + "), A; \n";
     }
 
     template<Registers::Paired NAME>
@@ -140,11 +90,6 @@ namespace cpu
         m_registers.write16<NAME>(val);
 
         return 3;
-    }
-    template<Registers::Paired NAME>
-    std::string Executor::ld_rr_nn_dis(uint8_t opCode)
-    {
-        return std::to_string(opCode) + " : LD rr, " + m_registers.register16ToStr(NAME) + ";\n";
     }
 
     template<Registers::Paired NAME>
@@ -160,11 +105,6 @@ namespace cpu
 
         return 4;
     }
-    template<Registers::Paired NAME>
-    std::string Executor::push_dis(uint8_t opCode)
-    {
-        return std::to_string(opCode) + " : PUSH " + m_registers.register16ToStr(NAME) + ";\n";
-    }
 
     template<Registers::Paired NAME>
     int Executor::pop()
@@ -179,11 +119,6 @@ namespace cpu
         m_registers.write16<NAME>(val);
         return 3;                                                                                                                                                                                            
     }
-    template<Registers::Paired NAME>
-    std::string Executor::pop_dis(uint8_t opCode)
-    {
-        return std::to_string(opCode) + " : POP " + m_registers.register16ToStr(NAME) + ";\n";
-    }
 
     template<Registers::Names NAME>
     int Executor::add_r()
@@ -194,11 +129,6 @@ namespace cpu
 
         return 1;
     }
-    template<Registers::Names NAME>
-    std::string Executor::add_r_dis(uint8_t opCode)
-    {
-        return std::to_string(opCode) + " : ADD " + m_registers.register8ToStr(NAME) + ";\n";
-    }
 
     template<Registers::Names NAME>
     int Executor::adc_r()
@@ -208,10 +138,5 @@ namespace cpu
         adc(a, b);
 
         return 1;
-    }
-    template<Registers::Names NAME>
-    std::string Executor::adc_r_dis(uint8_t opCode)
-    {
-        return std::to_string(opCode) + " : ADC " + m_registers.register8ToStr(NAME) + ";\n";
     }
 }
