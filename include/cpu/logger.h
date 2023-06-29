@@ -12,13 +12,13 @@ namespace cpu
 {
     class Registers;
 
-    class Tracer
+    class Logger
     {
     public:
-        using Disassembly = std::string(Tracer::*)(uint8_t);
+        using Disassembly = std::string(Logger::*)(uint8_t);
 
-        Tracer() = delete;
-        Tracer(Registers& regist, Memory& mem);
+        Logger() = delete;
+        Logger(Registers& regist, Memory& mem);
 
         std::string operator()(uint8_t opCode)
         {
@@ -98,4 +98,4 @@ namespace cpu
     };
 }
 
-#include "tracer-impl.hpp"
+#include "logger-impl.hpp"

@@ -6,12 +6,12 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_library(anothergbemulator STATIC 
  "src/cpu/executor.cpp"
- "src/cpu/tracer.cpp"
+ "src/cpu/logger.cpp"
  "include/cpu/executor.h"
  "include/cpu/executor-impl.hpp"
  "include/cpu/registery.h"
- "include/cpu/tracer.h"
- "include/cpu/tracer-impl.hpp"
+ "include/cpu/logger.h"
+ "include/cpu/logger-impl.hpp"
  "include/memory/memory.h"
  "include/utils/global.h"
  "include/utils/utils.h"

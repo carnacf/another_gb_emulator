@@ -2,7 +2,7 @@
 
 #include "utils/global.h"
 
-#include "tracer.h"
+#include "logger.h"
 #include "registery.h"
 
 #include <string>
@@ -114,7 +114,7 @@ private:
     int sbc_HL();
     int sbc_n();
 private:
-    Tracer m_tracer;
+    Logger m_tracer;
     Registers& m_registers;
     Memory& m_memory;
 
