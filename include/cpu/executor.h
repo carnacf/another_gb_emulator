@@ -12,20 +12,14 @@ namespace cpu
 {
 class Registers;
 
-struct InstructionData
-{
-    std::string opcode;
-    std::string instruction;
-};
-
-class Instructions
+class Executor
 {
 public:
-    using Instruction = int (Instructions::*)();
-    using Disassembly = std::string (Instructions::*)(uint8_t);
+    using Instruction = int (Executor::*)();
+    using Disassembly = std::string (Executor::*)(uint8_t);
 
-    Instructions() = delete;
-    Instructions(Registers& regist, Memory& mem);
+    Executor() = delete;
+    Executor(Registers& regist, Memory& mem);
 
     template<bool disassemble>
     int execute(uint8_t opCode)
@@ -191,4 +185,4 @@ private:
 };
 }
 
-#include "instruction-impl.hpp"
+#include "executor-impl.hpp"

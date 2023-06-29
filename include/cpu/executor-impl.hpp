@@ -3,7 +3,7 @@
 namespace cpu
 {
     template<uint8_t opcode>
-    int Instructions::ld_r_r_8()
+    int Executor::ld_r_r_8()
     {
         constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
         uint8_t A = m_registers.read8<operands.first>();
@@ -13,7 +13,7 @@ namespace cpu
     }
 
     template<uint8_t opcode>
-    std::string Instructions::ld_r_r_8_dis(uint8_t opCode)
+    std::string Executor::ld_r_r_8_dis(uint8_t opCode)
     {
         constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
 
@@ -22,7 +22,7 @@ namespace cpu
     }
 
     template<uint8_t opcode>
-    int Instructions::ld_r_n_8()
+    int Executor::ld_r_n_8()
     {
         uint8_t immediate = m_memory.read8(m_registers.getPC());
         m_registers.incrementPC();
@@ -34,7 +34,7 @@ namespace cpu
     }
 
     template<uint8_t opcode>
-    std::string Instructions::ld_r_n_8_dis(uint8_t opCode)
+    std::string Executor::ld_r_n_8_dis(uint8_t opCode)
     {
         constexpr Registers::Names opA = opAFromOpCode<opcode>();
 
@@ -42,7 +42,7 @@ namespace cpu
     }
 
     template<uint8_t opcode>
-    int Instructions::ld_HL_n_8()
+    int Executor::ld_HL_n_8()
     {
         uint16_t addr = m_registers.read16<Registers::HL>();
         uint8_t immediate = m_memory.read8(m_registers.getPC());
@@ -54,13 +54,13 @@ namespace cpu
     }
 
     template<uint8_t opcode>
-    std::string Instructions::ld_HL_n_8_dis(uint8_t opCode)
+    std::string Executor::ld_HL_n_8_dis(uint8_t opCode)
     {
         return std::to_string(opcode) + " : LD (HL), n; \n";
     }
 
     template<uint8_t opcode>
-    inline int Instructions::ld_r_HL()
+    inline int Executor::ld_r_HL()
     {
         constexpr Registers::Names opA = opAFromOpCode<opcode>();
         uint16_t hl = m_registers.read16<Registers::HL>();
@@ -71,7 +71,7 @@ namespace cpu
     }
 
     template<uint8_t opcode>
-    inline std::string Instructions::ld_r_HL_dis(uint8_t opCode)
+    inline std::string Executor::ld_r_HL_dis(uint8_t opCode)
     {
         constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
 
@@ -79,7 +79,7 @@ namespace cpu
     }
 
     template<uint8_t opcode>
-    int Instructions::ld_HL_r()
+    int Executor::ld_HL_r()
     {
         constexpr Registers::Names opB = opBFromOpCode<opcode>();
         uint16_t hl = m_registers.read16<Registers::HL>();
@@ -90,7 +90,7 @@ namespace cpu
     }
 
     template<uint8_t opcode>
-    std::string Instructions::ld_HL_r_dis(uint8_t opCode)
+    std::string Executor::ld_HL_r_dis(uint8_t opCode)
     {
         constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
 
@@ -98,7 +98,7 @@ namespace cpu
     }
 
     template<Registers::Paired NAME>
-    int Instructions::ld_A_r16()
+    int Executor::ld_A_r16()
     {
         uint16_t addr = m_registers.read16<NAME>();
         uint8_t val = m_memory.read8(addr);
@@ -109,13 +109,13 @@ namespace cpu
     }
 
     template<Registers::Paired NAME>
-    std::string Instructions::ld_A_r16_dis(uint8_t opCode)
+    std::string Executor::ld_A_r16_dis(uint8_t opCode)
     {
         return std::to_string(opCode) + " : LD A, (" + Registers::register16ToStr(NAME) + "); \n";
     }
 
     template<Registers::Paired NAME>
-    int Instructions::ld_r16_A()
+    int Executor::ld_r16_A()
     {
         uint16_t addr = m_registers.read16<NAME>();
         uint8_t val = m_registers.read8<Registers::A> ();
@@ -125,13 +125,13 @@ namespace cpu
     }
 
     template<Registers::Paired NAME>
-    std::string Instructions::ld_r16_A_dis(uint8_t opCode)
+    std::string Executor::ld_r16_A_dis(uint8_t opCode)
     {
         return std::to_string(opCode) + " : LD (" + Registers::register16ToStr(NAME) + "), A; \n";
     }
 
     template<Registers::Paired NAME>
-    int Instructions::ld_rr_nn()
+    int Executor::ld_rr_nn()
     {
         uint16_t val = m_memory.read16(m_registers.getPC());
         m_registers.incrementPC();
@@ -142,13 +142,13 @@ namespace cpu
         return 3;
     }
     template<Registers::Paired NAME>
-    std::string Instructions::ld_rr_nn_dis(uint8_t opCode)
+    std::string Executor::ld_rr_nn_dis(uint8_t opCode)
     {
         return std::to_string(opCode) + " : LD rr, " + m_registers.register16ToStr(NAME) + ";\n";
     }
 
     template<Registers::Paired NAME>
-    int Instructions::push()
+    int Executor::push()
     {
         uint16_t val = m_registers.read16<NAME>();
         uint16_t sp = m_registers.getSP();
@@ -161,13 +161,13 @@ namespace cpu
         return 4;
     }
     template<Registers::Paired NAME>
-    std::string Instructions::push_dis(uint8_t opCode)
+    std::string Executor::push_dis(uint8_t opCode)
     {
         return std::to_string(opCode) + " : PUSH " + m_registers.register16ToStr(NAME) + ";\n";
     }
 
     template<Registers::Paired NAME>
-    int Instructions::pop()
+    int Executor::pop()
     {
         uint16_t sp = m_registers.getSP();
         uint16_t val = m_memory.read16(sp);
@@ -180,13 +180,13 @@ namespace cpu
         return 3;                                                                                                                                                                                            
     }
     template<Registers::Paired NAME>
-    std::string Instructions::pop_dis(uint8_t opCode)
+    std::string Executor::pop_dis(uint8_t opCode)
     {
         return std::to_string(opCode) + " : POP " + m_registers.register16ToStr(NAME) + ";\n";
     }
 
     template<Registers::Names NAME>
-    int Instructions::add_r()
+    int Executor::add_r()
     {
         int a = (int8_t) m_registers.read8<Registers::A>();
         int b = (int8_t) m_registers.read8<NAME>();
@@ -195,13 +195,13 @@ namespace cpu
         return 1;
     }
     template<Registers::Names NAME>
-    std::string Instructions::add_r_dis(uint8_t opCode)
+    std::string Executor::add_r_dis(uint8_t opCode)
     {
         return std::to_string(opCode) + " : ADD " + m_registers.register8ToStr(NAME) + ";\n";
     }
 
     template<Registers::Names NAME>
-    int Instructions::adc_r()
+    int Executor::adc_r()
     {
         int a = (int8_t) m_registers.read8<Registers::A>();
         int b = (int8_t) m_registers.read8<NAME>();
@@ -210,7 +210,7 @@ namespace cpu
         return 1;
     }
     template<Registers::Names NAME>
-    std::string Instructions::adc_r_dis(uint8_t opCode)
+    std::string Executor::adc_r_dis(uint8_t opCode)
     {
         return std::to_string(opCode) + " : ADC " + m_registers.register8ToStr(NAME) + ";\n";
     }

@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 3.21)
 
 project(anothergbemulator)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 add_library(anothergbemulator STATIC 
-    src/cpu/instruction.cpp
+    "src/cpu/executor.cpp"
 )
 
 target_include_directories(anothergbemulator

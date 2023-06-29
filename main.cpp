@@ -3,7 +3,7 @@
 
 #include "utils/utils.h"
 
-#include "cpu/instruction.h"
+#include "cpu/executor.h"
 #include "cpu/registery.h"
 #include "memory/memory.h"
 
@@ -18,8 +18,13 @@ int main(int argc, char* argv[])
     }
 
     cpu::Registers registery;
-    cpu::Instructions instructions(registery, memory);
-    
+    cpu::Executor instructions(registery, memory);
+
+    while (1)
+    {
+        uint8_t opcode = memory.read8(registery.getPC());
+        instructions.execute<true>(opcode);
+    }
 
     return 1;
 }
