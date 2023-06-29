@@ -121,14 +121,22 @@ namespace cpu
         m_instructionSet[0x8D] = &Tracer::adc_r<Registers::L>;
         m_instructionSet[0x8E] = &Tracer::adc_HL;
         m_instructionSet[0x8F] = &Tracer::adc_r<Registers::A>;
-        m_instructionSet[0x90] = &Tracer::add_r<Registers::B>;
-        m_instructionSet[0x91] = &Tracer::add_r<Registers::C>;
-        m_instructionSet[0x92] = &Tracer::add_r<Registers::D>;
-        m_instructionSet[0x93] = &Tracer::add_r<Registers::E>;
-        m_instructionSet[0x94] = &Tracer::add_r<Registers::H>;
-        m_instructionSet[0x95] = &Tracer::add_r<Registers::L>;
-        m_instructionSet[0x96] = &Tracer::add_HL;
-        m_instructionSet[0x97] = &Tracer::add_r<Registers::A>;
+        m_instructionSet[0x90] = &Tracer::sub_r<Registers::B>;
+        m_instructionSet[0x91] = &Tracer::sub_r<Registers::C>;
+        m_instructionSet[0x92] = &Tracer::sub_r<Registers::D>;
+        m_instructionSet[0x93] = &Tracer::sub_r<Registers::E>;
+        m_instructionSet[0x94] = &Tracer::sub_r<Registers::H>;
+        m_instructionSet[0x95] = &Tracer::sub_r<Registers::L>;
+        m_instructionSet[0x96] = &Tracer::sub_HL;
+        m_instructionSet[0x97] = &Tracer::sub_r<Registers::A>;
+        m_instructionSet[0x98] = &Tracer::sbc_r<Registers::B>;
+        m_instructionSet[0x99] = &Tracer::sbc_r<Registers::C>;
+        m_instructionSet[0x9A] = &Tracer::sbc_r<Registers::D>;
+        m_instructionSet[0x9B] = &Tracer::sbc_r<Registers::E>;
+        m_instructionSet[0x9C] = &Tracer::sbc_r<Registers::H>;
+        m_instructionSet[0x9D] = &Tracer::sbc_r<Registers::L>;
+        m_instructionSet[0x9E] = &Tracer::sbc_HL;
+        m_instructionSet[0x9F] = &Tracer::sbc_r<Registers::A>;
 
         m_instructionSet[0xC1] = &Tracer::pop<Registers::BC>;
         m_instructionSet[0xC5] = &Tracer::push<Registers::BC>;
@@ -137,6 +145,7 @@ namespace cpu
         m_instructionSet[0xD1] = &Tracer::pop<Registers::DE>;
         m_instructionSet[0xD5] = &Tracer::push<Registers::DE>;
         m_instructionSet[0xD6] = &Tracer::sub_n;
+        m_instructionSet[0xDE] = &Tracer::sbc_n;
         m_instructionSet[0xE0] = &Tracer::ldh_an_A;
         m_instructionSet[0xE1] = &Tracer::pop<Registers::HL>;
         m_instructionSet[0xE2] = &Tracer::ldh_aC_A;
@@ -259,5 +268,15 @@ namespace cpu
     std::string Tracer::sub_n(uint8_t opCode)
     {
         return std::to_string(opCode) + " : SUB n;\n";
+    }
+
+    std::string Tracer::sbc_HL(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : SBC (HL);\n";
+    }
+
+    std::string Tracer::sbc_n(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : SBC n;\n";
     }
 }

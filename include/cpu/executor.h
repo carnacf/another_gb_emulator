@@ -107,6 +107,12 @@ private:
     int sub_r();
     int sub_HL();
     int sub_n();
+
+    void sbc(int a, int b);
+    template<Registers::Names NAME>
+    int sbc_r();
+    int sbc_HL();
+    int sbc_n();
 private:
     Tracer m_tracer;
     Registers& m_registers;
