@@ -139,4 +139,14 @@ namespace cpu
 
         return 1;
     }
+    
+    template<Registers::Names NAME>
+    int Executor::sub_r()
+    {
+        int a = (int8_t)m_registers.read8<Registers::A>();
+        int b = (int8_t)m_registers.read8<NAME>();
+        sub(a, b);
+
+        return 1;
+    }
 }

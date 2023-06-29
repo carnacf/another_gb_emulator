@@ -43,90 +43,70 @@ private:
     // 8bit Loads
     template<uint8_t opcode>
     int ld_r_r_8();
-
     template<uint8_t opcode>
     int ld_r_n_8();
-
     template<uint8_t opcode>
     int ld_HL_n_8();
-
     template<uint8_t opcode>
     int ld_r_HL();
-
     template<uint8_t opcode>
     int ld_HL_r();
-
     template<Registers::Paired NAME>
     int ld_A_r16();
-
     template<Registers::Paired NAME>
     int ld_r16_A();
-
     int ld_A_nn();
-
     int ld_nn_A();
-
     int ldh_A_aC();
-
     int ldh_aC_A();
-
     int ldh_A_an();
-
     int ldh_an_A();
-
     int ld_HLd_A();
-
     int ld_A_HLd();
-
     int ld_HLi_A();
-
     int ld_A_HLi();
 
     // 16bits loads
     template<Registers::Paired NAME>
     int ld_rr_nn();
-    
     int ld_SP_rr();
-
     int ld_nn_SP();
-
     int ld_SP_HL();
-
     int ld_HL_SP_r8();
 
     template<Registers::Paired NAME>
     int push();
-
     template<Registers::Paired NAME>
     int pop();
 
     // 8-bit arithmetic and logical instructions
-    void updateFlagsAdd(int carryBits, uint8_t res)
+    void updateFlags(int carryBits, uint8_t res, bool isSub = false)
     {
-        m_registers.resetFlags();
-
         bool hc = (carryBits & 0x10) == 0x10;
         bool c = (carryBits & 0x100) == 0x100;
         m_registers.setFlag(Registers::Flag::H, hc);
         m_registers.setFlag(Registers::Flag::C, c);
         m_registers.setFlag(Registers::Flag::Z, res == 0);
+        m_registers.setFlag(Registers::Flag::N, isSub);
     }
 
     void add(int a, int b);
     template<Registers::Names NAME>
     int add_r();
-    
     int add_HL();
-
     int add_n();
 
     void adc(int a, int b);
     template<Registers::Names NAME>
     int adc_r();
-
     int adc_HL();
-
     int adc_n();
+
+    void sub(int a, int b);
+    template<Registers::Names NAME>
+    int sub_r();
+    int sub_HL();
+    int sub_n();
 private:
     Tracer m_tracer;
     Registers& m_registers;

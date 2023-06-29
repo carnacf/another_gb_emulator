@@ -122,8 +122,15 @@ namespace cpu
         m_instructionSet[0x8C] = &Executor::adc_r<Registers::H>;
         m_instructionSet[0x8D] = &Executor::adc_r<Registers::L>;
         m_instructionSet[0x8E] = &Executor::adc_HL;
-        m_instructionSet[0x8F] = &Executor::adc_r<Registers::A>;
-
+        m_instructionSet[0x8F] = &Executor::sub_r<Registers::A>;
+        m_instructionSet[0x90] = &Executor::sub_r<Registers::B>;
+        m_instructionSet[0x91] = &Executor::sub_r<Registers::C>;
+        m_instructionSet[0x92] = &Executor::sub_r<Registers::D>;
+        m_instructionSet[0x93] = &Executor::sub_r<Registers::E>;
+        m_instructionSet[0x94] = &Executor::sub_r<Registers::H>;
+        m_instructionSet[0x95] = &Executor::sub_r<Registers::L>;
+        m_instructionSet[0x96] = &Executor::sub_HL;
+        m_instructionSet[0x97] = &Executor::sub_r<Registers::A>;
 
         m_instructionSet[0xC1] = &Executor::pop<Registers::BC>;
         m_instructionSet[0xC5] = &Executor::push<Registers::BC>;
@@ -131,6 +138,7 @@ namespace cpu
         m_instructionSet[0xCE] = &Executor::adc_n;
         m_instructionSet[0xD1] = &Executor::pop<Registers::DE>;
         m_instructionSet[0xD5] = &Executor::push<Registers::DE>;
+        m_instructionSet[0xD6] = &Executor::sub_n;
         m_instructionSet[0xE0] = &Executor::ldh_an_A;
         m_instructionSet[0xE1] = &Executor::pop<Registers::HL>;
         m_instructionSet[0xE2] = &Executor::ldh_aC_A;
@@ -325,7 +333,7 @@ namespace cpu
         int carryBits = a ^ b ^ res;
 
         m_registers.write8<Registers::A>(res);
-        updateFlagsAdd(carryBits, res);
+        updateFlags(carryBits, res);
     }
 
     int Executor::add_HL()
@@ -350,14 +358,14 @@ namespace cpu
         return 2;
     }
     
-    void cpu::Executor::adc(int a, int b)
+    void Executor::adc(int a, int b)
     {
         int carryFlag = m_registers.isSetFlag(Registers::Flag::C) ? 1 : 0;
         int res = a + b + carryFlag;
         int carryBits = a ^ b ^ carryFlag ^ res;
 
         m_registers.write8<Registers::A>(res);
-        updateFlagsAdd(carryBits, res);
+        updateFlags(carryBits, res);
     }
 
     int Executor::adc_HL()
@@ -378,6 +386,37 @@ namespace cpu
         int b = (int8_t)m_memory.read8(m_registers.getPC());
         m_registers.incrementPC();
         adc(a, b);
+
+        return 2;
+    }
+
+    void Executor::sub(int a, int b)
+    {
+        int res = a - b;
+        int carryBits = a ^ b ^ res;
+
+        m_registers.write8<Registers::A>(res);
+        updateFlags(carryBits, res, true);
+    }
+
+    int Executor::sub_HL()
+    {
+        int a = (int8_t)m_registers.read8<Registers::A>();
+
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        int b = (int8_t)m_memory.read8(hl);
+        sub(a, b);
+
+        return 2;
+    }
+
+    int Executor::sub_n()
+    {
+        int a = (int8_t)m_registers.read8<Registers::A>();
+
+        int b = (int8_t)m_memory.read8(m_registers.getPC());
+        m_registers.incrementPC();
+        sub(a, b);
 
         return 2;
     }
