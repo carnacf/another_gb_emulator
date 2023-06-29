@@ -312,16 +312,16 @@ namespace cpu
         std::fill_n(m_cbInstructionSetDisassembly, 255, &Instructions::unhandledDisassembly);
     }
 
-    int Instructions::unhandled(uint16_t, uint16_t) 
+    int Instructions::unhandled() 
     {
         return 1;
     }
-    std::string Instructions::unhandledDisassembly(uint8_t opCode, uint16_t, uint16_t)
+    std::string Instructions::unhandledDisassembly(uint8_t opCode)
     {
         return std::to_string(opCode) +  " : Not handled yet;\n";
     }
     
-    int Instructions::ld_A_nn(uint16_t opA, uint16_t opB)
+    int Instructions::ld_A_nn()
     {
         uint16_t nn = m_memory.read16(m_registers.getPC());
         m_registers.incrementPC();
@@ -331,12 +331,12 @@ namespace cpu
         m_registers.write8<Registers::A>(val);
         return 4;
     }
-    std::string Instructions::ld_A_nn_dis(uint8_t, uint16_t, uint16_t)
+    std::string Instructions::ld_A_nn_dis(uint8_t /*opCode*/)
     {
         return "LD A, nn;\n";
     }
 
-    int Instructions::ld_nn_A(uint16_t opA, uint16_t opB)
+    int Instructions::ld_nn_A()
     {
         uint16_t nn = m_memory.read16(m_registers.getPC());
         m_registers.incrementPC();
@@ -347,12 +347,12 @@ namespace cpu
 
         return 4;
     }
-    std::string Instructions::ld_nn_A_dis(uint8_t, uint16_t, uint16_t)
+    std::string Instructions::ld_nn_A_dis(uint8_t opCode)
     {
         return "LD nn, A;";
     }
 
-    int Instructions::ldh_A_aC(uint16_t opA, uint16_t opB)
+    int Instructions::ldh_A_aC()
     {
         uint8_t c = m_registers.read8<Registers::C>();
         uint16_t addr = utils::to16(0xFF, c);
@@ -362,12 +362,12 @@ namespace cpu
 
         return 2;
     }
-    std::string Instructions::ldh_A_aC_dis(uint8_t, uint16_t, uint16_t)
+    std::string Instructions::ldh_A_aC_dis(uint8_t opCode)
     {
         return "LDH A, (C);\n";
     }
 
-    int Instructions::ldh_aC_A(uint16_t opA, uint16_t opB)
+    int Instructions::ldh_aC_A()
     {
         uint8_t c = m_registers.read8<Registers::C>();
         uint16_t addr = utils::to16(0xFF, c);
@@ -378,12 +378,12 @@ namespace cpu
 
         return 2;
     }
-    std::string Instructions::ldh_aC_A_dis(uint8_t, uint16_t, uint16_t)
+    std::string Instructions::ldh_aC_A_dis(uint8_t opCode)
     {
         return "LDH (C), A;\n";
     }
 
-    int Instructions::ldh_A_an(uint16_t opA, uint16_t opB)
+    int Instructions::ldh_A_an()
     {
         uint8_t n = m_memory.read8(m_registers.getPC());
         m_registers.incrementPC();
@@ -394,12 +394,12 @@ namespace cpu
 
         return 3;
     }
-    std::string Instructions::ldh_A_an_dis(uint8_t, uint16_t, uint16_t)
+    std::string Instructions::ldh_A_an_dis(uint8_t opCode)
     {
         return "LDH A, (n);\n";
     }
 
-    int Instructions::ldh_an_A(uint16_t opA, uint16_t opB)
+    int Instructions::ldh_an_A()
     {
         uint8_t n = m_memory.read8(m_registers.getPC());
         m_registers.incrementPC();
@@ -410,12 +410,12 @@ namespace cpu
         m_memory.write8(addr, a);
         return 3;
     }
-    std::string Instructions::ldh_an_A_dis(uint8_t, uint16_t, uint16_t)
+    std::string Instructions::ldh_an_A_dis(uint8_t opCode)
     {
         return "LDH (n), A;\n";
     }
 
-    int Instructions::ld_HLd_A(uint16_t, uint16_t)
+    int Instructions::ld_HLd_A()
     {
         uint16_t hl = m_registers.read16<Registers::HL>();
         uint8_t val = m_memory.read8(hl);
@@ -426,12 +426,12 @@ namespace cpu
         return 2;
 
     }
-    std::string Instructions::ld_HLd_A_dis(uint8_t, uint16_t, uint16_t)
+    std::string Instructions::ld_HLd_A_dis(uint8_t opCode)
     {
         return "LD (HL-), A;\n";
     }
         
-    int Instructions::ld_A_HLd(uint16_t, uint16_t)
+    int Instructions::ld_A_HLd()
     {
         uint16_t hl = m_registers.read16<Registers::HL>();
         uint8_t a = m_registers.read8<Registers::A>();
@@ -441,12 +441,12 @@ namespace cpu
 
         return 2;
     }
-    std::string Instructions::ld_A_HLd_dis(uint8_t, uint16_t, uint16_t)
+    std::string Instructions::ld_A_HLd_dis(uint8_t opCode)
     {
         return "LD A, (HL-);\n";
     }
         
-    int Instructions::ld_HLi_A(uint16_t, uint16_t)
+    int Instructions::ld_HLi_A()
     {
         uint16_t hl = m_registers.read16<Registers::HL>();
         uint8_t val = m_memory.read8(hl);
@@ -456,12 +456,12 @@ namespace cpu
 
         return 2;
     }
-    std::string Instructions::ld_HLi_A_dis(uint8_t, uint16_t, uint16_t)
+    std::string Instructions::ld_HLi_A_dis(uint8_t opCode)
     {
         return "LD (HL+), A;\n";
     }
     
-    int Instructions::ld_A_HLi(uint16_t, uint16_t)
+    int Instructions::ld_A_HLi()
     {
         uint16_t hl = m_registers.read16<Registers::HL>();
         uint8_t a = m_registers.read8<Registers::A>();
@@ -471,12 +471,12 @@ namespace cpu
 
         return 2;
     }
-    std::string Instructions::ld_A_HLi_dis(uint8_t, uint16_t, uint16_t)
+    std::string Instructions::ld_A_HLi_dis(uint8_t opCode)
     {
         return "LD A, (HL+);\n";
     }
 
-    int Instructions::ld_SP_rr(uint16_t, uint16_t)
+    int Instructions::ld_SP_rr()
     {
         uint16_t val = m_memory.read16(m_registers.getPC());
         m_registers.incrementPC();
@@ -486,12 +486,12 @@ namespace cpu
 
         return 3;
     }
-    std::string Instructions::ld_SP_rr_dis(uint8_t, uint16_t, uint16_t)
+    std::string Instructions::ld_SP_rr_dis(uint8_t opCode)
     {
         return "LD rr, SP;\n";
     }
 
-    int Instructions::ld_nn_SP(uint16_t, uint16_t)
+    int Instructions::ld_nn_SP()
     {
         uint16_t addr = m_memory.read16(m_registers.getPC());
         m_registers.incrementPC();
@@ -501,24 +501,24 @@ namespace cpu
 
         return 5;
     }
-    std::string Instructions::ld_nn_SP_dis(uint8_t, uint16_t, uint16_t)
+    std::string Instructions::ld_nn_SP_dis(uint8_t opCode)
     {
         return "LD SP, rr;\n";
     }
 
-    int Instructions::ld_SP_HL(uint16_t, uint16_t)
+    int Instructions::ld_SP_HL()
     {
         uint16_t hl = m_registers.read16<Registers::HL>();
         m_registers.setSP(hl);
 
         return 2;
     }
-    std::string Instructions::ld_SP_HL_dis(uint8_t, uint16_t, uint16_t)
+    std::string Instructions::ld_SP_HL_dis(uint8_t opCode)
     {
         return "LD SP, HL;\n";
     }
 
-    int Instructions::ld_HL_SP_r8(uint16_t, uint16_t)
+    int Instructions::ld_HL_SP_r8()
     {
         int8_t val = (int8_t) m_memory.read8(m_registers.getPC());
         m_registers.incrementPC();
@@ -536,7 +536,7 @@ namespace cpu
 
         return 3;
     }
-    std::string Instructions::ld_HL_SP_r8_dis(uint8_t, uint16_t, uint16_t)
+    std::string Instructions::ld_HL_SP_r8_dis(uint8_t opCode)
     {
         return "LD HL, SP + r8;\n";
     }
@@ -550,7 +550,7 @@ namespace cpu
         updateFlagsAdd(carryBits, res);
     }
 
-    int Instructions::add_HL(uint16_t, uint16_t)
+    int Instructions::add_HL()
     {
         int a = (int8_t) m_registers.read8<Registers::A>();
         
@@ -560,12 +560,12 @@ namespace cpu
 
         return 2;
     }
-    std::string Instructions::add_HL_dis(uint8_t opCode, uint16_t, uint16_t)
+    std::string Instructions::add_HL_dis(uint8_t opCode)
     {
         return std::to_string(opCode) + " : ADD (HL);\n";
     }
 
-    int Instructions::add_n(uint16_t, uint16_t)
+    int Instructions::add_n()
     {
         int a = (int8_t) m_registers.read8<Registers::A>();
 
@@ -575,7 +575,7 @@ namespace cpu
 
         return 2;
     }
-    std::string Instructions::add_n_dis(uint8_t opCode, uint16_t, uint16_t)
+    std::string Instructions::add_n_dis(uint8_t opCode)
     {
         return std::to_string(opCode) + " : ADD n;\n";
     }
@@ -590,7 +590,7 @@ namespace cpu
         updateFlagsAdd(carryBits, res);
     }
 
-    int Instructions::adc_HL(uint16_t, uint16_t)
+    int Instructions::adc_HL()
     {
         int a = (int8_t)m_registers.read8<Registers::A>();
 
@@ -600,12 +600,12 @@ namespace cpu
 
         return 2;
     }
-    std::string Instructions::adc_HL_dis(uint8_t opCode, uint16_t, uint16_t)
+    std::string Instructions::adc_HL_dis(uint8_t opCode)
     {
         return std::to_string(opCode) + " : ADC (HL);\n";
     }
 
-    int Instructions::adc_n(uint16_t, uint16_t)
+    int Instructions::adc_n()
     {
         int a = (int8_t)m_registers.read8<Registers::A>();
 
@@ -615,7 +615,7 @@ namespace cpu
 
         return 2;
     }
-    std::string Instructions::adc_n_dis(uint8_t opCode, uint16_t, uint16_t)
+    std::string Instructions::adc_n_dis(uint8_t opCode)
     {
         return std::to_string(opCode) + " : ADC n;\n";
     }

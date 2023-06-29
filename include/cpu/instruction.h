@@ -21,8 +21,8 @@ struct InstructionData
 class Instructions
 {
 public:
-    using Instruction = int (Instructions::*)(uint16_t, uint16_t);
-    using Disassembly = std::string (Instructions::*)(uint8_t, uint16_t, uint16_t);
+    using Instruction = int (Instructions::*)();
+    using Disassembly = std::string (Instructions::*)(uint8_t);
 
     Instructions() = delete;
     Instructions(Registers& regist, Memory& mem);
@@ -31,10 +31,10 @@ public:
     int execute(uint8_t opCode)
     {
         m_registers.incrementPC();
-        int numberOfCycles = (this->*m_instructionSet[opCode])(0, 0);
+        int numberOfCycles = (this->*m_instructionSet[opCode])();
         if constexpr (disassemble)
         {
-            std::cout << (this->*m_instructionSetDisassembly[opCode])(opCode, 0, 0);
+            std::cout << (this->*m_instructionSetDisassembly[opCode])(opCode);
         }
 
         return numberOfCycles;
@@ -47,102 +47,102 @@ private:
     void fillInstructionSetDisassembly();
     void fillCbInstructionSetDisassembly();
     
-    int unhandled(uint16_t, uint16_t);
-    std::string unhandledDisassembly(uint8_t opcode, uint16_t, uint16_t);
+    int unhandled();
+    std::string unhandledDisassembly(uint8_t opcode);
 
     // 8bit Loads
     template<uint8_t opcode>
-    int ld_r_r_8(uint16_t opA, uint16_t opB);
+    int ld_r_r_8();
     template<uint8_t opcode>
-    std::string ld_r_r_8_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
+    std::string ld_r_r_8_dis(uint8_t opCode);
 
     template<uint8_t opcode>
-    int ld_r_n_8(uint16_t opA, uint16_t opB);
+    int ld_r_n_8();
     template<uint8_t opcode>
-    std::string ld_r_n_8_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
+    std::string ld_r_n_8_dis(uint8_t opCode);
 
     template<uint8_t opcode>
-    int ld_HL_n_8(uint16_t opA, uint16_t opB);
+    int ld_HL_n_8();
     template<uint8_t opcode>
-    std::string ld_HL_n_8_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
+    std::string ld_HL_n_8_dis(uint8_t opCode);
 
     template<uint8_t opcode>
-    int ld_r_HL(uint16_t opA, uint16_t opB);
+    int ld_r_HL();
     template<uint8_t opcode>
-    std::string ld_r_HL_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
+    std::string ld_r_HL_dis(uint8_t opCode);
 
     template<uint8_t opcode>
-    int ld_HL_r(uint16_t opA, uint16_t opB);
+    int ld_HL_r();
     template<uint8_t opcode>
-    std::string ld_HL_r_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
+    std::string ld_HL_r_dis(uint8_t opCode);
 
     template<Registers::Paired NAME>
-    int ld_A_r16(uint16_t opA, uint16_t opB);
+    int ld_A_r16();
     template<Registers::Paired NAME>
-    std::string ld_A_r16_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
+    std::string ld_A_r16_dis(uint8_t opCode);
 
     template<Registers::Paired NAME>
-    int ld_r16_A(uint16_t opA, uint16_t opB);
+    int ld_r16_A();
     template<Registers::Paired NAME>
-    std::string ld_r16_A_dis(uint8_t opCode, uint16_t opA, uint16_t opB);
+    std::string ld_r16_A_dis(uint8_t opCode);
 
-    int ld_A_nn(uint16_t opA, uint16_t opB);
-    std::string ld_A_nn_dis(uint8_t, uint16_t, uint16_t);
+    int ld_A_nn();
+    std::string ld_A_nn_dis(uint8_t opCode);
 
-    int ld_nn_A(uint16_t opA, uint16_t opB);
-    std::string ld_nn_A_dis(uint8_t, uint16_t, uint16_t);
+    int ld_nn_A();
+    std::string ld_nn_A_dis(uint8_t opCode);
 
-    int ldh_A_aC(uint16_t opA, uint16_t opB);
-    std::string ldh_A_aC_dis(uint8_t, uint16_t, uint16_t);
+    int ldh_A_aC();
+    std::string ldh_A_aC_dis(uint8_t opCode);
 
-    int ldh_aC_A(uint16_t opA, uint16_t opB);
-    std::string ldh_aC_A_dis(uint8_t, uint16_t, uint16_t);
+    int ldh_aC_A();
+    std::string ldh_aC_A_dis(uint8_t opCode);
 
-    int ldh_A_an(uint16_t opA, uint16_t opB);
-    std::string ldh_A_an_dis(uint8_t, uint16_t, uint16_t);
+    int ldh_A_an();
+    std::string ldh_A_an_dis(uint8_t opCode);
 
-    int ldh_an_A(uint16_t opA, uint16_t opB);
-    std::string ldh_an_A_dis(uint8_t, uint16_t, uint16_t);
+    int ldh_an_A();
+    std::string ldh_an_A_dis(uint8_t opCode);
 
-    int ld_HLd_A(uint16_t, uint16_t);
-    std::string ld_HLd_A_dis(uint8_t, uint16_t, uint16_t);
+    int ld_HLd_A();
+    std::string ld_HLd_A_dis(uint8_t opCode);
 
-    int ld_A_HLd(uint16_t, uint16_t);
-    std::string ld_A_HLd_dis(uint8_t, uint16_t, uint16_t);
+    int ld_A_HLd();
+    std::string ld_A_HLd_dis(uint8_t opCode);
 
-    int ld_HLi_A(uint16_t, uint16_t);
-    std::string ld_HLi_A_dis(uint8_t, uint16_t, uint16_t);
+    int ld_HLi_A();
+    std::string ld_HLi_A_dis(uint8_t opCode);
 
-    int ld_A_HLi(uint16_t, uint16_t);
-    std::string ld_A_HLi_dis(uint8_t, uint16_t, uint16_t);
+    int ld_A_HLi();
+    std::string ld_A_HLi_dis(uint8_t opCode);
 
     // 16bits loads
     template<Registers::Paired NAME>
-    int ld_rr_nn(uint16_t, uint16_t);
+    int ld_rr_nn();
     template<Registers::Paired NAME>
-    std::string ld_rr_nn_dis(uint8_t, uint16_t, uint16_t);
+    std::string ld_rr_nn_dis(uint8_t opCode);
     
-    int ld_SP_rr(uint16_t, uint16_t);
-    std::string ld_SP_rr_dis(uint8_t, uint16_t, uint16_t);
+    int ld_SP_rr();
+    std::string ld_SP_rr_dis(uint8_t opCode);
 
-    int ld_nn_SP(uint16_t, uint16_t);
-    std::string ld_nn_SP_dis(uint8_t, uint16_t, uint16_t);
+    int ld_nn_SP();
+    std::string ld_nn_SP_dis(uint8_t opCode);
 
-    int ld_SP_HL(uint16_t, uint16_t);
-    std::string ld_SP_HL_dis(uint8_t, uint16_t, uint16_t);
+    int ld_SP_HL();
+    std::string ld_SP_HL_dis(uint8_t opCode);
 
-    int ld_HL_SP_r8(uint16_t, uint16_t);
-    std::string ld_HL_SP_r8_dis(uint8_t, uint16_t, uint16_t);
-
-    template<Registers::Paired NAME>
-    int push(uint16_t, uint16_t);
-    template<Registers::Paired NAME>
-    std::string push_dis(uint8_t, uint16_t, uint16_t);
+    int ld_HL_SP_r8();
+    std::string ld_HL_SP_r8_dis(uint8_t opCode);
 
     template<Registers::Paired NAME>
-    int pop(uint16_t, uint16_t);
+    int push();
     template<Registers::Paired NAME>
-    std::string pop_dis(uint8_t, uint16_t, uint16_t);
+    std::string push_dis(uint8_t opCode);
+
+    template<Registers::Paired NAME>
+    int pop();
+    template<Registers::Paired NAME>
+    std::string pop_dis(uint8_t opCode);
 
     // 8-bit arithmetic and logical instructions
     void updateFlagsAdd(int carryBits, uint8_t res)
@@ -158,27 +158,27 @@ private:
 
     void add(int a, int b);
     template<Registers::Names NAME>
-    int add_r(uint16_t, uint16_t);
+    int add_r();
     template<Registers::Names NAME>
-    std::string add_r_dis(uint8_t, uint16_t, uint16_t);
+    std::string add_r_dis(uint8_t opCode);
     
-    int add_HL(uint16_t, uint16_t);
-    std::string add_HL_dis(uint8_t, uint16_t, uint16_t);
+    int add_HL();
+    std::string add_HL_dis(uint8_t opCode);
 
-    int add_n(uint16_t, uint16_t);
-    std::string add_n_dis(uint8_t, uint16_t, uint16_t);
+    int add_n();
+    std::string add_n_dis(uint8_t opCode);
 
     void adc(int a, int b);
     template<Registers::Names NAME>
-    int adc_r(uint16_t, uint16_t);
+    int adc_r();
     template<Registers::Names NAME>
-    std::string adc_r_dis(uint8_t, uint16_t, uint16_t);
+    std::string adc_r_dis(uint8_t opCode);
 
-    int adc_HL(uint16_t, uint16_t);
-    std::string adc_HL_dis(uint8_t, uint16_t, uint16_t);
+    int adc_HL();
+    std::string adc_HL_dis(uint8_t opCode);
 
-    int adc_n(uint16_t, uint16_t);
-    std::string adc_n_dis(uint8_t, uint16_t, uint16_t);
+    int adc_n();
+    std::string adc_n_dis(uint8_t opCode);
 private:
     Registers& m_registers;
     Memory& m_memory;
