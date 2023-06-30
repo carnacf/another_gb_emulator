@@ -113,6 +113,12 @@ private:
     int sbc_r();
     int sbc_HL();
     int sbc_n();
+
+    void cp(int a, int b);
+    template<Registers::Names NAME>
+    int cp_r();
+    int cp_HL();
+    int cp_n();
 private:
     Logger m_tracer;
     Registers& m_registers;

@@ -95,4 +95,10 @@ namespace cpu
     {
         return std::to_string(opCode) + " : SBC " + m_registers.register8ToStr(NAME) + ";\n";
     }
+
+    template<Registers::Names NAME>
+    std::string Logger::cp_r(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : CP " + m_registers.register8ToStr(NAME) + ";\n";
+    }
 }

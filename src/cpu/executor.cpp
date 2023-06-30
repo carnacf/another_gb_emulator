@@ -140,6 +140,14 @@ namespace cpu
         m_instructionSet[0x9E] = &Executor::sbc_HL;
         m_instructionSet[0x9F] = &Executor::sbc_r<Registers::A>;
 
+        m_instructionSet[0xB8] = &Executor::cp_r<Registers::B>;
+        m_instructionSet[0xB9] = &Executor::cp_r<Registers::C>;
+        m_instructionSet[0xBA] = &Executor::cp_r<Registers::D>;
+        m_instructionSet[0xBB] = &Executor::cp_r<Registers::E>;
+        m_instructionSet[0xBC] = &Executor::cp_r<Registers::H>;
+        m_instructionSet[0xBD] = &Executor::cp_r<Registers::L>;
+        m_instructionSet[0xBE] = &Executor::cp_HL;
+        m_instructionSet[0xBF] = &Executor::cp_r<Registers::A>;
         m_instructionSet[0xC1] = &Executor::pop<Registers::BC>;
         m_instructionSet[0xC5] = &Executor::push<Registers::BC>;
         m_instructionSet[0xC6] = &Executor::add_n;
@@ -160,6 +168,7 @@ namespace cpu
         m_instructionSet[0xF8] = &Executor::ld_HL_SP_r8;
         m_instructionSet[0xF9] = &Executor::ld_SP_HL;
         m_instructionSet[0xFA] = &Executor::ld_A_nn;
+        m_instructionSet[0xFE] = &Executor::cp_n;
     }
 
     void Executor::fillCbInstructionSet()
@@ -458,6 +467,36 @@ namespace cpu
         int b = (int8_t)m_memory.read8(m_registers.getPC());
         m_registers.incrementPC();
         sbc(a, b);
+
+        return 2;
+    }
+
+    void Executor::cp(int a, int b)
+    {
+        int res = a - b;
+        int carryBits = a ^ b ^ res;
+
+        updateFlags(carryBits, res, true);
+    }
+
+    int Executor::cp_HL()
+    {
+        int a = (int8_t)m_registers.read8<Registers::A>();
+
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        int b = (int8_t)m_memory.read8(hl);
+        cp(a, b);
+
+        return 2;
+    }
+
+    int Executor::cp_n()
+    {
+        int a = (int8_t)m_registers.read8<Registers::A>();
+
+        int b = (int8_t)m_memory.read8(m_registers.getPC());
+        m_registers.incrementPC();
+        cp(a, b);
 
         return 2;
     }

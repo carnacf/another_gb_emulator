@@ -138,6 +138,14 @@ namespace cpu
         m_instructionSet[0x9E] = &Logger::sbc_HL;
         m_instructionSet[0x9F] = &Logger::sbc_r<Registers::A>;
 
+        m_instructionSet[0xB8] = &Logger::cp_r<Registers::B>;
+        m_instructionSet[0xB9] = &Logger::cp_r<Registers::C>;
+        m_instructionSet[0xBA] = &Logger::cp_r<Registers::D>;
+        m_instructionSet[0xBB] = &Logger::cp_r<Registers::E>;
+        m_instructionSet[0xBC] = &Logger::cp_r<Registers::H>;
+        m_instructionSet[0xBD] = &Logger::cp_r<Registers::L>;
+        m_instructionSet[0xBE] = &Logger::cp_HL;
+        m_instructionSet[0xBF] = &Logger::cp_r<Registers::A>;
         m_instructionSet[0xC1] = &Logger::pop<Registers::BC>;
         m_instructionSet[0xC5] = &Logger::push<Registers::BC>;
         m_instructionSet[0xC6] = &Logger::add_n;
@@ -158,6 +166,7 @@ namespace cpu
         m_instructionSet[0xF8] = &Logger::ld_HL_SP_r8;
         m_instructionSet[0xF9] = &Logger::ld_SP_HL;
         m_instructionSet[0xFA] = &Logger::ld_A_nn;
+        m_instructionSet[0xFE] = &Logger::cp_n;
     }
 
     void Logger::fillCbInstructionSet()
@@ -278,5 +287,15 @@ namespace cpu
     std::string Logger::sbc_n(uint8_t opCode)
     {
         return std::to_string(opCode) + " : SBC n;\n";
+    }
+
+    std::string Logger::cp_HL(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : CP (HL);\n";
+    }
+
+    std::string Logger::cp_n(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : CP n;\n";
     }
 }

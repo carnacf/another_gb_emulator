@@ -159,4 +159,14 @@ namespace cpu
 
         return 1;
     }
+
+    template<Registers::Names NAME>
+    int Executor::cp_r()
+    {
+        int a = (int8_t)m_registers.read8<Registers::A>();
+        int b = (int8_t)m_registers.read8<NAME>();
+        cp(a, b);
+
+        return 1;
+    }
 }
