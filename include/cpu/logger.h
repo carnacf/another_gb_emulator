@@ -102,6 +102,10 @@ namespace cpu
         template<Registers::Names NAME>
         std::string dec_r(uint8_t opCode);
         std::string dec_HL(uint8_t opCode);
+
+        template<Registers::Names NAME>
+        std::string and_r(uint8_t opCode);
+        std::string and_HL(uint8_t opCode);
     private:
         Registers& m_registers;
         //Memory& m_memory;

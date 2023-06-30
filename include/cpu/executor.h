@@ -80,19 +80,19 @@ private:
     int pop();
 
     // 8-bit arithmetic and logical instructions
-    void updateFlags(int carryBits, uint8_t res, bool carryFlag, bool isSub)
+    void updateFlagsWithCarry(int carryBits, uint8_t res, bool carryFlag, bool n)
     {
-        bool hc = (carryBits & 0x10) == 0x10;
-        m_registers.setFlag(Registers::Flag::H, hc);
+        bool h = (carryBits & 0x10) == 0x10;
+        bool c = carryFlag && ((carryBits & 0x100) == 0x100);
         
-        if (carryFlag)
-        {
-            bool c = (carryBits & 0x100) == 0x100;
-            m_registers.setFlag(Registers::Flag::C, c);
-        }
-        
+        updateFlags(res, n, h, c);
+    }
+    void updateFlags(uint8_t res, bool n, bool h, bool c)
+    {
         m_registers.setFlag(Registers::Flag::Z, res == 0);
-        m_registers.setFlag(Registers::Flag::N, isSub);
+        m_registers.setFlag(Registers::Flag::N, n);
+        m_registers.setFlag(Registers::Flag::H, h);
+        m_registers.setFlag(Registers::Flag::C, c);
     }
 
     void add(int a, int b);
@@ -132,6 +132,10 @@ private:
     template<Registers::Names NAME>
     int dec_r();
     int dec_HL();
+
+    template<Registers::Names NAME>
+    int and_r();
+    int and_HL();
 private:
     Logger m_tracer;
     Registers& m_registers;

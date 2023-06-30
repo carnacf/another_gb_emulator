@@ -153,6 +153,14 @@ namespace cpu
         m_instructionSet[0x9D] = &Logger::sbc_r<Registers::L>;
         m_instructionSet[0x9E] = &Logger::sbc_HL;
         m_instructionSet[0x9F] = &Logger::sbc_r<Registers::A>;
+        m_instructionSet[0xA0] = &Logger::and_r<Registers::B>;
+        m_instructionSet[0xA1] = &Logger::and_r<Registers::C>;
+        m_instructionSet[0xA2] = &Logger::and_r<Registers::D>;
+        m_instructionSet[0xA3] = &Logger::and_r<Registers::E>;
+        m_instructionSet[0xA4] = &Logger::and_r<Registers::H>;
+        m_instructionSet[0xA5] = &Logger::and_r<Registers::L>;
+        m_instructionSet[0xA6] = &Logger::and_HL;
+        m_instructionSet[0xA7] = &Logger::and_r<Registers::A>;
 
         m_instructionSet[0xB8] = &Logger::cp_r<Registers::B>;
         m_instructionSet[0xB9] = &Logger::cp_r<Registers::C>;
@@ -323,5 +331,10 @@ namespace cpu
     std::string Logger::dec_HL(uint8_t opCode)
     {
         return std::to_string(opCode) + " : INC (HL);\n";
+    }
+
+    std::string Logger::and_HL(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : AND (HL);\n";
     }
 }
