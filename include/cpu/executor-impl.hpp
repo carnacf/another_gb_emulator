@@ -169,4 +169,30 @@ namespace cpu
 
         return 1;
     }
+
+    template<Registers::Names NAME>
+    int Executor::inc_r()
+    {
+        int b = (int8_t)m_registers.read8<NAME>();
+        int8_t r = b + 1;
+        m_registers.write8<NAME>((uint8_t)r);
+
+        int carryBits = b ^ 1 ^ r;
+        updateFlags(carryBits, r, false, false);
+
+        return 1;
+    }
+
+    template<Registers::Names NAME>
+    int Executor::dec_r()
+    {
+        int b = (int8_t)m_registers.read8<NAME>();
+        int8_t r = b - 1;
+        m_registers.write8<NAME>((uint8_t)r);
+
+        int carryBits = b ^ 1 ^ r;
+        updateFlags(carryBits, r, false, true);
+
+        return 1;
+    }
 }

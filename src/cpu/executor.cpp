@@ -23,24 +23,40 @@ namespace cpu
         
         m_instructionSet[0x01] = &Executor::ld_rr_nn<Registers::BC>;
         m_instructionSet[0x02] = &Executor::ld_r16_A<Registers::BC>;
+        m_instructionSet[0x04] = &Executor::inc_r<Registers::B>;
+        m_instructionSet[0x05] = &Executor::dec_r<Registers::B>;
         m_instructionSet[0x06] = &Executor::ld_r_n_8<0x06>;
         m_instructionSet[0x08] = &Executor::ld_nn_SP;
         m_instructionSet[0x0A] = &Executor::ld_A_r16<Registers::BC>;
+        m_instructionSet[0x0C] = &Executor::inc_r<Registers::C>;
+        m_instructionSet[0x0D] = &Executor::dec_r<Registers::C>;
         m_instructionSet[0x0E] = &Executor::ld_r_n_8<0x0E>;
         m_instructionSet[0x11] = &Executor::ld_rr_nn<Registers::DE>;
         m_instructionSet[0x12] = &Executor::ld_r16_A<Registers::DE>;
+        m_instructionSet[0x14] = &Executor::inc_r<Registers::D>;
+        m_instructionSet[0x15] = &Executor::dec_r<Registers::D>;
         m_instructionSet[0x16] = &Executor::ld_r_n_8<0x16>;
         m_instructionSet[0x1A] = &Executor::ld_A_r16<Registers::DE>;
+        m_instructionSet[0x1C] = &Executor::inc_r<Registers::E>;
+        m_instructionSet[0x1D] = &Executor::dec_r<Registers::E>;
         m_instructionSet[0x1E] = &Executor::ld_r_n_8<0x1E>;
         m_instructionSet[0x21] = &Executor::ld_rr_nn<Registers::HL>;
         m_instructionSet[0x22] = &Executor::ld_HLi_A;
+        m_instructionSet[0x24] = &Executor::inc_r<Registers::H>;
+        m_instructionSet[0x25] = &Executor::dec_r<Registers::H>;
         m_instructionSet[0x26] = &Executor::ld_r_n_8<0x26>;
         m_instructionSet[0x2A] = &Executor::ld_A_HLi;
+        m_instructionSet[0x2C] = &Executor::inc_r<Registers::L>;
+        m_instructionSet[0x2D] = &Executor::dec_r<Registers::L>;
         m_instructionSet[0x2E] = &Executor::ld_r_n_8<0x2E>;
         m_instructionSet[0x31] = &Executor::ld_SP_rr;
         m_instructionSet[0x32] = &Executor::ld_HLd_A;
+        m_instructionSet[0x34] = &Executor::inc_HL;
+        m_instructionSet[0x35] = &Executor::dec_HL;
         m_instructionSet[0x36] = &Executor::ld_HL_n_8<0x36>;
         m_instructionSet[0x3A] = &Executor::ld_A_HLd;
+        m_instructionSet[0x3C] = &Executor::inc_r<Registers::A>;
+        m_instructionSet[0x3D] = &Executor::dec_r<Registers::A>;
         m_instructionSet[0x3E] = &Executor::ld_r_n_8<0x3E>;
 
         m_instructionSet[0x40] = &Executor::ld_r_r_8<0x40>;
@@ -351,7 +367,7 @@ namespace cpu
         int carryBits = a ^ b ^ res;
 
         m_registers.write8<Registers::A>(res);
-        updateFlags(carryBits, res);
+        updateFlags(carryBits, res, true, false);
     }
 
     int Executor::add_HL()
@@ -383,7 +399,7 @@ namespace cpu
         int carryBits = a ^ b ^ carryFlag ^ res;
 
         m_registers.write8<Registers::A>(res);
-        updateFlags(carryBits, res);
+        updateFlags(carryBits, res, true, false);
     }
 
     int Executor::adc_HL()
@@ -414,7 +430,7 @@ namespace cpu
         int carryBits = a ^ b ^ res;
 
         m_registers.write8<Registers::A>(res);
-        updateFlags(carryBits, res, true);
+        updateFlags(carryBits, res, true, true);
     }
 
     int Executor::sub_HL()
@@ -446,7 +462,7 @@ namespace cpu
         int carryBits = a ^ b ^ carryFlag ^ res;
 
         m_registers.write8<Registers::A>(res);
-        updateFlags(carryBits, res, true);
+        updateFlags(carryBits, res, true, true);
     }
 
     int Executor::sbc_HL()
@@ -476,7 +492,7 @@ namespace cpu
         int res = a - b;
         int carryBits = a ^ b ^ res;
 
-        updateFlags(carryBits, res, true);
+        updateFlags(carryBits, res, true, true);
     }
 
     int Executor::cp_HL()
@@ -499,5 +515,33 @@ namespace cpu
         cp(a, b);
 
         return 2;
+    }
+
+    int Executor::inc_HL()
+    {
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        int val = (int8_t) m_memory.read8(hl);
+
+        int8_t r = val + 1;
+        m_memory.write8(hl, r);
+
+        int carryBits = val ^ 1 ^ r;
+        updateFlags(carryBits, r, false, false);
+
+        return 3;
+    }
+
+    int Executor::dec_HL()
+    {
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        int val = (int8_t)m_memory.read8(hl);
+
+        int8_t r = val - 1;
+        m_memory.write8(hl, r);
+
+        int carryBits = val ^ 1 ^ r;
+        updateFlags(carryBits, r, false, false);
+
+        return 3;
     }
 }

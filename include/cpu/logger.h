@@ -94,6 +94,14 @@ namespace cpu
         std::string cp_r(uint8_t opCode);
         std::string cp_HL(uint8_t opCode);
         std::string cp_n(uint8_t opCode);
+
+        template<Registers::Names NAME>
+        std::string inc_r(uint8_t opCode);
+        std::string inc_HL(uint8_t opCode);
+
+        template<Registers::Names NAME>
+        std::string dec_r(uint8_t opCode);
+        std::string dec_HL(uint8_t opCode);
     private:
         Registers& m_registers;
         //Memory& m_memory;
