@@ -223,4 +223,18 @@ namespace cpu
 
         return 1;
     }
+
+    template<Registers::Names NAME>
+    int Executor::xor_r()
+    {
+        uint8_t a = m_registers.read8<Registers::A>();
+        uint8_t b = m_registers.read8<NAME>();
+        uint8_t r = a ^ b;
+
+        m_registers.write8<Registers::A>(r);
+
+        updateFlags(r, false, false, false);
+
+        return 1;
+    }
 }

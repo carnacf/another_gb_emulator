@@ -163,7 +163,14 @@ namespace cpu
         m_instructionSet[0xA5] = &Executor::and_r<Registers::L>;
         m_instructionSet[0xA6] = &Executor::and_HL;
         m_instructionSet[0xA7] = &Executor::and_r<Registers::A>;
-
+        m_instructionSet[0xA8] = &Executor::xor_r<Registers::B>;
+        m_instructionSet[0xA9] = &Executor::xor_r<Registers::C>;
+        m_instructionSet[0xAA] = &Executor::xor_r<Registers::D>;
+        m_instructionSet[0xAB] = &Executor::xor_r<Registers::E>;
+        m_instructionSet[0xAC] = &Executor::xor_r<Registers::H>;
+        m_instructionSet[0xAD] = &Executor::xor_r<Registers::L>;
+        m_instructionSet[0xAE] = &Executor::xor_HL;
+        m_instructionSet[0xAF] = &Executor::xor_r<Registers::A>;
         m_instructionSet[0xB0] = &Executor::or_r<Registers::B>;
         m_instructionSet[0xB1] = &Executor::or_r<Registers::C>;
         m_instructionSet[0xB2] = &Executor::or_r<Registers::D>;
@@ -194,6 +201,7 @@ namespace cpu
         m_instructionSet[0xE5] = &Executor::push<Registers::HL>;
         m_instructionSet[0xE6] = &Executor::and_n;
         m_instructionSet[0xEA] = &Executor::ld_nn_A;
+        m_instructionSet[0xEE] = &Executor::xor_n;
         m_instructionSet[0xF0] = &Executor::ldh_A_an;
         m_instructionSet[0xF1] = &Executor::pop<Registers::AF>;
         m_instructionSet[0xF2] = &Executor::ldh_A_aC;
@@ -613,6 +621,35 @@ namespace cpu
         int8_t b = m_memory.read8(m_registers.getPC());
         m_registers.incrementPC();
         uint8_t r = a | b;
+
+        m_registers.write8<Registers::A>(r);
+
+        updateFlags(r, false, false, false);
+
+        return 2;
+    }
+
+    int Executor::xor_HL()
+    {
+        uint8_t a = m_registers.read8<Registers::A>();
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        uint8_t b = m_memory.read8(hl);
+        uint8_t r = a ^ b;
+
+        m_registers.write8<Registers::A>(r);
+
+        updateFlags(r, false, false, false);
+
+        return 2;
+    }
+
+    int Executor::xor_n()
+    {
+        int8_t a = m_registers.read8<Registers::A>();
+
+        int8_t b = m_memory.read8(m_registers.getPC());
+        m_registers.incrementPC();
+        uint8_t r = a ^ b;
 
         m_registers.write8<Registers::A>(r);
 

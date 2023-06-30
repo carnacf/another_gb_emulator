@@ -143,6 +143,11 @@ private:
     int or_HL();
     int or_n();
 
+    template<Registers::Names NAME>
+    int xor_r();
+    int xor_HL();
+    int xor_n();
+
 private:
     Logger m_tracer;
     Registers& m_registers;
