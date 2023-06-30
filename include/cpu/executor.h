@@ -136,6 +136,8 @@ private:
     template<Registers::Names NAME>
     int and_r();
     int and_HL();
+    int and_n();
+
 private:
     Logger m_tracer;
     Registers& m_registers;

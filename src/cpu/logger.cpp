@@ -182,6 +182,7 @@ namespace cpu
         m_instructionSet[0xE1] = &Logger::pop<Registers::HL>;
         m_instructionSet[0xE2] = &Logger::ldh_aC_A;
         m_instructionSet[0xE5] = &Logger::push<Registers::HL>;
+        m_instructionSet[0xE6] = &Logger::and_n;
         m_instructionSet[0xEA] = &Logger::ld_nn_A;
         m_instructionSet[0xF0] = &Logger::ldh_A_an;
         m_instructionSet[0xF1] = &Logger::pop<Registers::AF>;
@@ -336,5 +337,10 @@ namespace cpu
     std::string Logger::and_HL(uint8_t opCode)
     {
         return std::to_string(opCode) + " : AND (HL);\n";
+    }
+
+    std::string Logger::and_n(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : AND n;\n";
     }
 }

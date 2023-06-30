@@ -184,6 +184,7 @@ namespace cpu
         m_instructionSet[0xE1] = &Executor::pop<Registers::HL>;
         m_instructionSet[0xE2] = &Executor::ldh_aC_A;
         m_instructionSet[0xE5] = &Executor::push<Registers::HL>;
+        m_instructionSet[0xE6] = &Executor::and_n;
         m_instructionSet[0xEA] = &Executor::ld_nn_A;
         m_instructionSet[0xF0] = &Executor::ldh_A_an;
         m_instructionSet[0xF1] = &Executor::pop<Registers::AF>;
@@ -564,6 +565,21 @@ namespace cpu
 
         updateFlags(r, false, true, false);
 
+        return 2;
+    }
+
+    int Executor::and_n()
+    {
+        int8_t a = m_registers.read8<Registers::A>();
+
+        int8_t b = m_memory.read8(m_registers.getPC());
+        m_registers.incrementPC();
+        uint8_t r = a & b;
+
+        m_registers.write8<Registers::A>(r);
+
+        updateFlags(r, false, true, false);
+        
         return 2;
     }
 }
