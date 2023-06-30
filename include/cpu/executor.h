@@ -138,6 +138,11 @@ private:
     int and_HL();
     int and_n();
 
+    template<Registers::Names NAME>
+    int or_r();
+    int or_HL();
+    int or_n();
+
 private:
     Logger m_tracer;
     Registers& m_registers;

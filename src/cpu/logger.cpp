@@ -162,6 +162,14 @@ namespace cpu
         m_instructionSet[0xA6] = &Logger::and_HL;
         m_instructionSet[0xA7] = &Logger::and_r<Registers::A>;
 
+        m_instructionSet[0xB0] = &Logger::or_r<Registers::B>;
+        m_instructionSet[0xB1] = &Logger::or_r<Registers::C>;
+        m_instructionSet[0xB2] = &Logger::or_r<Registers::D>;
+        m_instructionSet[0xB3] = &Logger::or_r<Registers::E>;
+        m_instructionSet[0xB4] = &Logger::or_r<Registers::H>;
+        m_instructionSet[0xB5] = &Logger::or_r<Registers::L>;
+        m_instructionSet[0xB6] = &Logger::or_HL;
+        m_instructionSet[0xB7] = &Logger::or_r<Registers::A>;
         m_instructionSet[0xB8] = &Logger::cp_r<Registers::B>;
         m_instructionSet[0xB9] = &Logger::cp_r<Registers::C>;
         m_instructionSet[0xBA] = &Logger::cp_r<Registers::D>;
@@ -188,6 +196,7 @@ namespace cpu
         m_instructionSet[0xF1] = &Logger::pop<Registers::AF>;
         m_instructionSet[0xF2] = &Logger::ldh_A_aC;
         m_instructionSet[0xF5] = &Logger::push<Registers::AF>;
+        m_instructionSet[0xF6] = &Logger::or_n;
         m_instructionSet[0xF8] = &Logger::ld_HL_SP_r8;
         m_instructionSet[0xF9] = &Logger::ld_SP_HL;
         m_instructionSet[0xFA] = &Logger::ld_A_nn;
@@ -342,5 +351,15 @@ namespace cpu
     std::string Logger::and_n(uint8_t opCode)
     {
         return std::to_string(opCode) + " : AND n;\n";
+    }
+
+    std::string Logger::or_HL(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : OR (HL);\n";
+    }
+
+    std::string Logger::or_n(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : OR n;\n";
     }
 }

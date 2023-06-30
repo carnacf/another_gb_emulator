@@ -107,6 +107,11 @@ namespace cpu
         std::string and_r(uint8_t opCode);
         std::string and_HL(uint8_t opCode);
         std::string and_n(uint8_t opCode);
+
+        template<Registers::Names NAME>
+        std::string or_r(uint8_t opCode);
+        std::string or_HL(uint8_t opCode);
+        std::string or_n(uint8_t opCode);
     private:
         Registers& m_registers;
         //Memory& m_memory;
