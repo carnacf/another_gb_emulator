@@ -45,6 +45,7 @@ namespace cpu
         m_instructionSet[0x24] = &Executor::inc_r<Registers::H>;
         m_instructionSet[0x25] = &Executor::dec_r<Registers::H>;
         m_instructionSet[0x26] = &Executor::ld_r_n_8<0x26>;
+        m_instructionSet[0x27] = &Executor::daa;
         m_instructionSet[0x2A] = &Executor::ld_A_HLi;
         m_instructionSet[0x2C] = &Executor::inc_r<Registers::L>;
         m_instructionSet[0x2D] = &Executor::dec_r<Registers::L>;
@@ -687,6 +688,33 @@ namespace cpu
 
         m_registers.setFlag(Registers::Flag::N, true);
         m_registers.setFlag(Registers::Flag::H, true);
+
+        return 1;
+    }
+
+    int Executor::daa()
+    {
+        uint8_t a = m_registers.read8<Registers::A>();
+        bool isSub = m_registers.isSetFlag(Registers::Flag::N);
+
+        if ( (a&0x0F) > 9 || m_registers.isSetFlag(Registers::Flag::H) )
+        {
+            isSub ? a -= 0x06 : a += 0x06;
+        }
+
+        if ((a & 0xF0) > 0x90 || m_registers.isSetFlag(Registers::Flag::C))
+        {
+            isSub ? a -= 0x60 : a += 0x60;
+            m_registers.setFlag(Registers::Flag::C, true);
+        }
+
+        if (a == 0)
+        {
+            m_registers.setFlag(Registers::Flag::Z, true);
+        }
+        m_registers.setFlag(Registers::Flag::H, false);
+
+        m_registers.write8<Registers::A>(a);
 
         return 1;
     }

@@ -151,6 +151,7 @@ private:
     int scf();
     int ccf();
     int cpl();
+    int daa();
 
 private:
     Logger m_tracer;
