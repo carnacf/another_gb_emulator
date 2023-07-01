@@ -49,6 +49,7 @@ namespace cpu
         m_instructionSet[0x2C] = &Executor::inc_r<Registers::L>;
         m_instructionSet[0x2D] = &Executor::dec_r<Registers::L>;
         m_instructionSet[0x2E] = &Executor::ld_r_n_8<0x2E>;
+        m_instructionSet[0x2F] = &Executor::cpl;
         m_instructionSet[0x31] = &Executor::ld_SP_rr;
         m_instructionSet[0x32] = &Executor::ld_HLd_A;
         m_instructionSet[0x34] = &Executor::inc_HL;
@@ -675,6 +676,17 @@ namespace cpu
 
         bool c = m_registers.isSetFlag(Registers::Flag::C);
         m_registers.setFlag(Registers::Flag::C, !c);
+
+        return 1;
+    }
+
+    int Executor::cpl()
+    {
+        uint8_t a = m_registers.read8<Registers::A>();
+        m_registers.write8<Registers::A>(~a);
+
+        m_registers.setFlag(Registers::Flag::N, true);
+        m_registers.setFlag(Registers::Flag::H, true);
 
         return 1;
     }

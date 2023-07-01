@@ -120,6 +120,7 @@ namespace cpu
 
         std::string scf(uint8_t opCode);
         std::string ccf(uint8_t opCode);
+        std::string cpl(uint8_t opCode);
     private:
         Registers& m_registers;
         //Memory& m_memory;

@@ -47,6 +47,7 @@ namespace cpu
         m_instructionSet[0x2C] = &Logger::inc_r<Registers::L>;
         m_instructionSet[0x2D] = &Logger::dec_r<Registers::L>;
         m_instructionSet[0x2E] = &Logger::ld_r_n_8<0x2E>;
+        m_instructionSet[0x2F] = &Logger::cpl;
         m_instructionSet[0x31] = &Logger::ld_SP_rr;
         m_instructionSet[0x32] = &Logger::ld_HLd_A;
         m_instructionSet[0x34] = &Logger::inc_HL;
@@ -391,5 +392,10 @@ namespace cpu
     std::string Logger::ccf(uint8_t opCode)
     {
         return std::to_string(opCode) + " : SCF;\n";
+    }
+
+    std::string Logger::cpl(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : CPL;\n";
     }
 }
