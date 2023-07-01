@@ -52,11 +52,12 @@ namespace cpu
         m_instructionSet[0x34] = &Logger::inc_HL;
         m_instructionSet[0x35] = &Logger::dec_HL;
         m_instructionSet[0x36] = &Logger::ld_HL_n_8<0x36>;
+        m_instructionSet[0x37] = &Logger::scf;
         m_instructionSet[0x3A] = &Logger::ld_A_HLd;
         m_instructionSet[0x3C] = &Logger::inc_r<Registers::A>;
         m_instructionSet[0x3D] = &Logger::dec_r<Registers::A>;
         m_instructionSet[0x3E] = &Logger::ld_r_n_8<0x3E>;
-
+        m_instructionSet[0x3F] = &Logger::ccf;
         m_instructionSet[0x40] = &Logger::ld_r_r_8<0x40>;
         m_instructionSet[0x41] = &Logger::ld_r_r_8<0x41>;
         m_instructionSet[0x42] = &Logger::ld_r_r_8<0x42>;
@@ -380,5 +381,15 @@ namespace cpu
     std::string Logger::xor_n(uint8_t opCode)
     {
         return std::to_string(opCode) + " : XOR n;\n";
+    }
+
+    std::string Logger::scf(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : CCF;\n";
+    }
+
+    std::string Logger::ccf(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : SCF;\n";
     }
 }

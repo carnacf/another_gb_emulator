@@ -117,6 +117,9 @@ namespace cpu
         std::string xor_r(uint8_t opCode);
         std::string xor_HL(uint8_t opCode);
         std::string xor_n(uint8_t opCode);
+
+        std::string scf(uint8_t opCode);
+        std::string ccf(uint8_t opCode);
     private:
         Registers& m_registers;
         //Memory& m_memory;

@@ -54,11 +54,12 @@ namespace cpu
         m_instructionSet[0x34] = &Executor::inc_HL;
         m_instructionSet[0x35] = &Executor::dec_HL;
         m_instructionSet[0x36] = &Executor::ld_HL_n_8<0x36>;
+        m_instructionSet[0x37] = &Executor::scf;
         m_instructionSet[0x3A] = &Executor::ld_A_HLd;
         m_instructionSet[0x3C] = &Executor::inc_r<Registers::A>;
         m_instructionSet[0x3D] = &Executor::dec_r<Registers::A>;
         m_instructionSet[0x3E] = &Executor::ld_r_n_8<0x3E>;
-
+        m_instructionSet[0x3F] = &Executor::ccf;
         m_instructionSet[0x40] = &Executor::ld_r_r_8<0x40>;
         m_instructionSet[0x41] = &Executor::ld_r_r_8<0x41>;
         m_instructionSet[0x42] = &Executor::ld_r_r_8<0x42>;
@@ -656,5 +657,25 @@ namespace cpu
         updateFlags(r, false, false, false);
 
         return 2;
+    }
+
+    int Executor::scf()
+    {
+        m_registers.setFlag(Registers::Flag::N, false);
+        m_registers.setFlag(Registers::Flag::H, false);
+        m_registers.setFlag(Registers::Flag::C, true);
+
+        return 1;
+    }
+
+    int Executor::ccf()
+    {
+        m_registers.setFlag(Registers::Flag::N, false);
+        m_registers.setFlag(Registers::Flag::H, false);
+
+        bool c = m_registers.isSetFlag(Registers::Flag::C);
+        m_registers.setFlag(Registers::Flag::C, !c);
+
+        return 1;
     }
 }

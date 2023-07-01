@@ -148,6 +148,9 @@ private:
     int xor_HL();
     int xor_n();
 
+    int scf();
+    int ccf();
+
 private:
     Logger m_tracer;
     Registers& m_registers;
