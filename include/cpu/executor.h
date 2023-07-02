@@ -79,20 +79,20 @@ private:
     template<Registers::Paired NAME>
     int pop();
 
-    // 8-bit arithmetic and logical instructions
-    void updateFlagsWithCarry(int carryBits, uint8_t res, bool carryFlag, bool n)
-    {
-        bool h = (carryBits & 0x10) == 0x10;
-        bool c = carryFlag && ((carryBits & 0x100) == 0x100);
-        
-        updateFlags(res, n, h, c);
-    }
     void updateFlags(uint8_t res, bool n, bool h, bool c)
     {
         m_registers.setFlag(Registers::Flag::Z, res == 0);
         m_registers.setFlag(Registers::Flag::N, n);
         m_registers.setFlag(Registers::Flag::H, h);
         m_registers.setFlag(Registers::Flag::C, c);
+    }
+    // 8-bit arithmetic and logical instructions
+    void updateFlagsWithCarry8bit(int carryBits, uint8_t res, bool carryFlag, bool n)
+    {
+        bool h = (carryBits & 0x10) == 0x10;
+        bool c = carryFlag && ((carryBits & 0x100) == 0x100);
+        
+        updateFlags(res, n, h, c);
     }
 
     void add(int a, int b);
@@ -152,6 +152,19 @@ private:
     int ccf();
     int cpl();
     int daa();
+
+    // 16-bit arithmetic
+    void updateFlagsWithCarry16bit(int carryBits, uint16_t res, bool carryFlag, bool n)
+    {
+        bool h = (carryBits & 0x100) == 0x100;
+        bool c = carryFlag && ((carryBits & 0x10000) == 0x10000);
+
+        updateFlags(res, n, h, c);
+    }
+
+    template<Registers::Paired NAME>
+    int add_HL_rr();
+    int add_HL_SP();
 
 private:
     Logger m_tracer;

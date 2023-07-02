@@ -131,4 +131,10 @@ namespace cpu
     {
         return std::to_string(opCode) + " : XOR " + m_registers.register8ToStr(NAME) + ";\n";
     }
+
+    template<Registers::Paired NAME>
+    std::string Logger::add_HL_rr(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : ADD HL " + m_registers.register16ToStr(NAME) + ";\n";
+    }
 }

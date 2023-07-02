@@ -25,6 +25,7 @@ namespace cpu
         m_instructionSet[0x05] = &Logger::dec_r<Registers::B>;
         m_instructionSet[0x06] = &Logger::ld_r_n_8<0x06>;
         m_instructionSet[0x08] = &Logger::ld_nn_SP;
+        m_instructionSet[0x09] = &Logger::add_HL_rr<Registers::BC>;
         m_instructionSet[0x0A] = &Logger::ld_A_r16<Registers::BC>;
         m_instructionSet[0x0C] = &Logger::inc_r<Registers::C>;
         m_instructionSet[0x0D] = &Logger::dec_r<Registers::C>;
@@ -34,6 +35,7 @@ namespace cpu
         m_instructionSet[0x14] = &Logger::inc_r<Registers::D>;
         m_instructionSet[0x15] = &Logger::dec_r<Registers::D>;
         m_instructionSet[0x16] = &Logger::ld_r_n_8<0x16>;
+        m_instructionSet[0x19] = &Logger::add_HL_rr<Registers::DE>;
         m_instructionSet[0x1A] = &Logger::ld_A_r16<Registers::DE>;
         m_instructionSet[0x1C] = &Logger::inc_r<Registers::E>;
         m_instructionSet[0x1D] = &Logger::dec_r<Registers::E>;
@@ -44,6 +46,7 @@ namespace cpu
         m_instructionSet[0x25] = &Logger::dec_r<Registers::H>;
         m_instructionSet[0x26] = &Logger::ld_r_n_8<0x26>;
         m_instructionSet[0x27] = &Logger::daa;
+        m_instructionSet[0x29] = &Logger::add_HL_rr<Registers::HL>;
         m_instructionSet[0x2A] = &Logger::ld_A_HLi;
         m_instructionSet[0x2C] = &Logger::inc_r<Registers::L>;
         m_instructionSet[0x2D] = &Logger::dec_r<Registers::L>;
@@ -55,6 +58,7 @@ namespace cpu
         m_instructionSet[0x35] = &Logger::dec_HL;
         m_instructionSet[0x36] = &Logger::ld_HL_n_8<0x36>;
         m_instructionSet[0x37] = &Logger::scf;
+        m_instructionSet[0x39] = &Logger::add_HL_SP;
         m_instructionSet[0x3A] = &Logger::ld_A_HLd;
         m_instructionSet[0x3C] = &Logger::inc_r<Registers::A>;
         m_instructionSet[0x3D] = &Logger::dec_r<Registers::A>;
@@ -403,5 +407,10 @@ namespace cpu
     std::string Logger::daa(uint8_t opCode)
     {
         return std::to_string(opCode) + " : DAA;\n";
+    }
+
+    std::string Logger::add_HL_SP(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : ADD HL SP;\n";
     }
 }

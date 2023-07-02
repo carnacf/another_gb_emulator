@@ -122,6 +122,11 @@ namespace cpu
         std::string ccf(uint8_t opCode);
         std::string cpl(uint8_t opCode);
         std::string daa(uint8_t opCode);
+
+        // 16-bit arithmetic
+        template<Registers::Paired NAME>
+        std::string add_HL_rr(uint8_t opCode);
+        std::string add_HL_SP(uint8_t opCode);
     private:
         Registers& m_registers;
         //Memory& m_memory;

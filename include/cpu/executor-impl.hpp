@@ -178,7 +178,7 @@ namespace cpu
         m_registers.write8<NAME>((uint8_t)r);
 
         int carryBits = b ^ 1 ^ r;
-        updateFlagsWithCarry(carryBits, r, false, false);
+        updateFlagsWithCarry8bit(carryBits, r, false, false);
 
         return 1;
     }
@@ -191,7 +191,7 @@ namespace cpu
         m_registers.write8<NAME>((uint8_t)r);
 
         int carryBits = b ^ 1 ^ r;
-        updateFlagsWithCarry(carryBits, r, false, true);
+        updateFlagsWithCarry8bit(carryBits, r, false, true);
 
         return 1;
     }
@@ -236,5 +236,20 @@ namespace cpu
         updateFlags(r, false, false, false);
 
         return 1;
+    }
+
+    template<Registers::Paired NAME>
+    int Executor::add_HL_rr()
+    {
+        int hl = m_registers.read16<Registers::HL>();
+        int rr = m_registers.read16<NAME>();
+        int res = hl + rr;
+
+        int carryBits = hl ^ rr ^ res;
+        updateFlagsWithCarry16bit(carryBits, res, true, false);
+
+        m_registers.write16<Registers::HL>((uint16_t) res);
+
+        return 2;
     }
 }
