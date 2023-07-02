@@ -16,8 +16,7 @@ namespace cpu
     template<uint8_t opcode>
     int Executor::ld_r_n_8()
     {
-        uint8_t immediate = m_memory.read8(m_registers.getPC());
-        m_registers.incrementPC();
+        uint8_t immediate = getImmediate8();
 
         constexpr Registers::Names opA = opAFromOpCode<opcode>();
         m_registers.write8<opA>(immediate);
@@ -29,8 +28,7 @@ namespace cpu
     int Executor::ld_HL_n_8()
     {
         uint16_t addr = m_registers.read16<Registers::HL>();
-        uint8_t immediate = m_memory.read8(m_registers.getPC());
-        m_registers.incrementPC();
+        uint8_t immediate = getImmediate8();
 
         m_memory.write8(addr, immediate);
 
@@ -83,9 +81,7 @@ namespace cpu
     template<Registers::Paired NAME>
     int Executor::ld_rr_nn()
     {
-        uint16_t val = m_memory.read16(m_registers.getPC());
-        m_registers.incrementPC();
-        m_registers.incrementPC();
+        uint16_t val = getImmediate16();
 
         m_registers.write16<NAME>(val);
 
@@ -246,7 +242,7 @@ namespace cpu
         int res = hl + rr;
 
         int carryBits = hl ^ rr ^ res;
-        updateFlagsWithCarry16bit(carryBits, res, true, false);
+        updateFlagsWithCarry16bit(carryBits, true, false);
 
         m_registers.write16<Registers::HL>((uint16_t) res);
 

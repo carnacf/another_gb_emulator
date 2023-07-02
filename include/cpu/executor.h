@@ -40,6 +40,9 @@ private:
     
     int unhandled();
 
+    uint8_t getImmediate8();
+    uint16_t getImmediate16();
+
     // 8bit Loads
     template<uint8_t opcode>
     int ld_r_r_8();
@@ -154,17 +157,20 @@ private:
     int daa();
 
     // 16-bit arithmetic
-    void updateFlagsWithCarry16bit(int carryBits, uint16_t res, bool carryFlag, bool n)
+    void updateFlagsWithCarry16bit(int carryBits, bool carryFlag, bool n)
     {
         bool h = (carryBits & 0x100) == 0x100;
         bool c = carryFlag && ((carryBits & 0x10000) == 0x10000);
 
-        updateFlags(res, n, h, c);
+        m_registers.setFlag(Registers::Flag::N, n);
+        m_registers.setFlag(Registers::Flag::H, h);
+        m_registers.setFlag(Registers::Flag::C, c);
     }
 
     template<Registers::Paired NAME>
     int add_HL_rr();
     int add_HL_SP();
+    int add_SP_n();
 
 private:
     Logger m_tracer;

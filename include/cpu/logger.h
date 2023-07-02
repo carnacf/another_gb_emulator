@@ -127,6 +127,7 @@ namespace cpu
         template<Registers::Paired NAME>
         std::string add_HL_rr(uint8_t opCode);
         std::string add_HL_SP(uint8_t opCode);
+        std::string add_SP_n(uint8_t opCode);
     private:
         Registers& m_registers;
         //Memory& m_memory;

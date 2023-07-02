@@ -207,6 +207,7 @@ namespace cpu
         m_instructionSet[0xE2] = &Executor::ldh_aC_A;
         m_instructionSet[0xE5] = &Executor::push<Registers::HL>;
         m_instructionSet[0xE6] = &Executor::and_n;
+        m_instructionSet[0xE8] = &Executor::add_SP_n;
         m_instructionSet[0xEA] = &Executor::ld_nn_A;
         m_instructionSet[0xEE] = &Executor::xor_n;
         m_instructionSet[0xF0] = &Executor::ldh_A_an;
@@ -229,12 +230,27 @@ namespace cpu
     {
         return 1;
     }
-    
-    int Executor::ld_A_nn()
+
+    uint8_t Executor::getImmediate8()
+    {
+        uint8_t n = m_memory.read8(m_registers.getPC());
+        m_registers.incrementPC();
+
+        return n;
+    }
+
+    uint16_t Executor::getImmediate16()
     {
         uint16_t nn = m_memory.read16(m_registers.getPC());
         m_registers.incrementPC();
         m_registers.incrementPC();
+        
+        return nn;
+    }
+    
+    int Executor::ld_A_nn()
+    {
+        uint16_t nn = getImmediate16();
 
         uint8_t val = m_memory.read8(nn);
         m_registers.write8<Registers::A>(val);
@@ -243,9 +259,7 @@ namespace cpu
 
     int Executor::ld_nn_A()
     {
-        uint16_t nn = m_memory.read16(m_registers.getPC());
-        m_registers.incrementPC();
-        m_registers.incrementPC();
+        uint16_t nn = getImmediate16();
 
         uint8_t a = m_registers.read8<Registers::A>();
         m_memory.write8(nn, a);
@@ -278,8 +292,7 @@ namespace cpu
 
     int Executor::ldh_A_an()
     {
-        uint8_t n = m_memory.read8(m_registers.getPC());
-        m_registers.incrementPC();
+        uint8_t n = getImmediate8();
         uint16_t addr = utils::to16(0xFF, n);
 
         uint8_t val = m_memory.read8(addr);
@@ -290,8 +303,7 @@ namespace cpu
 
     int Executor::ldh_an_A()
     {
-        uint8_t n = m_memory.read8(m_registers.getPC());
-        m_registers.incrementPC();
+        uint8_t n = getImmediate8();
         uint16_t addr = utils::to16(0xFF, n);
 
         uint8_t a = m_registers.read8<Registers::A>();
@@ -347,9 +359,7 @@ namespace cpu
 
     int Executor::ld_SP_rr()
     {
-        uint16_t val = m_memory.read16(m_registers.getPC());
-        m_registers.incrementPC();
-        m_registers.incrementPC();
+        uint16_t val = getImmediate16();
 
         m_registers.setSP(val);
 
@@ -358,9 +368,7 @@ namespace cpu
 
     int Executor::ld_nn_SP()
     {
-        uint16_t addr = m_memory.read16(m_registers.getPC());
-        m_registers.incrementPC();
-        m_registers.incrementPC();
+        uint16_t addr = getImmediate16();
 
         m_memory.write16(addr, m_registers.getSP());
 
@@ -377,8 +385,7 @@ namespace cpu
 
     int Executor::ld_HL_SP_r8()
     {
-        int8_t val = (int8_t) m_memory.read8(m_registers.getPC());
-        m_registers.incrementPC();
+        int8_t val = (int8_t) getImmediate8();
         
         uint16_t result = m_registers.getSP() + val;
 
@@ -417,9 +424,7 @@ namespace cpu
     int Executor::add_n()
     {
         int a = (int8_t) m_registers.read8<Registers::A>();
-
-        int b = (int8_t) m_memory.read8(m_registers.getPC());
-        m_registers.incrementPC();
+        int b = (int8_t) getImmediate8();
         add(a, b);
 
         return 2;
@@ -450,8 +455,7 @@ namespace cpu
     {
         int a = (int8_t)m_registers.read8<Registers::A>();
 
-        int b = (int8_t)m_memory.read8(m_registers.getPC());
-        m_registers.incrementPC();
+        int b = (int8_t) getImmediate8();
         adc(a, b);
 
         return 2;
@@ -481,8 +485,7 @@ namespace cpu
     {
         int a = (int8_t)m_registers.read8<Registers::A>();
 
-        int b = (int8_t)m_memory.read8(m_registers.getPC());
-        m_registers.incrementPC();
+        int b = (int8_t) getImmediate8();
         sub(a, b);
 
         return 2;
@@ -511,10 +514,9 @@ namespace cpu
 
     int Executor::sbc_n()
     {
-        int a = (int8_t)m_registers.read8<Registers::A>();
+        int a = (int8_t) m_registers.read8<Registers::A>();
 
-        int b = (int8_t)m_memory.read8(m_registers.getPC());
-        m_registers.incrementPC();
+        int b = (int8_t) getImmediate8();
         sbc(a, b);
 
         return 2;
@@ -541,10 +543,9 @@ namespace cpu
 
     int Executor::cp_n()
     {
-        int a = (int8_t)m_registers.read8<Registers::A>();
+        int a = (int8_t) m_registers.read8<Registers::A>();
 
-        int b = (int8_t)m_memory.read8(m_registers.getPC());
-        m_registers.incrementPC();
+        int b = (int8_t) getImmediate8();
         cp(a, b);
 
         return 2;
@@ -594,10 +595,9 @@ namespace cpu
 
     int Executor::and_n()
     {
-        int8_t a = m_registers.read8<Registers::A>();
+        uint8_t a = m_registers.read8<Registers::A>();
 
-        int8_t b = m_memory.read8(m_registers.getPC());
-        m_registers.incrementPC();
+        uint8_t b = getImmediate8();
         uint8_t r = a & b;
 
         m_registers.write8<Registers::A>(r);
@@ -623,10 +623,9 @@ namespace cpu
 
     int Executor::or_n()
     {
-        int8_t a = m_registers.read8<Registers::A>();
+        uint8_t a = m_registers.read8<Registers::A>();
 
-        int8_t b = m_memory.read8(m_registers.getPC());
-        m_registers.incrementPC();
+        uint8_t b = getImmediate8();
         uint8_t r = a | b;
 
         m_registers.write8<Registers::A>(r);
@@ -652,10 +651,9 @@ namespace cpu
 
     int Executor::xor_n()
     {
-        int8_t a = m_registers.read8<Registers::A>();
+        uint8_t a = m_registers.read8<Registers::A>();
 
-        int8_t b = m_memory.read8(m_registers.getPC());
-        m_registers.incrementPC();
+        uint8_t b = getImmediate8();
         uint8_t r = a ^ b;
 
         m_registers.write8<Registers::A>(r);
@@ -730,10 +728,26 @@ namespace cpu
         int res = hl + sp;
 
         int carryBits = hl ^ sp ^ res;
-        updateFlagsWithCarry16bit(carryBits, res, true, false);
+        updateFlagsWithCarry16bit(carryBits, true, false);
 
         m_registers.write16<Registers::HL>((uint16_t)res);
 
         return 2;
+    }
+
+    int Executor::add_SP_n()
+    {
+        int sp = m_registers.getSP();
+        int8_t n = (int8_t) getImmediate8();
+
+        int res = sp + n;
+
+        int carryBits = sp ^ n ^ res;
+        m_registers.setFlag(Registers::Flag::Z, false);
+        updateFlagsWithCarry16bit(carryBits, true, false);
+
+        m_registers.setSP((uint16_t)res);
+
+        return 4;
     }
 }
