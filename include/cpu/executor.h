@@ -182,6 +182,8 @@ private:
     // Rotates and shifts
     int rlca();
     int rla();
+    int rrca();
+    int rra();
 
 private:
     Logger m_tracer;

@@ -138,6 +138,8 @@ namespace cpu
         // Rotates and shifts
         std::string rlca(uint8_t opCode);
         std::string rla(uint8_t opCode);
+        std::string rrca(uint8_t opCode);
+        std::string rra(uint8_t opCode);
 
     private:
         Registers& m_registers;
