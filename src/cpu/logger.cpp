@@ -25,6 +25,7 @@ namespace cpu
         m_instructionSet[0x04] = &Logger::inc_r<Registers::B>;
         m_instructionSet[0x05] = &Logger::dec_r<Registers::B>;
         m_instructionSet[0x06] = &Logger::ld_r_n_8<0x06>;
+        m_instructionSet[0x07] = &Logger::rlca;
         m_instructionSet[0x08] = &Logger::ld_nn_SP;
         m_instructionSet[0x09] = &Logger::add_HL_rr<Registers::BC>;
         m_instructionSet[0x0A] = &Logger::ld_A_r16<Registers::BC>;
@@ -38,6 +39,7 @@ namespace cpu
         m_instructionSet[0x14] = &Logger::inc_r<Registers::D>;
         m_instructionSet[0x15] = &Logger::dec_r<Registers::D>;
         m_instructionSet[0x16] = &Logger::ld_r_n_8<0x16>;
+        m_instructionSet[0x17] = &Logger::rla;
         m_instructionSet[0x19] = &Logger::add_HL_rr<Registers::DE>;
         m_instructionSet[0x1A] = &Logger::ld_A_r16<Registers::DE>;
         m_instructionSet[0x1B] = &Logger::dec_rr<Registers::DE>;
@@ -436,5 +438,15 @@ namespace cpu
     std::string Logger::dec_SP(uint8_t opCode)
     {
         return std::to_string(opCode) + " : DEC SP;\n";
+    }
+
+    std::string Logger::rlca(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : RLCA;\n";
+    }
+
+    std::string Logger::rla(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : RLA;\n";
     }
 }

@@ -27,6 +27,7 @@ namespace cpu
         m_instructionSet[0x04] = &Executor::inc_r<Registers::B>;
         m_instructionSet[0x05] = &Executor::dec_r<Registers::B>;
         m_instructionSet[0x06] = &Executor::ld_r_n_8<0x06>;
+        m_instructionSet[0x07] = &Executor::rlca;
         m_instructionSet[0x08] = &Executor::ld_nn_SP;
         m_instructionSet[0x09] = &Executor::add_HL_rr<Registers::BC>;
         m_instructionSet[0x0A] = &Executor::ld_A_r16<Registers::BC>;
@@ -40,6 +41,7 @@ namespace cpu
         m_instructionSet[0x14] = &Executor::inc_r<Registers::D>;
         m_instructionSet[0x15] = &Executor::dec_r<Registers::D>;
         m_instructionSet[0x16] = &Executor::ld_r_n_8<0x16>;
+        m_instructionSet[0x17] = &Executor::rla;
         m_instructionSet[0x19] = &Executor::add_HL_rr<Registers::DE>;
         m_instructionSet[0x1A] = &Executor::ld_A_r16<Registers::DE>;
         m_instructionSet[0x1B] = &Executor::dec_rr<Registers::DE>;
@@ -775,5 +777,33 @@ namespace cpu
         m_registers.setSP(rr);
 
         return 2;
+    }
+
+    int Executor::rlca()
+    {
+        uint8_t a = m_registers.read8<Registers::A>();
+        bool c = (a & 0x80) == 0x80;
+        
+        a <<= 1;
+        updateFlags(a, false, false, c);
+
+        m_registers.write8<Registers::A>(a);
+
+        return 1;
+    }
+
+    int Executor::rla()
+    {
+        uint8_t a = m_registers.read8<Registers::A>();
+        bool c = (a & 0x80) == 0x80;
+        uint8_t oldCarry = m_registers.isSetFlag(Registers::Flag::C) ? 1 : 0;
+        a <<= 1;
+        a |= oldCarry;
+
+        updateFlags(a, false, false, c);
+
+        m_registers.write8<Registers::A>(a);
+
+        return 1;
     }
 }

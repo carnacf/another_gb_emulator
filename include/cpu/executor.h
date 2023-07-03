@@ -178,6 +178,11 @@ private:
     int dec_rr();
     int dec_SP();
 
+
+    // Rotates and shifts
+    int rlca();
+    int rla();
+
 private:
     Logger m_tracer;
     Registers& m_registers;

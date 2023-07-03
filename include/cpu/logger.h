@@ -134,6 +134,11 @@ namespace cpu
         template<Registers::Paired NAME>
         std::string dec_rr(uint8_t opCode);
         std::string dec_SP(uint8_t opCode);
+
+        // Rotates and shifts
+        std::string rlca(uint8_t opCode);
+        std::string rla(uint8_t opCode);
+
     private:
         Registers& m_registers;
         //Memory& m_memory;
