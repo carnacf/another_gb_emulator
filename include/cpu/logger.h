@@ -128,6 +128,12 @@ namespace cpu
         std::string add_HL_rr(uint8_t opCode);
         std::string add_HL_SP(uint8_t opCode);
         std::string add_SP_n(uint8_t opCode);
+        template<Registers::Paired NAME>
+        std::string inc_rr(uint8_t opCode);
+        std::string inc_SP(uint8_t opCode);
+        template<Registers::Paired NAME>
+        std::string dec_rr(uint8_t opCode);
+        std::string dec_SP(uint8_t opCode);
     private:
         Registers& m_registers;
         //Memory& m_memory;

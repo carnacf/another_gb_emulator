@@ -248,4 +248,24 @@ namespace cpu
 
         return 2;
     }
+
+    template<Registers::Paired NAME>
+    int Executor::inc_rr()
+    {
+        uint16_t rr = m_registers.read16<NAME>();
+        rr++;
+        m_registers.write16<NAME>(rr);
+
+        return 2;
+    }
+
+    template<Registers::Paired NAME>
+    int Executor::dec_rr()
+    {
+        uint16_t rr = m_registers.read16<NAME>();
+        rr--;
+        m_registers.write16<NAME>(rr);
+
+        return 2;
+    }
 }

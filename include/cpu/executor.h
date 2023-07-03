@@ -171,6 +171,12 @@ private:
     int add_HL_rr();
     int add_HL_SP();
     int add_SP_n();
+    template<Registers::Paired NAME>
+    int inc_rr();
+    int inc_SP();
+    template<Registers::Paired NAME>
+    int dec_rr();
+    int dec_SP();
 
 private:
     Logger m_tracer;
