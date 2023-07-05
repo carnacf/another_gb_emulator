@@ -205,6 +205,12 @@ private:
     int call_cc_nn();
     template<Registers::Flag f>
     int call_ncc_nn();
+
+    int ret();
+    template<Registers::Flag f>
+    int ret_cc();
+    template<Registers::Flag f>
+    int ret_ncc();
 private:
     Logger m_tracer;
     Registers& m_registers;

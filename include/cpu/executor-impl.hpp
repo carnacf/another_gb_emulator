@@ -356,4 +356,36 @@ namespace cpu
             return 3;
         }
     }
+
+    template<Registers::Flag f>
+    int Executor::ret_cc()
+    {
+        if (m_registers.isSetFlag(f))
+        {
+            uint16_t addr = pop();
+            m_registers.setPC(addr);
+
+            return 5;
+        }
+        else
+        {
+            return 2;
+        }
+    }
+
+    template<Registers::Flag f>
+    int Executor::ret_ncc()
+    {
+        if (!m_registers.isSetFlag(f))
+        {
+            uint16_t addr = pop();
+            m_registers.setPC(addr);
+
+            return 5;
+        }
+        else
+        {
+            return 2;
+        }
+    }
 }

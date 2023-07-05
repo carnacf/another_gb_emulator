@@ -160,6 +160,12 @@ namespace cpu
         std::string call_z_nn(uint8_t opCode);
         std::string call_nc_nn(uint8_t opCode);
         std::string call_c_nn(uint8_t opCode);
+
+        std::string ret(uint8_t opCode);
+        std::string ret_nz(uint8_t opCode);
+        std::string ret_z(uint8_t opCode);
+        std::string ret_nc(uint8_t opCode);
+        std::string ret_c(uint8_t opCode);
     private:
         Registers& m_registers;
         //Memory& m_memory;

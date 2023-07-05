@@ -211,21 +211,26 @@ namespace cpu
         m_instructionSet[0xBD] = &Executor::cp_r<Registers::L>;
         m_instructionSet[0xBE] = &Executor::cp_HL;
         m_instructionSet[0xBF] = &Executor::cp_r<Registers::A>;
+        m_instructionSet[0xC0] = &Executor::ret_ncc<Registers::Flag::Z>;
         m_instructionSet[0xC1] = &Executor::pop_rr<Registers::BC>;
         m_instructionSet[0xC2] = &Executor::jp_ncc_nn<Registers::Flag::Z>;
         m_instructionSet[0xC3] = &Executor::jp_nn;
         m_instructionSet[0xC4] = &Executor::call_ncc_nn<Registers::Flag::Z>;
         m_instructionSet[0xC5] = &Executor::push_rr<Registers::BC>;
         m_instructionSet[0xC6] = &Executor::add_n;
+        m_instructionSet[0xC8] = &Executor::ret_cc<Registers::Flag::Z>;
+        m_instructionSet[0xC9] = &Executor::ret;
         m_instructionSet[0xCA] = &Executor::jp_cc_nn<Registers::Flag::Z>;
         m_instructionSet[0xCC] = &Executor::call_cc_nn<Registers::Flag::Z>;
         m_instructionSet[0xCD] = &Executor::call_nn;
         m_instructionSet[0xCE] = &Executor::adc_n;
+        m_instructionSet[0xD0] = &Executor::ret_ncc<Registers::Flag::C>;
         m_instructionSet[0xD1] = &Executor::pop_rr<Registers::DE>;
         m_instructionSet[0xD2] = &Executor::jp_ncc_nn<Registers::Flag::C>;
         m_instructionSet[0xD4] = &Executor::call_ncc_nn<Registers::Flag::C>;
         m_instructionSet[0xD5] = &Executor::push_rr<Registers::DE>;
         m_instructionSet[0xD6] = &Executor::sub_n;
+        m_instructionSet[0xD8] = &Executor::ret_cc<Registers::Flag::C>;
         m_instructionSet[0xDA] = &Executor::jp_cc_nn<Registers::Flag::C>;
         m_instructionSet[0xDC] = &Executor::call_cc_nn<Registers::Flag::C>;
         m_instructionSet[0xDE] = &Executor::sbc_n;
@@ -909,5 +914,13 @@ namespace cpu
 
         m_registers.setPC(addr);
         return 6;
+    }
+
+    int Executor::ret()
+    {
+        uint16_t addr = pop();
+        m_registers.setPC(addr);
+
+        return 4;
     }
 }
