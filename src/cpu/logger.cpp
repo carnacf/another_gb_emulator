@@ -230,6 +230,7 @@ namespace cpu
         m_instructionSet[0xD5] = &Logger::push<Registers::DE>;
         m_instructionSet[0xD6] = &Logger::sub_n;
         m_instructionSet[0xD8] = &Logger::ret_c;
+        m_instructionSet[0xD9] = &Logger::reti;
         m_instructionSet[0xDA] = &Logger::jp_c_nn;
         m_instructionSet[0xDC] = &Logger::call_c_nn;
         m_instructionSet[0xDE] = &Logger::sbc_n;
@@ -586,5 +587,10 @@ namespace cpu
     std::string Logger::ret_c(uint8_t opCode)
     {
         return std::to_string(opCode) + " : RET NC;\n";
+    }
+
+    std::string Logger::reti(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : RETI;\n";
     }
 }

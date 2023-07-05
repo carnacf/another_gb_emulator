@@ -166,6 +166,7 @@ namespace cpu
         std::string ret_z(uint8_t opCode);
         std::string ret_nc(uint8_t opCode);
         std::string ret_c(uint8_t opCode);
+        std::string reti(uint8_t opCode);
     private:
         Registers& m_registers;
         //Memory& m_memory;

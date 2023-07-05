@@ -231,6 +231,7 @@ namespace cpu
         m_instructionSet[0xD5] = &Executor::push_rr<Registers::DE>;
         m_instructionSet[0xD6] = &Executor::sub_n;
         m_instructionSet[0xD8] = &Executor::ret_cc<Registers::Flag::C>;
+        m_instructionSet[0xD8] = &Executor::reti;
         m_instructionSet[0xDA] = &Executor::jp_cc_nn<Registers::Flag::C>;
         m_instructionSet[0xDC] = &Executor::call_cc_nn<Registers::Flag::C>;
         m_instructionSet[0xDE] = &Executor::sbc_n;
@@ -922,5 +923,11 @@ namespace cpu
         m_registers.setPC(addr);
 
         return 4;
+    }
+
+    int Executor::reti()
+    {
+        m_IME = true;
+        return ret();
     }
 }

@@ -211,6 +211,8 @@ private:
     int ret_cc();
     template<Registers::Flag f>
     int ret_ncc();
+    int reti();
+
 private:
     Logger m_tracer;
     Registers& m_registers;
@@ -218,6 +220,8 @@ private:
 
     Instruction m_instructionSet[255];
     Instruction m_cbInstructionSet[255];
+
+    bool m_IME = false;
 };
 }
 
