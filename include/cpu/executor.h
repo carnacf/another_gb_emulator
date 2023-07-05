@@ -77,10 +77,12 @@ private:
     int ld_SP_HL();
     int ld_HL_SP_r8();
 
+    void push(uint16_t val);
+    uint16_t pop();
     template<Registers::Paired NAME>
-    int push();
+    int push_rr();
     template<Registers::Paired NAME>
-    int pop();
+    int pop_rr();
 
     void updateFlags(uint8_t res, bool n, bool h, bool c)
     {

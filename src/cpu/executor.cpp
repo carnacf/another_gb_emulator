@@ -211,32 +211,32 @@ namespace cpu
         m_instructionSet[0xBD] = &Executor::cp_r<Registers::L>;
         m_instructionSet[0xBE] = &Executor::cp_HL;
         m_instructionSet[0xBF] = &Executor::cp_r<Registers::A>;
-        m_instructionSet[0xC1] = &Executor::pop<Registers::BC>;
+        m_instructionSet[0xC1] = &Executor::pop_rr<Registers::BC>;
         m_instructionSet[0xC2] = &Executor::jp_ncc_nn<Registers::Flag::Z>;
         m_instructionSet[0xC3] = &Executor::jp_nn;
-        m_instructionSet[0xC5] = &Executor::push<Registers::BC>;
+        m_instructionSet[0xC5] = &Executor::push_rr<Registers::BC>;
         m_instructionSet[0xC6] = &Executor::add_n;
         m_instructionSet[0xCA] = &Executor::jp_cc_nn<Registers::Flag::Z>;
         m_instructionSet[0xCE] = &Executor::adc_n;
-        m_instructionSet[0xD1] = &Executor::pop<Registers::DE>;
+        m_instructionSet[0xD1] = &Executor::pop_rr<Registers::DE>;
         m_instructionSet[0xD2] = &Executor::jp_ncc_nn<Registers::Flag::C>;
-        m_instructionSet[0xD5] = &Executor::push<Registers::DE>;
+        m_instructionSet[0xD5] = &Executor::push_rr<Registers::DE>;
         m_instructionSet[0xD6] = &Executor::sub_n;
         m_instructionSet[0xDA] = &Executor::jp_cc_nn<Registers::Flag::C>;
         m_instructionSet[0xDE] = &Executor::sbc_n;
         m_instructionSet[0xE0] = &Executor::ldh_an_A;
-        m_instructionSet[0xE1] = &Executor::pop<Registers::HL>;
+        m_instructionSet[0xE1] = &Executor::pop_rr<Registers::HL>;
         m_instructionSet[0xE2] = &Executor::ldh_aC_A;
-        m_instructionSet[0xE5] = &Executor::push<Registers::HL>;
+        m_instructionSet[0xE5] = &Executor::push_rr<Registers::HL>;
         m_instructionSet[0xE6] = &Executor::and_n;
         m_instructionSet[0xE8] = &Executor::add_SP_n;
         m_instructionSet[0xE9] = &Executor::jp_HL;
         m_instructionSet[0xEA] = &Executor::ld_nn_A;
         m_instructionSet[0xEE] = &Executor::xor_n;
         m_instructionSet[0xF0] = &Executor::ldh_A_an;
-        m_instructionSet[0xF1] = &Executor::pop<Registers::AF>;
+        m_instructionSet[0xF1] = &Executor::pop_rr<Registers::AF>;
         m_instructionSet[0xF2] = &Executor::ldh_A_aC;
-        m_instructionSet[0xF5] = &Executor::push<Registers::AF>;
+        m_instructionSet[0xF5] = &Executor::push_rr<Registers::AF>;
         m_instructionSet[0xF6] = &Executor::or_n;
         m_instructionSet[0xF8] = &Executor::ld_HL_SP_r8;
         m_instructionSet[0xF9] = &Executor::ld_SP_HL;
@@ -422,6 +422,28 @@ namespace cpu
         m_registers.setFlag(Registers::Flag::C, c);
 
         return 3;
+    }
+
+    void Executor::push(uint16_t val)
+    {
+        uint16_t sp = m_registers.getSP();
+        sp--;
+        sp--;
+
+        m_registers.setSP(sp);
+        m_memory.write16(m_registers.getSP(), val);
+    }
+
+    uint16_t Executor::pop()
+    {
+        uint16_t sp = m_registers.getSP();
+        uint16_t val = m_memory.read16(sp);
+
+        sp++;
+        sp++;
+        m_registers.setSP(sp);
+
+        return val;
     }
 
     void Executor::add(int a, int b)

@@ -89,30 +89,20 @@ namespace cpu
     }
 
     template<Registers::Paired NAME>
-    int Executor::push()
+    int Executor::push_rr()
     {
         uint16_t val = m_registers.read16<NAME>();
-        uint16_t sp = m_registers.getSP();
-        sp--;
-        sp--;
-
-        m_registers.setSP(sp);
-        m_memory.write16(m_registers.getSP(), val);
+        push(val);
 
         return 4;
     }
 
     template<Registers::Paired NAME>
-    int Executor::pop()
+    int Executor::pop_rr()
     {
-        uint16_t sp = m_registers.getSP();
-        uint16_t val = m_memory.read16(sp);
-
-        sp++;
-        sp++;
-        m_registers.setSP(sp);
-
+        uint16_t val = pop();
         m_registers.write16<NAME>(val);
+        
         return 3;                                                                                                                                                                                            
     }
 
