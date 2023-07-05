@@ -106,6 +106,10 @@ public:
     {
         m_pc++;
     }
+    void setPC(uint16_t pc)
+    {
+        m_pc = pc;
+    }
     
     uint16_t getSP() const
     {

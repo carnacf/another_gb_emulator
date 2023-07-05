@@ -207,12 +207,17 @@ namespace cpu
         m_instructionSet[0xBE] = &Executor::cp_HL;
         m_instructionSet[0xBF] = &Executor::cp_r<Registers::A>;
         m_instructionSet[0xC1] = &Executor::pop<Registers::BC>;
+        m_instructionSet[0xC2] = &Executor::jp_ncc_nn<Registers::Flag::Z>;
+        m_instructionSet[0xC3] = &Executor::jp_nn;
         m_instructionSet[0xC5] = &Executor::push<Registers::BC>;
         m_instructionSet[0xC6] = &Executor::add_n;
+        m_instructionSet[0xCA] = &Executor::jp_cc_nn<Registers::Flag::Z>;
         m_instructionSet[0xCE] = &Executor::adc_n;
         m_instructionSet[0xD1] = &Executor::pop<Registers::DE>;
+        m_instructionSet[0xD2] = &Executor::jp_ncc_nn<Registers::Flag::C>;
         m_instructionSet[0xD5] = &Executor::push<Registers::DE>;
         m_instructionSet[0xD6] = &Executor::sub_n;
+        m_instructionSet[0xDA] = &Executor::jp_cc_nn<Registers::Flag::C>;
         m_instructionSet[0xDE] = &Executor::sbc_n;
         m_instructionSet[0xE0] = &Executor::ldh_an_A;
         m_instructionSet[0xE1] = &Executor::pop<Registers::HL>;
@@ -220,6 +225,7 @@ namespace cpu
         m_instructionSet[0xE5] = &Executor::push<Registers::HL>;
         m_instructionSet[0xE6] = &Executor::and_n;
         m_instructionSet[0xE8] = &Executor::add_SP_n;
+        m_instructionSet[0xE9] = &Executor::jp_HL;
         m_instructionSet[0xEA] = &Executor::ld_nn_A;
         m_instructionSet[0xEE] = &Executor::xor_n;
         m_instructionSet[0xF0] = &Executor::ldh_A_an;
@@ -833,6 +839,22 @@ namespace cpu
         updateFlags(a, false, false, c);
 
         m_registers.write8<Registers::A>(a);
+
+        return 1;
+    }
+
+    int Executor::jp_nn()
+    {
+        uint16_t immediate = getImmediate16();
+        m_registers.setPC(immediate);
+
+        return 4;
+    }
+
+    int Executor::jp_HL()
+    {
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        m_registers.setPC(hl);
 
         return 1;
     }

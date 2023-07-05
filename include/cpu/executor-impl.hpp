@@ -268,4 +268,34 @@ namespace cpu
 
         return 2;
     }
+
+    template<Registers::Flag f>
+    int Executor::jp_cc_nn()
+    {
+        uint16_t immediate = getImmediate16();
+        if (m_registers.isSetFlag(f))
+        {
+            m_registers.setPC(immediate);
+            return 4;
+        }
+        else
+        {
+            return 3;
+        }
+    }
+
+    template<Registers::Flag f>
+    int Executor::jp_ncc_nn()
+    {
+        uint16_t immediate = getImmediate16();
+        if (!m_registers.isSetFlag(f))
+        {
+            m_registers.setPC(immediate);
+            return 4;
+        }
+        else
+        {
+            return 3;
+        }
+    }
 }

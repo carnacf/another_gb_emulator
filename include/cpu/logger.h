@@ -141,6 +141,13 @@ namespace cpu
         std::string rrca(uint8_t opCode);
         std::string rra(uint8_t opCode);
 
+        // Control flow instructions
+        std::string jp_nn(uint8_t opCode);
+        std::string jp_HL(uint8_t opCode);
+        std::string jp_nz_nn(uint8_t opCode);
+        std::string jp_z_nn(uint8_t opCode);
+        std::string jp_nc_nn(uint8_t opCode);
+        std::string jp_c_nn(uint8_t opCode);
     private:
         Registers& m_registers;
         //Memory& m_memory;

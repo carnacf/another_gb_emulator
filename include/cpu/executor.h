@@ -185,6 +185,13 @@ private:
     int rrca();
     int rra();
 
+    // Control flow instructions
+    int jp_nn();
+    int jp_HL();
+    template<Registers::Flag f>
+    int jp_cc_nn();
+    template<Registers::Flag f>
+    int jp_ncc_nn();
 private:
     Logger m_tracer;
     Registers& m_registers;
