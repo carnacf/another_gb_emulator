@@ -148,6 +148,12 @@ namespace cpu
         std::string jp_z_nn(uint8_t opCode);
         std::string jp_nc_nn(uint8_t opCode);
         std::string jp_c_nn(uint8_t opCode);
+        
+        std::string jr_e(uint8_t opCode);
+        std::string jr_nz_n(uint8_t opCode);
+        std::string jr_z_n(uint8_t opCode);
+        std::string jr_nc_n(uint8_t opCode);
+        std::string jr_c_n(uint8_t opCode);
     private:
         Registers& m_registers;
         //Memory& m_memory;

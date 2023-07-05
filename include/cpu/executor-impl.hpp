@@ -298,4 +298,36 @@ namespace cpu
             return 3;
         }
     }
+
+    template<Registers::Flag f>
+    int Executor::jr_cc_n()
+    {
+        int8_t immediate = (int8_t) getImmediate8();
+        if (m_registers.isSetFlag(f))
+        {
+            uint16_t pc = m_registers.getPC();
+            m_registers.setPC(pc + immediate);
+            return 3;
+        }
+        else
+        {
+            return 2;
+        }
+    }
+
+    template<Registers::Flag f>
+    int Executor::jr_ncc_n()
+    {
+        int8_t immediate = (int8_t)getImmediate8();
+        if (!m_registers.isSetFlag(f))
+        {
+            uint16_t pc = m_registers.getPC();
+            m_registers.setPC(pc + immediate);
+            return 3;
+        }
+        else
+        {
+            return 2;
+        }
+    }
 }

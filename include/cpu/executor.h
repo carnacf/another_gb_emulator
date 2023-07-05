@@ -192,6 +192,12 @@ private:
     int jp_cc_nn();
     template<Registers::Flag f>
     int jp_ncc_nn();
+
+    int jr_e();
+    template<Registers::Flag f>
+    int jr_cc_n();
+    template<Registers::Flag f>
+    int jr_ncc_n();
 private:
     Logger m_tracer;
     Registers& m_registers;

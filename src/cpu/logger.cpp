@@ -41,6 +41,7 @@ namespace cpu
         m_instructionSet[0x15] = &Logger::dec_r<Registers::D>;
         m_instructionSet[0x16] = &Logger::ld_r_n_8<0x16>;
         m_instructionSet[0x17] = &Logger::rla;
+        m_instructionSet[0x18] = &Logger::jr_e;
         m_instructionSet[0x19] = &Logger::add_HL_rr<Registers::DE>;
         m_instructionSet[0x1A] = &Logger::ld_A_r16<Registers::DE>;
         m_instructionSet[0x1B] = &Logger::dec_rr<Registers::DE>;
@@ -48,6 +49,7 @@ namespace cpu
         m_instructionSet[0x1D] = &Logger::dec_r<Registers::E>;
         m_instructionSet[0x1E] = &Logger::ld_r_n_8<0x1E>;
         m_instructionSet[0x1F] = &Logger::rra;
+        m_instructionSet[0x20] = &Logger::jr_nz_n;
         m_instructionSet[0x21] = &Logger::ld_rr_nn<Registers::HL>;
         m_instructionSet[0x22] = &Logger::ld_HLi_A;
         m_instructionSet[0x23] = &Logger::inc_rr<Registers::HL>;
@@ -55,6 +57,7 @@ namespace cpu
         m_instructionSet[0x25] = &Logger::dec_r<Registers::H>;
         m_instructionSet[0x26] = &Logger::ld_r_n_8<0x26>;
         m_instructionSet[0x27] = &Logger::daa;
+        m_instructionSet[0x28] = &Logger::jr_z_n;
         m_instructionSet[0x29] = &Logger::add_HL_rr<Registers::HL>;
         m_instructionSet[0x2A] = &Logger::ld_A_HLi;
         m_instructionSet[0x2B] = &Logger::inc_rr<Registers::HL>;
@@ -62,6 +65,7 @@ namespace cpu
         m_instructionSet[0x2D] = &Logger::dec_r<Registers::L>;
         m_instructionSet[0x2E] = &Logger::ld_r_n_8<0x2E>;
         m_instructionSet[0x2F] = &Logger::cpl;
+        m_instructionSet[0x30] = &Logger::jr_nc_n;
         m_instructionSet[0x31] = &Logger::ld_SP_rr;
         m_instructionSet[0x32] = &Logger::ld_HLd_A;
         m_instructionSet[0x33] = &Logger::inc_SP;
@@ -69,6 +73,7 @@ namespace cpu
         m_instructionSet[0x35] = &Logger::dec_HL;
         m_instructionSet[0x36] = &Logger::ld_HL_n_8<0x36>;
         m_instructionSet[0x37] = &Logger::scf;
+        m_instructionSet[0x38] = &Logger::jr_c_n;
         m_instructionSet[0x39] = &Logger::add_HL_SP;
         m_instructionSet[0x3A] = &Logger::ld_A_HLd;
         m_instructionSet[0x3B] = &Logger::dec_SP;
@@ -496,5 +501,30 @@ namespace cpu
     std::string Logger::jp_c_nn(uint8_t opCode)
     {
         return std::to_string(opCode) + " : JP C nn;\n";
+    }
+
+    std::string Logger::jr_e(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : JR e;\n";
+    }
+
+    std::string Logger::jr_nz_n(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : JR NZ nn;\n";
+    }
+
+    std::string Logger::jr_z_n(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : JR Z nn;\n";
+    }
+
+    std::string Logger::jr_nc_n(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : JR NC nn;\n";
+    }
+
+    std::string Logger::jr_c_n(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : JR C nn;\n";
     }
 }

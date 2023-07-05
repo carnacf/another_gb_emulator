@@ -43,6 +43,7 @@ namespace cpu
         m_instructionSet[0x15] = &Executor::dec_r<Registers::D>;
         m_instructionSet[0x16] = &Executor::ld_r_n_8<0x16>;
         m_instructionSet[0x17] = &Executor::rla;
+        m_instructionSet[0x18] = &Executor::jr_e;
         m_instructionSet[0x19] = &Executor::add_HL_rr<Registers::DE>;
         m_instructionSet[0x1A] = &Executor::ld_A_r16<Registers::DE>;
         m_instructionSet[0x1B] = &Executor::dec_rr<Registers::DE>;
@@ -50,6 +51,7 @@ namespace cpu
         m_instructionSet[0x1D] = &Executor::dec_r<Registers::E>;
         m_instructionSet[0x1E] = &Executor::ld_r_n_8<0x1E>;
         m_instructionSet[0x1F] = &Executor::rra;
+        m_instructionSet[0x20] = &Executor::jr_ncc_n<Registers::Flag::Z>;
         m_instructionSet[0x21] = &Executor::ld_rr_nn<Registers::HL>;
         m_instructionSet[0x22] = &Executor::ld_HLi_A;
         m_instructionSet[0x23] = &Executor::inc_rr<Registers::HL>;
@@ -57,6 +59,7 @@ namespace cpu
         m_instructionSet[0x25] = &Executor::dec_r<Registers::H>;
         m_instructionSet[0x26] = &Executor::ld_r_n_8<0x26>;
         m_instructionSet[0x27] = &Executor::daa;
+        m_instructionSet[0x28] = &Executor::jr_cc_n<Registers::Flag::Z>;
         m_instructionSet[0x29] = &Executor::add_HL_rr<Registers::HL>;
         m_instructionSet[0x2A] = &Executor::ld_A_HLi;
         m_instructionSet[0x2B] = &Executor::inc_rr<Registers::HL>;
@@ -64,6 +67,7 @@ namespace cpu
         m_instructionSet[0x2D] = &Executor::dec_r<Registers::L>;
         m_instructionSet[0x2E] = &Executor::ld_r_n_8<0x2E>;
         m_instructionSet[0x2F] = &Executor::cpl;
+        m_instructionSet[0x30] = &Executor::jr_ncc_n<Registers::Flag::C>;
         m_instructionSet[0x31] = &Executor::ld_SP_rr;
         m_instructionSet[0x32] = &Executor::ld_HLd_A;
         m_instructionSet[0x33] = &Executor::inc_SP;
@@ -71,6 +75,7 @@ namespace cpu
         m_instructionSet[0x35] = &Executor::dec_HL;
         m_instructionSet[0x36] = &Executor::ld_HL_n_8<0x36>;
         m_instructionSet[0x37] = &Executor::scf;
+        m_instructionSet[0x38] = &Executor::jr_cc_n<Registers::Flag::C>;
         m_instructionSet[0x39] = &Executor::add_HL_SP;
         m_instructionSet[0x3A] = &Executor::ld_A_HLd;
         m_instructionSet[0x3B] = &Executor::dec_SP;
@@ -857,5 +862,14 @@ namespace cpu
         m_registers.setPC(hl);
 
         return 1;
+    }
+
+    int Executor::jr_e()
+    {
+        int8_t e = (int8_t) getImmediate8();
+        uint16_t pc = m_registers.getPC();
+        m_registers.setPC(pc + e);
+
+        return 3;
     }
 }
