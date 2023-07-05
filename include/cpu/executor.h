@@ -180,7 +180,6 @@ private:
     int dec_rr();
     int dec_SP();
 
-
     // Rotates and shifts
     int rlca();
     int rla();
@@ -200,6 +199,12 @@ private:
     int jr_cc_n();
     template<Registers::Flag f>
     int jr_ncc_n();
+
+    int call_nn();
+    template<Registers::Flag f>
+    int call_cc_nn();
+    template<Registers::Flag f>
+    int call_ncc_nn();
 private:
     Logger m_tracer;
     Registers& m_registers;

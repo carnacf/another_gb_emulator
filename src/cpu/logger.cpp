@@ -213,15 +213,20 @@ namespace cpu
         m_instructionSet[0xC1] = &Logger::pop<Registers::BC>;
         m_instructionSet[0xC2] = &Logger::jp_nz_nn;
         m_instructionSet[0xC3] = &Logger::jp_nn;
+        m_instructionSet[0xC4] = &Logger::call_nz_nn;
         m_instructionSet[0xC5] = &Logger::push<Registers::BC>;
         m_instructionSet[0xC6] = &Logger::add_n;
         m_instructionSet[0xCA] = &Logger::jp_z_nn;
+        m_instructionSet[0xCC] = &Logger::call_z_nn;
+        m_instructionSet[0xCD] = &Logger::call_nn;
         m_instructionSet[0xCE] = &Logger::adc_n;
         m_instructionSet[0xD1] = &Logger::pop<Registers::DE>;
         m_instructionSet[0xD2] = &Logger::jp_nc_nn;
+        m_instructionSet[0xD4] = &Logger::call_nc_nn;
         m_instructionSet[0xD5] = &Logger::push<Registers::DE>;
         m_instructionSet[0xD6] = &Logger::sub_n;
         m_instructionSet[0xDA] = &Logger::jp_c_nn;
+        m_instructionSet[0xDC] = &Logger::call_c_nn;
         m_instructionSet[0xDE] = &Logger::sbc_n;
         m_instructionSet[0xE0] = &Logger::ldh_an_A;
         m_instructionSet[0xE1] = &Logger::pop<Registers::HL>;
@@ -485,22 +490,22 @@ namespace cpu
 
     std::string Logger::jp_nz_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JP NZ nn;\n";
+        return std::to_string(opCode) + " : JP NZ, nn;\n";
     }
 
     std::string Logger::jp_z_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JP Z nn;\n";
+        return std::to_string(opCode) + " : JP Z, nn;\n";
     }
 
     std::string Logger::jp_nc_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JP NC nn;\n";
+        return std::to_string(opCode) + " : JP NC, nn;\n";
     }
 
     std::string Logger::jp_c_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JP C nn;\n";
+        return std::to_string(opCode) + " : JP C, nn;\n";
     }
 
     std::string Logger::jr_e(uint8_t opCode)
@@ -510,21 +515,46 @@ namespace cpu
 
     std::string Logger::jr_nz_n(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JR NZ nn;\n";
+        return std::to_string(opCode) + " : JR NZ, nn;\n";
     }
 
     std::string Logger::jr_z_n(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JR Z nn;\n";
+        return std::to_string(opCode) + " : JR Z, nn;\n";
     }
 
     std::string Logger::jr_nc_n(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JR NC nn;\n";
+        return std::to_string(opCode) + " : JR NC, nn;\n";
     }
 
     std::string Logger::jr_c_n(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JR C nn;\n";
+        return std::to_string(opCode) + " : JR C, nn;\n";
+    }
+
+    std::string Logger::call_nn(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : CALL nn;\n";
+    }
+
+    std::string Logger::call_nz_nn(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : CALL NZ, nn;\n";
+    }
+
+    std::string Logger::call_z_nn(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : CALL Z, nn;\n";
+    }
+
+    std::string Logger::call_nc_nn(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : CALL NC, nn;\n";
+    }
+
+    std::string Logger::call_c_nn(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : CALL C, nn;\n";
     }
 }

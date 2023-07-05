@@ -320,4 +320,40 @@ namespace cpu
             return 2;
         }
     }
+
+    template<Registers::Flag f>
+    int Executor::call_cc_nn()
+    {
+        uint16_t addr = getImmediate16();
+        if (m_registers.isSetFlag(f))
+        {
+            uint16_t pc = m_registers.getPC();
+            push(pc);
+
+            m_registers.setPC(addr);
+            return 6;
+        }
+        else
+        {
+            return 3;
+        }
+    }
+
+    template<Registers::Flag f>
+    int Executor::call_ncc_nn()
+    {
+        uint16_t addr = getImmediate16();
+        if (!m_registers.isSetFlag(f))
+        {
+            uint16_t pc = m_registers.getPC();
+            push(pc);
+
+            m_registers.setPC(addr);
+            return 6;
+        }
+        else
+        {
+            return 3;
+        }
+    }
 }
