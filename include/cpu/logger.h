@@ -167,12 +167,15 @@ namespace cpu
         std::string ret_nc(uint8_t opCode);
         std::string ret_c(uint8_t opCode);
         std::string reti(uint8_t opCode);
+
+        template<uint8_t n>
+        std::string rst(uint8_t opCode);
     private:
         Registers& m_registers;
         //Memory& m_memory;
 
-        Disassembly m_instructionSet[255];
-        Disassembly m_cbInstructionSet[255];
+        Disassembly m_instructionSet[256];
+        Disassembly m_cbInstructionSet[256];
     };
 }
 

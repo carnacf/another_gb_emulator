@@ -19,7 +19,7 @@ namespace cpu
     
     void Executor::fillInstructionSet()
     {
-        std::fill_n(m_instructionSet, 255, &Executor::unhandled);
+        std::fill_n(m_instructionSet, 256, &Executor::unhandled);
         
         m_instructionSet[0x01] = &Executor::ld_rr_nn<Registers::BC>;
         m_instructionSet[0x02] = &Executor::ld_r16_A<Registers::BC>;
@@ -218,46 +218,54 @@ namespace cpu
         m_instructionSet[0xC4] = &Executor::call_ncc_nn<Registers::Flag::Z>;
         m_instructionSet[0xC5] = &Executor::push_rr<Registers::BC>;
         m_instructionSet[0xC6] = &Executor::add_n;
+        m_instructionSet[0xC7] = &Executor::rst<0x00>;
         m_instructionSet[0xC8] = &Executor::ret_cc<Registers::Flag::Z>;
         m_instructionSet[0xC9] = &Executor::ret;
         m_instructionSet[0xCA] = &Executor::jp_cc_nn<Registers::Flag::Z>;
         m_instructionSet[0xCC] = &Executor::call_cc_nn<Registers::Flag::Z>;
         m_instructionSet[0xCD] = &Executor::call_nn;
         m_instructionSet[0xCE] = &Executor::adc_n;
+        m_instructionSet[0xCF] = &Executor::rst<0x08>;
         m_instructionSet[0xD0] = &Executor::ret_ncc<Registers::Flag::C>;
         m_instructionSet[0xD1] = &Executor::pop_rr<Registers::DE>;
         m_instructionSet[0xD2] = &Executor::jp_ncc_nn<Registers::Flag::C>;
         m_instructionSet[0xD4] = &Executor::call_ncc_nn<Registers::Flag::C>;
         m_instructionSet[0xD5] = &Executor::push_rr<Registers::DE>;
         m_instructionSet[0xD6] = &Executor::sub_n;
+        m_instructionSet[0xD7] = &Executor::rst<0x10>;
         m_instructionSet[0xD8] = &Executor::ret_cc<Registers::Flag::C>;
         m_instructionSet[0xD8] = &Executor::reti;
         m_instructionSet[0xDA] = &Executor::jp_cc_nn<Registers::Flag::C>;
         m_instructionSet[0xDC] = &Executor::call_cc_nn<Registers::Flag::C>;
         m_instructionSet[0xDE] = &Executor::sbc_n;
+        m_instructionSet[0xDF] = &Executor::rst<0x18>;
         m_instructionSet[0xE0] = &Executor::ldh_an_A;
         m_instructionSet[0xE1] = &Executor::pop_rr<Registers::HL>;
         m_instructionSet[0xE2] = &Executor::ldh_aC_A;
         m_instructionSet[0xE5] = &Executor::push_rr<Registers::HL>;
         m_instructionSet[0xE6] = &Executor::and_n;
+        m_instructionSet[0xE7] = &Executor::rst<0x20>;
         m_instructionSet[0xE8] = &Executor::add_SP_n;
         m_instructionSet[0xE9] = &Executor::jp_HL;
         m_instructionSet[0xEA] = &Executor::ld_nn_A;
         m_instructionSet[0xEE] = &Executor::xor_n;
+        m_instructionSet[0xEF] = &Executor::rst<0x28>;
         m_instructionSet[0xF0] = &Executor::ldh_A_an;
         m_instructionSet[0xF1] = &Executor::pop_rr<Registers::AF>;
         m_instructionSet[0xF2] = &Executor::ldh_A_aC;
         m_instructionSet[0xF5] = &Executor::push_rr<Registers::AF>;
         m_instructionSet[0xF6] = &Executor::or_n;
+        m_instructionSet[0xF7] = &Executor::rst<0x30>;
         m_instructionSet[0xF8] = &Executor::ld_HL_SP_r8;
         m_instructionSet[0xF9] = &Executor::ld_SP_HL;
         m_instructionSet[0xFA] = &Executor::ld_A_nn;
         m_instructionSet[0xFE] = &Executor::cp_n;
+        m_instructionSet[0xFF] = &Executor::rst<0x38>;
     }
 
     void Executor::fillCbInstructionSet()
     {
-        std::fill_n(m_cbInstructionSet, 255, &Executor::unhandled);
+        std::fill_n(m_cbInstructionSet, 256, &Executor::unhandled);
     }
 
     int Executor::unhandled() 

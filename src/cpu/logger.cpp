@@ -17,7 +17,7 @@ namespace cpu
 
     void Logger::fillInstructionSet()
     {
-        std::fill_n(m_instructionSet, 255, &Logger::unhandled);
+        std::fill_n(m_instructionSet, 256, &Logger::unhandled);
 
         m_instructionSet[0x01] = &Logger::ld_rr_nn<Registers::BC>;
         m_instructionSet[0x02] = &Logger::ld_r16_A<Registers::BC>;
@@ -217,46 +217,54 @@ namespace cpu
         m_instructionSet[0xC4] = &Logger::call_nz_nn;
         m_instructionSet[0xC5] = &Logger::push<Registers::BC>;
         m_instructionSet[0xC6] = &Logger::add_n;
+        m_instructionSet[0xC7] = &Logger::rst<0x00>;
         m_instructionSet[0xC8] = &Logger::ret_z;
         m_instructionSet[0xC9] = &Logger::ret;
         m_instructionSet[0xCA] = &Logger::jp_z_nn;
         m_instructionSet[0xCC] = &Logger::call_z_nn;
         m_instructionSet[0xCD] = &Logger::call_nn;
         m_instructionSet[0xCE] = &Logger::adc_n;
+        m_instructionSet[0xCF] = &Logger::rst<0x08>;
         m_instructionSet[0xD0] = &Logger::ret_nc;
         m_instructionSet[0xD1] = &Logger::pop<Registers::DE>;
         m_instructionSet[0xD2] = &Logger::jp_nc_nn;
         m_instructionSet[0xD4] = &Logger::call_nc_nn;
         m_instructionSet[0xD5] = &Logger::push<Registers::DE>;
         m_instructionSet[0xD6] = &Logger::sub_n;
+        m_instructionSet[0xD7] = &Logger::rst<0x10>;
         m_instructionSet[0xD8] = &Logger::ret_c;
         m_instructionSet[0xD9] = &Logger::reti;
         m_instructionSet[0xDA] = &Logger::jp_c_nn;
         m_instructionSet[0xDC] = &Logger::call_c_nn;
         m_instructionSet[0xDE] = &Logger::sbc_n;
+        m_instructionSet[0xDF] = &Logger::rst<0x18>;
         m_instructionSet[0xE0] = &Logger::ldh_an_A;
         m_instructionSet[0xE1] = &Logger::pop<Registers::HL>;
         m_instructionSet[0xE2] = &Logger::ldh_aC_A;
         m_instructionSet[0xE5] = &Logger::push<Registers::HL>;
         m_instructionSet[0xE6] = &Logger::and_n;
+        m_instructionSet[0xE7] = &Logger::rst<0x20>;
         m_instructionSet[0xE8] = &Logger::add_SP_n;
         m_instructionSet[0xE9] = &Logger::jp_HL;
         m_instructionSet[0xEA] = &Logger::ld_nn_A;
         m_instructionSet[0xEE] = &Logger::xor_n;
+        m_instructionSet[0xEF] = &Logger::rst<0x28>;
         m_instructionSet[0xF0] = &Logger::ldh_A_an;
         m_instructionSet[0xF1] = &Logger::pop<Registers::AF>;
         m_instructionSet[0xF2] = &Logger::ldh_A_aC;
         m_instructionSet[0xF5] = &Logger::push<Registers::AF>;
         m_instructionSet[0xF6] = &Logger::or_n;
+        m_instructionSet[0xF7] = &Logger::rst<0x30>;
         m_instructionSet[0xF8] = &Logger::ld_HL_SP_r8;
         m_instructionSet[0xF9] = &Logger::ld_SP_HL;
         m_instructionSet[0xFA] = &Logger::ld_A_nn;
         m_instructionSet[0xFE] = &Logger::cp_n;
+        m_instructionSet[0xFF] = &Logger::rst<0x38>;
     }
 
     void Logger::fillCbInstructionSet()
     {
-        std::fill_n(m_cbInstructionSet, 255, &Logger::unhandled);
+        std::fill_n(m_cbInstructionSet, 256, &Logger::unhandled);
     }
 
     std::string Logger::unhandled(uint8_t opCode)

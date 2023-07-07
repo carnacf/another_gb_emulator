@@ -213,13 +213,16 @@ private:
     int ret_ncc();
     int reti();
 
+    template<uint8_t n>
+    int rst();
+
 private:
     Logger m_tracer;
     Registers& m_registers;
     Memory& m_memory;
 
-    Instruction m_instructionSet[255];
-    Instruction m_cbInstructionSet[255];
+    Instruction m_instructionSet[256];
+    Instruction m_cbInstructionSet[256];
 
     bool m_IME = false;
 };

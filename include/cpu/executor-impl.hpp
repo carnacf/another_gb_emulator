@@ -388,4 +388,15 @@ namespace cpu
             return 2;
         }
     }
+
+    template<uint8_t n>
+    int Executor::rst()
+    {
+        uint16_t pc = m_registers.getPC();
+        push(pc);
+
+        uint16_t addr = utils::to16(0x00, n);
+        m_registers.setPC(addr);
+        return 4;
+    }
 }
