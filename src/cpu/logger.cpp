@@ -8,8 +8,8 @@
 
 namespace cpu
 {
-    Logger::Logger(Registers& regist, Memory& /*mem*/) :
-        m_registers(regist)//, m_memory(mem)
+    Logger::Logger(Registers& regist, Memory& mem) :
+        m_registers(regist), m_memory(mem)
     {
         fillInstructionSet();
         fillCbInstructionSet();
@@ -35,6 +35,7 @@ namespace cpu
         m_instructionSet[0x0D] = &Logger::dec_r<Registers::C>;
         m_instructionSet[0x0E] = &Logger::ld_r_n_8<0x0E>;
         m_instructionSet[0x0F] = &Logger::rrca;
+        m_instructionSet[0x10] = &Logger::stop;
         m_instructionSet[0x11] = &Logger::ld_rr_nn<Registers::DE>;
         m_instructionSet[0x12] = &Logger::ld_r16_A<Registers::DE>;
         m_instructionSet[0x13] = &Logger::inc_rr<Registers::DE>;
@@ -136,7 +137,7 @@ namespace cpu
         m_instructionSet[0x73] = &Logger::ld_HL_r<0x73>;
         m_instructionSet[0x74] = &Logger::ld_HL_r<0x74>;
         m_instructionSet[0x75] = &Logger::ld_HL_r<0x75>;
-
+        m_instructionSet[0x76] = &Logger::halt;
         m_instructionSet[0x77] = &Logger::ld_HL_r<0x77>;
         m_instructionSet[0x78] = &Logger::ld_r_r_8<0x78>;
         m_instructionSet[0x79] = &Logger::ld_r_r_8<0x79>;
@@ -222,6 +223,7 @@ namespace cpu
         m_instructionSet[0xC8] = &Logger::ret_z;
         m_instructionSet[0xC9] = &Logger::ret;
         m_instructionSet[0xCA] = &Logger::jp_z_nn;
+        m_instructionSet[0xCB] = &Logger::cb;
         m_instructionSet[0xCC] = &Logger::call_z_nn;
         m_instructionSet[0xCD] = &Logger::call_nn;
         m_instructionSet[0xCE] = &Logger::adc_n;
@@ -618,5 +620,21 @@ namespace cpu
     std::string Logger::ei(uint8_t opCode)
     {
         return std::to_string(opCode) + " : EI;\n";
+    }
+
+    std::string Logger::halt(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : HALT;\n";
+    }
+
+    std::string Logger::stop(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : STOP;\n";
+    }
+
+    std::string Logger::cb(uint8_t)
+    {
+        uint8_t n = m_memory.read8(m_registers.getPC());
+        return " : CB " + ((this->*m_cbInstructionSet[n]))(n);
     }
 }

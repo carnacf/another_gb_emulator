@@ -31,6 +31,7 @@ namespace cpu
         std::string unhandled(uint8_t opcode);
 
         std::string nop(uint8_t opcode);
+        std::string cb(uint8_t opcode);
         // 8bit Loads
         template<uint8_t opcode>
         std::string ld_r_r_8(uint8_t opCode);
@@ -174,9 +175,11 @@ namespace cpu
 
         std::string di(uint8_t opCode);
         std::string ei(uint8_t opCode);
+        std::string halt(uint8_t opCode);
+        std::string stop(uint8_t opCode);
     private:
         Registers& m_registers;
-        //Memory& m_memory;
+        Memory& m_memory;
 
         Disassembly m_instructionSet[256];
         Disassembly m_cbInstructionSet[256];

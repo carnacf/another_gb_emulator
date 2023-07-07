@@ -44,6 +44,7 @@ private:
     uint16_t getImmediate16();
 
     int nop();
+    int cb();
 
     // 8bit Loads
     template<uint8_t opcode>
@@ -220,6 +221,8 @@ private:
 
     int di();
     int ei();
+    int halt();
+    int stop();
 
 private:
     Logger m_tracer;
@@ -230,6 +233,8 @@ private:
     Instruction m_cbInstructionSet[256];
 
     bool m_IME = false;
+    bool m_isHalt = false;
+    bool m_isStopped = false;
 };
 }
 

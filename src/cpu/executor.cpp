@@ -37,6 +37,7 @@ namespace cpu
         m_instructionSet[0x0D] = &Executor::dec_r<Registers::C>;
         m_instructionSet[0x0E] = &Executor::ld_r_n_8<0x0E>;
         m_instructionSet[0x0F] = &Executor::rrca;
+        m_instructionSet[0x10] = &Executor::stop;
         m_instructionSet[0x11] = &Executor::ld_rr_nn<Registers::DE>;
         m_instructionSet[0x12] = &Executor::ld_r16_A<Registers::DE>;
         m_instructionSet[0x13] = &Executor::inc_rr<Registers::DE>;
@@ -138,7 +139,7 @@ namespace cpu
         m_instructionSet[0x73] = &Executor::ld_HL_r<0x73>;
         m_instructionSet[0x74] = &Executor::ld_HL_r<0x74>;
         m_instructionSet[0x75] = &Executor::ld_HL_r<0x75>;
-        
+        m_instructionSet[0x76] = &Executor::halt;
         m_instructionSet[0x77] = &Executor::ld_HL_r<0x77>;
         m_instructionSet[0x78] = &Executor::ld_r_r_8<0x78>;
         m_instructionSet[0x79] = &Executor::ld_r_r_8<0x79>;
@@ -223,6 +224,7 @@ namespace cpu
         m_instructionSet[0xC8] = &Executor::ret_cc<Registers::Flag::Z>;
         m_instructionSet[0xC9] = &Executor::ret;
         m_instructionSet[0xCA] = &Executor::jp_cc_nn<Registers::Flag::Z>;
+        m_instructionSet[0xCB] = &Executor::cb;
         m_instructionSet[0xCC] = &Executor::call_cc_nn<Registers::Flag::Z>;
         m_instructionSet[0xCD] = &Executor::call_nn;
         m_instructionSet[0xCE] = &Executor::adc_n;
@@ -296,6 +298,12 @@ namespace cpu
     int Executor::nop()
     {
         return 1;
+    }
+
+    int Executor::cb()
+    {
+        uint8_t opCode = getImmediate8();
+        return (this->*m_cbInstructionSet[opCode])();
     }
 
     int Executor::ld_A_nn()
@@ -956,6 +964,19 @@ namespace cpu
     int Executor::ei()
     {
         m_IME = true;
+        return 1;
+    }
+
+    int Executor::halt()
+    {
+        m_isHalt = true;
+        return 1;
+    }
+
+    int Executor::stop()
+    {
+        getImmediate8();
+        m_isStopped = true;
         return 1;
     }
 }
