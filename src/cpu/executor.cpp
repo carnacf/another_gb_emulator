@@ -253,12 +253,14 @@ namespace cpu
         m_instructionSet[0xF0] = &Executor::ldh_A_an;
         m_instructionSet[0xF1] = &Executor::pop_rr<Registers::AF>;
         m_instructionSet[0xF2] = &Executor::ldh_A_aC;
+        m_instructionSet[0xF3] = &Executor::di;
         m_instructionSet[0xF5] = &Executor::push_rr<Registers::AF>;
         m_instructionSet[0xF6] = &Executor::or_n;
         m_instructionSet[0xF7] = &Executor::rst<0x30>;
         m_instructionSet[0xF8] = &Executor::ld_HL_SP_r8;
         m_instructionSet[0xF9] = &Executor::ld_SP_HL;
         m_instructionSet[0xFA] = &Executor::ld_A_nn;
+        m_instructionSet[0xFB] = &Executor::ei;
         m_instructionSet[0xFE] = &Executor::cp_n;
         m_instructionSet[0xFF] = &Executor::rst<0x38>;
     }
@@ -937,5 +939,17 @@ namespace cpu
     {
         m_IME = true;
         return ret();
+    }
+
+    int Executor::di()
+    {
+        m_IME = false;
+        return 1;
+    }
+
+    int Executor::ei()
+    {
+        m_IME = true;
+        return 1;
     }
 }

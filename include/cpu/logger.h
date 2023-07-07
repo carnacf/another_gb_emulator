@@ -170,6 +170,9 @@ namespace cpu
 
         template<uint8_t n>
         std::string rst(uint8_t opCode);
+
+        std::string di(uint8_t opCode);
+        std::string ei(uint8_t opCode);
     private:
         Registers& m_registers;
         //Memory& m_memory;

@@ -216,6 +216,9 @@ private:
     template<uint8_t n>
     int rst();
 
+    int di();
+    int ei();
+
 private:
     Logger m_tracer;
     Registers& m_registers;

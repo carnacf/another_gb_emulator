@@ -252,12 +252,14 @@ namespace cpu
         m_instructionSet[0xF0] = &Logger::ldh_A_an;
         m_instructionSet[0xF1] = &Logger::pop<Registers::AF>;
         m_instructionSet[0xF2] = &Logger::ldh_A_aC;
+        m_instructionSet[0xF3] = &Logger::di;
         m_instructionSet[0xF5] = &Logger::push<Registers::AF>;
         m_instructionSet[0xF6] = &Logger::or_n;
         m_instructionSet[0xF7] = &Logger::rst<0x30>;
         m_instructionSet[0xF8] = &Logger::ld_HL_SP_r8;
         m_instructionSet[0xF9] = &Logger::ld_SP_HL;
         m_instructionSet[0xFA] = &Logger::ld_A_nn;
+        m_instructionSet[0xFB] = &Logger::ei;
         m_instructionSet[0xFE] = &Logger::cp_n;
         m_instructionSet[0xFF] = &Logger::rst<0x38>;
     }
@@ -600,5 +602,15 @@ namespace cpu
     std::string Logger::reti(uint8_t opCode)
     {
         return std::to_string(opCode) + " : RETI;\n";
+    }
+    
+    std::string Logger::di(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : DI;\n";
+    }
+    
+    std::string Logger::ei(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : EI;\n";
     }
 }
