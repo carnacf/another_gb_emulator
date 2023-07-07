@@ -21,6 +21,7 @@ namespace cpu
     {
         std::fill_n(m_instructionSet, 256, &Executor::unhandled);
         
+        m_instructionSet[0x00] = &Executor::nop;
         m_instructionSet[0x01] = &Executor::ld_rr_nn<Registers::BC>;
         m_instructionSet[0x02] = &Executor::ld_r16_A<Registers::BC>;
         m_instructionSet[0x03] = &Executor::inc_rr<Registers::BC>;
@@ -292,6 +293,11 @@ namespace cpu
         return nn;
     }
     
+    int Executor::nop()
+    {
+        return 1;
+    }
+
     int Executor::ld_A_nn()
     {
         uint16_t nn = getImmediate16();

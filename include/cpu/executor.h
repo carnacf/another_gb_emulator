@@ -43,6 +43,8 @@ private:
     uint8_t getImmediate8();
     uint16_t getImmediate16();
 
+    int nop();
+
     // 8bit Loads
     template<uint8_t opcode>
     int ld_r_r_8();

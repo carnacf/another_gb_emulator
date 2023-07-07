@@ -30,6 +30,7 @@ namespace cpu
 
         std::string unhandled(uint8_t opcode);
 
+        std::string nop(uint8_t opcode);
         // 8bit Loads
         template<uint8_t opcode>
         std::string ld_r_r_8(uint8_t opCode);

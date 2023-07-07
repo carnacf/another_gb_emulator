@@ -19,6 +19,7 @@ namespace cpu
     {
         std::fill_n(m_instructionSet, 256, &Logger::unhandled);
 
+        m_instructionSet[0x00] = &Logger::nop;
         m_instructionSet[0x01] = &Logger::ld_rr_nn<Registers::BC>;
         m_instructionSet[0x02] = &Logger::ld_r16_A<Registers::BC>;
         m_instructionSet[0x03] = &Logger::inc_rr<Registers::BC>;
@@ -272,6 +273,11 @@ namespace cpu
     std::string Logger::unhandled(uint8_t opCode)
     {
         return std::to_string(opCode) + " : Not handled yet;\n";
+    }
+
+    std::string Logger::nop(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : NOP;\n";
     }
 
     std::string Logger::ld_A_nn(uint8_t /*opCode*/)
