@@ -399,4 +399,18 @@ namespace cpu
         m_registers.setPC(addr);
         return 4;
     }
+
+    template<Registers::Names NAME>
+    int Executor::rlc_r()
+    {
+        uint8_t r = m_registers.read8<NAME>();
+        bool c = (r & 0x80) == 0x80;
+
+        r <<= 1;
+        updateFlags(r, false, false, c);
+
+        m_registers.write8<NAME>(r);
+
+        return 2;
+    }
 }

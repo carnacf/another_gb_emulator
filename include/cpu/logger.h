@@ -139,6 +139,9 @@ namespace cpu
 
         // Rotates and shifts
         std::string rlca(uint8_t opCode);
+        template<Registers::Names NAME>
+        std::string rlc_r(uint8_t opCode);
+        std::string rlc_HL(uint8_t opCode);
         std::string rla(uint8_t opCode);
         std::string rrca(uint8_t opCode);
         std::string rra(uint8_t opCode);

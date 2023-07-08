@@ -155,4 +155,10 @@ namespace cpu
     {
         return std::to_string(opCode) + " : RST " + std::to_string(n) + ";\n";
     }
+
+    template<Registers::Names NAME>
+    std::string Logger::rlc_r(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : RLC " + m_registers.register8ToStr(NAME) + ";\n";
+    }
 }

@@ -270,6 +270,14 @@ namespace cpu
     void Logger::fillCbInstructionSet()
     {
         std::fill_n(m_cbInstructionSet, 256, &Logger::unhandled);
+        m_cbInstructionSet[0x00] = &Logger::rlc_r<Registers::B>;
+        m_cbInstructionSet[0x01] = &Logger::rlc_r<Registers::C>;
+        m_cbInstructionSet[0x02] = &Logger::rlc_r<Registers::D>;
+        m_cbInstructionSet[0x03] = &Logger::rlc_r<Registers::E>;
+        m_cbInstructionSet[0x04] = &Logger::rlc_r<Registers::H>;
+        m_cbInstructionSet[0x05] = &Logger::rlc_r<Registers::L>;
+        m_cbInstructionSet[0x06] = &Logger::rlc_HL;
+        m_cbInstructionSet[0x07] = &Logger::rlc_r<Registers::A>;
     }
 
     std::string Logger::unhandled(uint8_t opCode)
@@ -485,6 +493,11 @@ namespace cpu
     std::string Logger::rlca(uint8_t opCode)
     {
         return std::to_string(opCode) + " : RLCA;\n";
+    }
+
+    std::string Logger::rlc_HL(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : RLC HL;\n";
     }
 
     std::string Logger::rla(uint8_t opCode)

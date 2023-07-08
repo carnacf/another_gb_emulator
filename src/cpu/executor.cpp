@@ -271,6 +271,14 @@ namespace cpu
     void Executor::fillCbInstructionSet()
     {
         std::fill_n(m_cbInstructionSet, 256, &Executor::unhandled);
+        m_cbInstructionSet[0x00] = &Executor::rlc_r<Registers::B>;
+        m_cbInstructionSet[0x01] = &Executor::rlc_r<Registers::C>;
+        m_cbInstructionSet[0x02] = &Executor::rlc_r<Registers::D>;
+        m_cbInstructionSet[0x03] = &Executor::rlc_r<Registers::E>;
+        m_cbInstructionSet[0x04] = &Executor::rlc_r<Registers::H>;
+        m_cbInstructionSet[0x05] = &Executor::rlc_r<Registers::L>;
+        m_cbInstructionSet[0x06] = &Executor::rlc_HL;
+        m_cbInstructionSet[0x07] = &Executor::rlc_r<Registers::A>;
     }
 
     int Executor::unhandled() 
@@ -851,15 +859,22 @@ namespace cpu
 
     int Executor::rlca()
     {
-        uint8_t a = m_registers.read8<Registers::A>();
-        bool c = (a & 0x80) == 0x80;
-        
-        a <<= 1;
-        updateFlags(a, false, false, c);
-
-        m_registers.write8<Registers::A>(a);
+        rlc_r<Registers::A>();
 
         return 1;
+    }
+
+    int Executor::rlc_HL()
+    {
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        bool c = (hl & 0x8000) == 0x8000;
+
+        hl <<= 1;
+        updateFlags(hl, false, false, c);
+
+        m_registers.write16<Registers::HL>(hl);
+
+        return 4;
     }
 
     int Executor::rla()

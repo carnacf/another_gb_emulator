@@ -87,7 +87,7 @@ private:
     template<Registers::Paired NAME>
     int pop_rr();
 
-    void updateFlags(uint8_t res, bool n, bool h, bool c)
+    void updateFlags(uint16_t res, bool n, bool h, bool c)
     {
         m_registers.setFlag(Registers::Flag::Z, res == 0);
         m_registers.setFlag(Registers::Flag::N, n);
@@ -185,6 +185,9 @@ private:
 
     // Rotates and shifts
     int rlca();
+    template<Registers::Names NAME>
+    int rlc_r();
+    int rlc_HL();
     int rla();
     int rrca();
     int rra();
