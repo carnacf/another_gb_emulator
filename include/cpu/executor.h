@@ -190,6 +190,9 @@ private:
     int rlc_HL();
     int rla();
     int rrca();
+    template<Registers::Names NAME>
+    int rrc_r();
+    int rrc_HL();
     int rra();
 
     // Control flow instructions

@@ -413,4 +413,18 @@ namespace cpu
 
         return 2;
     }
+
+    template<Registers::Names NAME>
+    int Executor::rrc_r()
+    {
+        uint8_t r = m_registers.read8<NAME>();
+        bool c = (r & 0x01) == 0x01;
+
+        r >>= 1;
+        updateFlags(a, false, false, c);
+
+        m_registers.write8<Registers::A>(r);
+
+        return 2;
+    }
 }
