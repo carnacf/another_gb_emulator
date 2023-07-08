@@ -294,6 +294,14 @@ namespace cpu
         m_cbInstructionSet[0x15] = &Logger::rl_r<Registers::L>;
         m_cbInstructionSet[0x16] = &Logger::rl_HL;
         m_cbInstructionSet[0x17] = &Logger::rl_r<Registers::A>;
+        m_cbInstructionSet[0x18] = &Logger::rr_r<Registers::B>;
+        m_cbInstructionSet[0x19] = &Logger::rr_r<Registers::C>;
+        m_cbInstructionSet[0x1A] = &Logger::rr_r<Registers::D>;
+        m_cbInstructionSet[0x1B] = &Logger::rr_r<Registers::E>;
+        m_cbInstructionSet[0x1C] = &Logger::rr_r<Registers::H>;
+        m_cbInstructionSet[0x1D] = &Logger::rr_r<Registers::L>;
+        m_cbInstructionSet[0x1E] = &Logger::rr_HL;
+        m_cbInstructionSet[0x1F] = &Logger::rr_r<Registers::A>;
     }
 
     std::string Logger::unhandled(uint8_t opCode)
@@ -539,6 +547,11 @@ namespace cpu
     std::string Logger::rra(uint8_t opCode)
     {
         return std::to_string(opCode) + " : RRA;\n";
+    }
+
+    std::string Logger::rr_HL(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : RR HL;\n";
     }
 
     std::string Logger::jp_nn(uint8_t opCode)

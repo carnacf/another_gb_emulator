@@ -421,9 +421,9 @@ namespace cpu
         bool c = (r & 0x01) == 0x01;
 
         r >>= 1;
-        updateFlags(a, false, false, c);
+        updateFlags(r, false, false, c);
 
-        m_registers.write8<Registers::A>(r);
+        m_registers.write8<NAME>(r);
 
         return 2;
     }
@@ -435,6 +435,22 @@ namespace cpu
         bool c = (r & 0x80) == 0x80;
         uint8_t oldCarry = m_registers.isSetFlag(Registers::Flag::C) ? 1 : 0;
         r <<= 1;
+        r |= oldCarry;
+
+        updateFlags(r, false, false, c);
+
+        m_registers.write8<NAME>(r);
+
+        return 2;
+    }
+
+    template<Registers::Names NAME>
+    int Executor::rr_r()
+    {
+        uint8_t r = m_registers.read8<NAME>();
+        bool c = (r & 1) == 1;
+        uint8_t oldCarry = m_registers.isSetFlag(Registers::Flag::C) ? 0X80 : 0;
+        r >>= 1;
         r |= oldCarry;
 
         updateFlags(r, false, false, c);

@@ -142,15 +142,21 @@ namespace cpu
         template<Registers::Names NAME>
         std::string rlc_r(uint8_t opCode);
         std::string rlc_HL(uint8_t opCode);
+
         std::string rla(uint8_t opCode);
         template<Registers::Names NAME>
         std::string rl_r(uint8_t opCode);
         std::string rl_HL(uint8_t opCode);
+
         std::string rrca(uint8_t opCode);
         template<Registers::Names NAME>
         std::string rrc_r(uint8_t opCode);
         std::string rrc_HL(uint8_t opCode);
+
         std::string rra(uint8_t opCode);
+        template<Registers::Names NAME>
+        std::string rr_r(uint8_t opCode);
+        std::string rr_HL(uint8_t opCode);
 
         // Control flow instructions
         std::string jp_nn(uint8_t opCode);

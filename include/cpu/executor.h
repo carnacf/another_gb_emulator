@@ -188,15 +188,21 @@ private:
     template<Registers::Names NAME>
     int rlc_r();
     int rlc_HL();
+
     int rla();
     template<Registers::Names NAME>
     int rl_r();
     int rl_HL();
+
     int rrca();
     template<Registers::Names NAME>
     int rrc_r();
     int rrc_HL();
+
     int rra();
+    template<Registers::Names NAME>
+    int rr_r();
+    int rr_HL();
 
     // Control flow instructions
     int jp_nn();

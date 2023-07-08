@@ -295,6 +295,14 @@ namespace cpu
         m_cbInstructionSet[0x15] = &Executor::rl_r<Registers::L>;
         m_cbInstructionSet[0x16] = &Executor::rl_HL;
         m_cbInstructionSet[0x17] = &Executor::rl_r<Registers::A>;
+        m_cbInstructionSet[0x18] = &Executor::rr_r<Registers::B>;
+        m_cbInstructionSet[0x19] = &Executor::rr_r<Registers::C>;
+        m_cbInstructionSet[0x1A] = &Executor::rr_r<Registers::D>;
+        m_cbInstructionSet[0x1B] = &Executor::rr_r<Registers::E>;
+        m_cbInstructionSet[0x1C] = &Executor::rr_r<Registers::H>;
+        m_cbInstructionSet[0x1D] = &Executor::rr_r<Registers::L>;
+        m_cbInstructionSet[0x1E] = &Executor::rr_HL;
+        m_cbInstructionSet[0x1F] = &Executor::rr_r<Registers::A>;
     }
 
     int Executor::unhandled() 
@@ -904,7 +912,7 @@ namespace cpu
     {
         uint16_t r = m_registers.read16<Registers::HL>();
         bool c = (r & 0x8000) == 0x8000;
-        uint8_t oldCarry = m_registers.isSetFlag(Registers::Flag::C) ? 1 : 0;
+        uint16_t oldCarry = m_registers.isSetFlag(Registers::Flag::C) ? 1 : 0;
         r <<= 1;
         r |= oldCarry;
 
@@ -937,17 +945,24 @@ namespace cpu
 
     int Executor::rra()
     {
-        uint8_t a = m_registers.read8<Registers::A>();
-        bool c = (a & 0x01) == 0x01;
-        uint8_t oldCarry = m_registers.isSetFlag(Registers::Flag::C) ? 0X80 : 0;
-        a >>= 1;
-        a |= oldCarry;
-
-        updateFlags(a, false, false, c);
-
-        m_registers.write8<Registers::A>(a);
+        rr_r<Registers::A>();
 
         return 1;
+    }
+    
+    int Executor::rr_HL()
+    {
+        uint16_t r = m_registers.read16<Registers::HL>();
+        bool c = (r & 1) == 1;
+        uint16_t oldCarry = m_registers.isSetFlag(Registers::Flag::C) ? 0X8000 : 0;
+        r >>= 1;
+        r |= oldCarry;
+
+        updateFlags(r, false, false, c);
+
+        m_registers.write16<Registers::HL>(r);
+
+        return 4;
     }
 
     int Executor::jp_nn()
