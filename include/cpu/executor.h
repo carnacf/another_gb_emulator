@@ -189,6 +189,9 @@ private:
     int rlc_r();
     int rlc_HL();
     int rla();
+    template<Registers::Names NAME>
+    int rl_r();
+    int rl_HL();
     int rrca();
     template<Registers::Names NAME>
     int rrc_r();

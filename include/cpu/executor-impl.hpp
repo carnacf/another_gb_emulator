@@ -427,4 +427,20 @@ namespace cpu
 
         return 2;
     }
+
+    template<Registers::Names NAME>
+    int Executor::rl_r()
+    {
+        uint8_t r = m_registers.read8<NAME>();
+        bool c = (r & 0x80) == 0x80;
+        uint8_t oldCarry = m_registers.isSetFlag(Registers::Flag::C) ? 1 : 0;
+        r <<= 1;
+        r |= oldCarry;
+
+        updateFlags(r, false, false, c);
+
+        m_registers.write8<NAME>(r);
+
+        return 2;
+    }
 }
