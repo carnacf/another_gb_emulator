@@ -204,6 +204,14 @@ private:
     int rr_r();
     int rr_HL();
 
+    template<Registers::Names NAME>
+    int sla_r();
+    int sla_HL();
+
+    template<Registers::Names NAME>
+    int sra_r();
+    int sra_HL();
+
     // Control flow instructions
     int jp_nn();
     int jp_HL();

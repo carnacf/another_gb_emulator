@@ -303,6 +303,22 @@ namespace cpu
         m_cbInstructionSet[0x1D] = &Executor::rr_r<Registers::L>;
         m_cbInstructionSet[0x1E] = &Executor::rr_HL;
         m_cbInstructionSet[0x1F] = &Executor::rr_r<Registers::A>;
+        m_cbInstructionSet[0x20] = &Executor::sla_r<Registers::B>;
+        m_cbInstructionSet[0x21] = &Executor::sla_r<Registers::C>;
+        m_cbInstructionSet[0x22] = &Executor::sla_r<Registers::D>;
+        m_cbInstructionSet[0x23] = &Executor::sla_r<Registers::E>;
+        m_cbInstructionSet[0x24] = &Executor::sla_r<Registers::H>;
+        m_cbInstructionSet[0x25] = &Executor::sla_r<Registers::L>;
+        m_cbInstructionSet[0x26] = &Executor::sla_HL;
+        m_cbInstructionSet[0x27] = &Executor::sla_r<Registers::A>;
+        m_cbInstructionSet[0x28] = &Executor::sra_r<Registers::B>;
+        m_cbInstructionSet[0x29] = &Executor::sra_r<Registers::C>;
+        m_cbInstructionSet[0x2A] = &Executor::sra_r<Registers::D>;
+        m_cbInstructionSet[0x2B] = &Executor::sra_r<Registers::E>;
+        m_cbInstructionSet[0x2C] = &Executor::sra_r<Registers::H>;
+        m_cbInstructionSet[0x2D] = &Executor::sra_r<Registers::L>;
+        m_cbInstructionSet[0x2E] = &Executor::sra_HL;
+        m_cbInstructionSet[0x2F] = &Executor::sra_r<Registers::A>;
     }
 
     int Executor::unhandled() 
@@ -970,6 +986,30 @@ namespace cpu
 
         updateFlags(r, false, false, c);
 
+        m_registers.write16<Registers::HL>(r);
+
+        return 4;
+    }
+
+    int Executor::sla_HL()
+    {
+        uint16_t r = m_registers.read16<Registers::HL>();
+        bool c = (r & 0x8000) == 0x8000;
+        r <<= 1;
+
+        updateFlags(r, false, false, c);
+        m_registers.write16<Registers::HL>(r);
+
+        return 4;
+    }
+
+    int Executor::sra_HL()
+    {
+        uint16_t r = m_registers.read16<Registers::HL>();
+        bool c = (r & 1) == 1;
+        r >>= 1;
+
+        updateFlags(r, false, false, c);
         m_registers.write16<Registers::HL>(r);
 
         return 4;
