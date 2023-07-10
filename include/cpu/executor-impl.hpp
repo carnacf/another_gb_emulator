@@ -1,5 +1,6 @@
 #pragma once
 #include "instruction_utils.h"
+#include "executor.h"
 
 namespace cpu
 {
@@ -491,6 +492,18 @@ namespace cpu
         r >>= 1;
 
         updateFlags(r, false, false, c);
+        m_registers.write8<NAME>(r);
+
+        return 2;
+    }
+
+    template<Registers::Names NAME>
+    int cpu::Executor::swap_r()
+    {
+        uint8_t r = m_registers.read8<NAME>();
+        r = (r << 4) | (r >> 4);
+
+        updateFlags(r, false, false, false);
         m_registers.write8<NAME>(r);
 
         return 2;

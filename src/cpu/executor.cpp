@@ -319,6 +319,15 @@ namespace cpu
         m_cbInstructionSet[0x2D] = &Executor::sra_r<Registers::L>;
         m_cbInstructionSet[0x2E] = &Executor::sra_HL;
         m_cbInstructionSet[0x2F] = &Executor::sra_r<Registers::A>;
+        m_cbInstructionSet[0x2F] = &Executor::swap_r<Registers::A>;
+        m_cbInstructionSet[0x30] = &Executor::swap_r<Registers::B>;
+        m_cbInstructionSet[0x31] = &Executor::swap_r<Registers::C>;
+        m_cbInstructionSet[0x32] = &Executor::swap_r<Registers::D>;
+        m_cbInstructionSet[0x33] = &Executor::swap_r<Registers::E>;
+        m_cbInstructionSet[0x34] = &Executor::swap_r<Registers::H>;
+        m_cbInstructionSet[0x35] = &Executor::swap_r<Registers::L>;
+        m_cbInstructionSet[0x36] = &Executor::swap_HL;
+        m_cbInstructionSet[0x37] = &Executor::swap_r<Registers::A>;
     }
 
     int Executor::unhandled() 
@@ -1010,6 +1019,17 @@ namespace cpu
         r >>= 1;
 
         updateFlags(r, false, false, c);
+        m_registers.write16<Registers::HL>(r);
+
+        return 4;
+    }
+
+    int Executor::swap_HL()
+    {
+        uint16_t r = m_registers.read16<Registers::HL>();
+        r = (r << 8) | (r >> 8);
+
+        updateFlags(r, false, false, false);
         m_registers.write16<Registers::HL>(r);
 
         return 4;

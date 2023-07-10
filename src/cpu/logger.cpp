@@ -317,7 +317,15 @@ namespace cpu
         m_cbInstructionSet[0x2C] = &Logger::sra_r<Registers::H>;
         m_cbInstructionSet[0x2D] = &Logger::sra_r<Registers::L>;
         m_cbInstructionSet[0x2E] = &Logger::sra_HL;
-        m_cbInstructionSet[0x2F] = &Logger::sra_r<Registers::A>;
+        m_cbInstructionSet[0x2F] = &Logger::swap_r<Registers::A>;
+        m_cbInstructionSet[0x30] = &Logger::swap_r<Registers::B>;
+        m_cbInstructionSet[0x31] = &Logger::swap_r<Registers::C>;
+        m_cbInstructionSet[0x32] = &Logger::swap_r<Registers::D>;
+        m_cbInstructionSet[0x33] = &Logger::swap_r<Registers::E>;
+        m_cbInstructionSet[0x34] = &Logger::swap_r<Registers::H>;
+        m_cbInstructionSet[0x35] = &Logger::swap_r<Registers::L>;
+        m_cbInstructionSet[0x36] = &Logger::swap_HL;
+        m_cbInstructionSet[0x37] = &Logger::swap_r<Registers::A>;
     }
 
     std::string Logger::unhandled(uint8_t opCode)
@@ -578,6 +586,11 @@ namespace cpu
     std::string Logger::sra_HL(uint8_t opCode)
     {
         return std::to_string(opCode) + " : SRA HL;\n";
+    }
+
+    std::string Logger::swap_HL(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : SWAP HL;\n";
     }
 
     std::string Logger::jp_nn(uint8_t opCode)

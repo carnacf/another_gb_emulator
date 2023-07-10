@@ -191,4 +191,10 @@ namespace cpu
     {
         return std::to_string(opCode) + " : SRA " + m_registers.register8ToStr(NAME) + ";\n";
     }
+
+    template<Registers::Names NAME>
+    std::string Logger::swap_r(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : SWAP " + m_registers.register8ToStr(NAME) + ";\n";
+    }
 }
