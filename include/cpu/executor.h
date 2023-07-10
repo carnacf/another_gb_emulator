@@ -213,6 +213,10 @@ private:
     int sra_HL();
 
     template<Registers::Names NAME>
+    int srl_r();
+    int srl_HL();
+
+    template<Registers::Names NAME>
     int swap_r();
     int swap_HL();
 

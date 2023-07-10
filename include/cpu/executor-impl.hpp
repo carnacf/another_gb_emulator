@@ -489,6 +489,27 @@ namespace cpu
     {
         uint8_t r = m_registers.read8<NAME>();
         bool c = (r & 1) == 1;
+        if ((r & 0x80) != 0)
+        {
+            r >>= 1;
+            r |= 0x80;
+        }
+        else
+        {
+            r >>= 1;
+        }
+        
+        updateFlags(r, false, false, c);
+        m_registers.write8<NAME>(r);
+
+        return 2;
+    }
+
+    template<Registers::Names NAME>
+    int Executor::srl_r()
+    {
+        uint8_t r = m_registers.read8<NAME>();
+        bool c = (r & 1) == 1;
         r >>= 1;
 
         updateFlags(r, false, false, c);

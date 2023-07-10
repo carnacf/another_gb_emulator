@@ -170,6 +170,10 @@ namespace cpu
         std::string swap_r(uint8_t opCode);
         std::string swap_HL(uint8_t opCode);
 
+        template<Registers::Names NAME>
+        std::string srl_r(uint8_t opCode);
+        std::string srl_HL(uint8_t opCode);
+
         // Control flow instructions
         std::string jp_nn(uint8_t opCode);
         std::string jp_HL(uint8_t opCode);

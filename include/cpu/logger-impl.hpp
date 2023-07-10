@@ -1,5 +1,6 @@
 #pragma once
 #include "instruction_utils.h"
+#include "logger.h"
 
 namespace cpu
 {
@@ -196,5 +197,11 @@ namespace cpu
     std::string Logger::swap_r(uint8_t opCode)
     {
         return std::to_string(opCode) + " : SWAP " + m_registers.register8ToStr(NAME) + ";\n";
+    }
+
+    template<Registers::Names NAME>
+    std::string cpu::Logger::srl_r(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : SRL " + m_registers.register8ToStr(NAME) + ";\n";
     }
 }
