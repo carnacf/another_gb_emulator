@@ -174,6 +174,12 @@ namespace cpu
         std::string srl_r(uint8_t opCode);
         std::string srl_HL(uint8_t opCode);
 
+        // Single - bit Operation instructions
+        template<uint8_t n, Registers::Names NAME>
+        std::string bit_n_r(uint8_t opCode);
+        template<uint8_t n>
+        std::string bit_n_HL(uint8_t opCode);
+
         // Control flow instructions
         std::string jp_nn(uint8_t opCode);
         std::string jp_HL(uint8_t opCode);

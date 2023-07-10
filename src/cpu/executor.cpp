@@ -336,6 +336,70 @@ namespace cpu
         m_cbInstructionSet[0x3D] = &Executor::srl_r<Registers::L>;
         m_cbInstructionSet[0x3E] = &Executor::srl_HL;
         m_cbInstructionSet[0x3F] = &Executor::srl_r<Registers::A>;
+        m_cbInstructionSet[0x40] = &Executor::bit_n_r<0, Registers::B>;
+        m_cbInstructionSet[0x41] = &Executor::bit_n_r<0, Registers::C>;
+        m_cbInstructionSet[0x42] = &Executor::bit_n_r<0, Registers::D>;
+        m_cbInstructionSet[0x43] = &Executor::bit_n_r<0, Registers::E>;
+        m_cbInstructionSet[0x44] = &Executor::bit_n_r<0, Registers::H>;
+        m_cbInstructionSet[0x45] = &Executor::bit_n_r<0, Registers::L>;
+        m_cbInstructionSet[0x46] = &Executor::bit_n_HL<0>;
+        m_cbInstructionSet[0x47] = &Executor::bit_n_r<0, Registers::A>;
+        m_cbInstructionSet[0x48] = &Executor::bit_n_r<1, Registers::B>;
+        m_cbInstructionSet[0x49] = &Executor::bit_n_r<1, Registers::C>;
+        m_cbInstructionSet[0x4A] = &Executor::bit_n_r<1, Registers::D>;
+        m_cbInstructionSet[0x4B] = &Executor::bit_n_r<1, Registers::E>;
+        m_cbInstructionSet[0x4C] = &Executor::bit_n_r<1, Registers::H>;
+        m_cbInstructionSet[0x4D] = &Executor::bit_n_r<1, Registers::L>;
+        m_cbInstructionSet[0x4E] = &Executor::bit_n_HL<1>;
+        m_cbInstructionSet[0x4F] = &Executor::bit_n_r<1, Registers::A>;
+        m_cbInstructionSet[0x50] = &Executor::bit_n_r<2, Registers::B>;
+        m_cbInstructionSet[0x51] = &Executor::bit_n_r<2, Registers::C>;
+        m_cbInstructionSet[0x52] = &Executor::bit_n_r<2, Registers::D>;
+        m_cbInstructionSet[0x53] = &Executor::bit_n_r<2, Registers::E>;
+        m_cbInstructionSet[0x54] = &Executor::bit_n_r<2, Registers::H>;
+        m_cbInstructionSet[0x55] = &Executor::bit_n_r<2, Registers::L>;
+        m_cbInstructionSet[0x56] = &Executor::bit_n_HL<2>;
+        m_cbInstructionSet[0x57] = &Executor::bit_n_r<2, Registers::A>;
+        m_cbInstructionSet[0x58] = &Executor::bit_n_r<3, Registers::B>;
+        m_cbInstructionSet[0x59] = &Executor::bit_n_r<3, Registers::C>;
+        m_cbInstructionSet[0x5A] = &Executor::bit_n_r<3, Registers::D>;
+        m_cbInstructionSet[0x5B] = &Executor::bit_n_r<3, Registers::E>;
+        m_cbInstructionSet[0x5C] = &Executor::bit_n_r<3, Registers::H>;
+        m_cbInstructionSet[0x5D] = &Executor::bit_n_r<3, Registers::L>;
+        m_cbInstructionSet[0x5E] = &Executor::bit_n_HL<3>;
+        m_cbInstructionSet[0x5F] = &Executor::bit_n_r<3, Registers::A>;
+        m_cbInstructionSet[0x60] = &Executor::bit_n_r<4, Registers::B>;
+        m_cbInstructionSet[0x61] = &Executor::bit_n_r<4, Registers::C>;
+        m_cbInstructionSet[0x62] = &Executor::bit_n_r<4, Registers::D>;
+        m_cbInstructionSet[0x63] = &Executor::bit_n_r<4, Registers::E>;
+        m_cbInstructionSet[0x64] = &Executor::bit_n_r<4, Registers::H>;
+        m_cbInstructionSet[0x65] = &Executor::bit_n_r<4, Registers::L>;
+        m_cbInstructionSet[0x66] = &Executor::bit_n_HL<4>;
+        m_cbInstructionSet[0x67] = &Executor::bit_n_r<4, Registers::A>;
+        m_cbInstructionSet[0x68] = &Executor::bit_n_r<5, Registers::B>;
+        m_cbInstructionSet[0x69] = &Executor::bit_n_r<5, Registers::C>;
+        m_cbInstructionSet[0x6A] = &Executor::bit_n_r<5, Registers::D>;
+        m_cbInstructionSet[0x6B] = &Executor::bit_n_r<5, Registers::E>;
+        m_cbInstructionSet[0x6C] = &Executor::bit_n_r<5, Registers::H>;
+        m_cbInstructionSet[0x6D] = &Executor::bit_n_r<5, Registers::L>;
+        m_cbInstructionSet[0x6E] = &Executor::bit_n_HL<5>;
+        m_cbInstructionSet[0x6F] = &Executor::bit_n_r<6, Registers::A>;
+        m_cbInstructionSet[0x70] = &Executor::bit_n_r<6, Registers::B>;
+        m_cbInstructionSet[0x71] = &Executor::bit_n_r<6, Registers::C>;
+        m_cbInstructionSet[0x72] = &Executor::bit_n_r<6, Registers::D>;
+        m_cbInstructionSet[0x73] = &Executor::bit_n_r<6, Registers::E>;
+        m_cbInstructionSet[0x74] = &Executor::bit_n_r<6, Registers::H>;
+        m_cbInstructionSet[0x75] = &Executor::bit_n_r<6, Registers::L>;
+        m_cbInstructionSet[0x76] = &Executor::bit_n_HL<6>;
+        m_cbInstructionSet[0x77] = &Executor::bit_n_r<6, Registers::A>;
+        m_cbInstructionSet[0x78] = &Executor::bit_n_r<7, Registers::B>;
+        m_cbInstructionSet[0x79] = &Executor::bit_n_r<7, Registers::C>;
+        m_cbInstructionSet[0x7A] = &Executor::bit_n_r<7, Registers::D>;
+        m_cbInstructionSet[0x7B] = &Executor::bit_n_r<7, Registers::E>;
+        m_cbInstructionSet[0x7C] = &Executor::bit_n_r<7, Registers::H>;
+        m_cbInstructionSet[0x7D] = &Executor::bit_n_r<7, Registers::L>;
+        m_cbInstructionSet[0x7E] = &Executor::bit_n_HL<7>;
+        m_cbInstructionSet[0x7F] = &Executor::bit_n_r<7, Registers::A>;
     }
 
     int Executor::unhandled() 
@@ -1061,6 +1125,16 @@ namespace cpu
         m_registers.write16<Registers::HL>(r);
 
         return 4;
+    }
+
+    void Executor::bit_n(uint8_t n, uint16_t r)
+    {
+        uint16_t b = 1 << n;
+        bool isSet = (b | r) == b;
+
+        m_registers.setFlag(Registers::Flag::Z, isSet);
+        m_registers.setFlag(Registers::Flag::N, 0);
+        m_registers.setFlag(Registers::Flag::H, 1);
     }
 
     int Executor::jp_nn()

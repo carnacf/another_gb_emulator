@@ -220,6 +220,13 @@ private:
     int swap_r();
     int swap_HL();
 
+    // Single - bit Operation instructions
+    void bit_n(uint8_t n, uint16_t r);
+    template<uint8_t n, Registers::Names NAME>
+    int bit_n_r();
+    template<uint8_t n>
+    int bit_n_HL();
+
     // Control flow instructions
     int jp_nn();
     int jp_HL();

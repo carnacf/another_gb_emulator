@@ -529,4 +529,26 @@ namespace cpu
 
         return 2;
     }
+
+    template<uint8_t n, Registers::Names NAME>
+    int Executor::bit_n_r()
+    {
+        static_assert(n < 8);
+
+        uint8_t r = m_registers.read8<NAME>();
+        bit_n(n ,r);
+
+        return 2;
+    }
+
+    template<uint8_t n>
+    int Executor::bit_n_HL()
+    {
+        static_assert(n < 8);
+        
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        bit_n(n, hl);
+
+        return 3;
+    }
 }
