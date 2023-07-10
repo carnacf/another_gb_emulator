@@ -218,6 +218,18 @@ namespace cpu
     }
 
     template<uint8_t n, Registers::Names NAME>
+    std::string Logger::res_n_r(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : RES " + std::to_string(n) + ", " + m_registers.register8ToStr(NAME) + ";\n";
+    }
+
+    template<uint8_t n>
+    std::string Logger::res_n_HL(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : RES " + std::to_string(n) + ", HL;\n";
+    }
+
+    template<uint8_t n, Registers::Names NAME>
     std::string Logger::set_n_r(uint8_t opCode)
     {
         return std::to_string(opCode) + " : SET " + std::to_string(n) + ", " + m_registers.register8ToStr(NAME) + ";\n";
@@ -226,6 +238,6 @@ namespace cpu
     template<uint8_t n>
     std::string Logger::set_n_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SET " + std::to_string(n) + ", HL;\n";;
+        return std::to_string(opCode) + " : SET " + std::to_string(n) + ", HL;\n";
     }
 }

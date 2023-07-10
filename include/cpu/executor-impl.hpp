@@ -553,6 +553,32 @@ namespace cpu
     }
 
     template<uint8_t n, Registers::Names NAME>
+    int Executor::res_n_r()
+    {
+        static_assert(n < 8);
+
+        uint8_t r = m_registers.read8<NAME>();
+        r = r & ~(1 << n);
+
+        m_registers.write8<NAME>(r);
+
+        return 2;
+    }
+
+    template<uint8_t n>
+    int Executor::res_n_HL()
+    {
+        static_assert(n < 8);
+
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        hl = hl & ~(1 << n);
+
+        m_registers.write16<Registers::HL>(hl);
+
+        return 4;
+    }
+
+    template<uint8_t n, Registers::Names NAME>
     int Executor::set_n_r()
     {
         static_assert(n < 8);

@@ -181,6 +181,11 @@ namespace cpu
         std::string bit_n_HL(uint8_t opCode);
 
         template<uint8_t n, Registers::Names NAME>
+        std::string res_n_r(uint8_t opCode);
+        template<uint8_t n>
+        std::string res_n_HL(uint8_t opCode);
+
+        template<uint8_t n, Registers::Names NAME>
         std::string set_n_r(uint8_t opCode);
         template<uint8_t n>
         std::string set_n_HL(uint8_t opCode);
