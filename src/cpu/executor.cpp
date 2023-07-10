@@ -894,6 +894,11 @@ namespace cpu
         bool c = (hl & 0x8000) == 0x8000;
 
         hl <<= 1;
+        if (c)
+        {
+            hl |= 1;
+        }
+
         updateFlags(hl, false, false, c);
 
         m_registers.write16<Registers::HL>(hl);
@@ -935,6 +940,11 @@ namespace cpu
         bool c = (hl & 1) == 1;
 
         hl >>= 1;
+        if (c)
+        {
+            hl |= 0x8000;
+        }
+
         updateFlags(hl, false, false, c);
 
         m_registers.write16<Registers::HL>(hl);

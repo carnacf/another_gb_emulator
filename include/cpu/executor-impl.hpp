@@ -407,6 +407,11 @@ namespace cpu
         bool c = (r & 0x80) == 0x80;
 
         r <<= 1;
+        if (c)
+        {
+            r |= 1;
+        }
+
         updateFlags(r, false, false, c);
 
         m_registers.write8<NAME>(r);
@@ -421,6 +426,11 @@ namespace cpu
         bool c = (r & 0x01) == 0x01;
 
         r >>= 1;
+        if (c)
+        {
+            r |= 0x80;
+        }
+
         updateFlags(r, false, false, c);
 
         m_registers.write8<NAME>(r);
