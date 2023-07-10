@@ -204,14 +204,28 @@ namespace cpu
     {
         return std::to_string(opCode) + " : SRL " + m_registers.register8ToStr(NAME) + ";\n";
     }
+   
     template<uint8_t n, Registers::Names NAME>
     std::string Logger::bit_n_r(uint8_t opCode)
     {
         return std::to_string(opCode) + " : BIT " + std::to_string(n)+ ", " + m_registers.register8ToStr(NAME) + ";\n";
     }
+    
     template<uint8_t n>
     std::string Logger::bit_n_HL(uint8_t opCode)
     {
         return std::to_string(opCode) + " : BIT " + std::to_string(n) + ", HL;\n";;
+    }
+
+    template<uint8_t n, Registers::Names NAME>
+    std::string Logger::set_n_r(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : SET " + std::to_string(n) + ", " + m_registers.register8ToStr(NAME) + ";\n";
+    }
+
+    template<uint8_t n>
+    std::string Logger::set_n_HL(uint8_t opCode)
+    {
+        return std::to_string(opCode) + " : SET " + std::to_string(n) + ", HL;\n";;
     }
 }

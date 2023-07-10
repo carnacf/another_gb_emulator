@@ -227,6 +227,11 @@ private:
     template<uint8_t n>
     int bit_n_HL();
 
+    template<uint8_t n, Registers::Names NAME>
+    int set_n_r();
+    template<uint8_t n>
+    int set_n_HL();
+
     // Control flow instructions
     int jp_nn();
     int jp_HL();
