@@ -13,13 +13,13 @@ namespace cpu
 {
 class Registers;
 
-class Executor
+class Processor
 {
 public:
-    using Instruction = int (Executor::*)();
+    using Instruction = int (Processor::*)();
 
-    Executor() = delete;
-    Executor(Registers& regist, Memory& mem);
+    Processor() = delete;
+    Processor(Registers& regist, Memory& mem);
 
     template<bool disassemble>
     int execute(uint8_t opCode)
@@ -286,4 +286,4 @@ private:
 };
 }
 
-#include "executor-impl.hpp"
+#include "processor-impl.hpp"

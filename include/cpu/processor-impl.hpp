@@ -1,11 +1,11 @@
 #pragma once
+
 #include "instruction_utils.h"
-#include "executor.h"
 
 namespace cpu
 {
     template<uint8_t opcode>
-    int Executor::ld_r_r_8()
+    int Processor::ld_r_r_8()
     {
         constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
         uint8_t A = m_registers.read8<operands.first>();
@@ -15,7 +15,7 @@ namespace cpu
     }
 
     template<uint8_t opcode>
-    int Executor::ld_r_n_8()
+    int Processor::ld_r_n_8()
     {
         uint8_t immediate = getImmediate8();
 
@@ -26,7 +26,7 @@ namespace cpu
     }
 
     template<uint8_t opcode>
-    int Executor::ld_HL_n_8()
+    int Processor::ld_HL_n_8()
     {
         uint16_t addr = m_registers.read16<Registers::HL>();
         uint8_t immediate = getImmediate8();
@@ -37,7 +37,7 @@ namespace cpu
     }
 
     template<uint8_t opcode>
-    inline int Executor::ld_r_HL()
+    inline int Processor::ld_r_HL()
     {
         constexpr Registers::Names opA = opAFromOpCode<opcode>();
         uint16_t hl = m_registers.read16<Registers::HL>();
@@ -48,7 +48,7 @@ namespace cpu
     }
 
     template<uint8_t opcode>
-    int Executor::ld_HL_r()
+    int Processor::ld_HL_r()
     {
         constexpr Registers::Names opB = opBFromOpCode<opcode>();
         uint16_t hl = m_registers.read16<Registers::HL>();
@@ -59,7 +59,7 @@ namespace cpu
     }
 
     template<Registers::Paired NAME>
-    int Executor::ld_A_r16()
+    int Processor::ld_A_r16()
     {
         uint16_t addr = m_registers.read16<NAME>();
         uint8_t val = m_memory.read8(addr);
@@ -70,7 +70,7 @@ namespace cpu
     }
 
     template<Registers::Paired NAME>
-    int Executor::ld_r16_A()
+    int Processor::ld_r16_A()
     {
         uint16_t addr = m_registers.read16<NAME>();
         uint8_t val = m_registers.read8<Registers::A> ();
@@ -80,7 +80,7 @@ namespace cpu
     }
 
     template<Registers::Paired NAME>
-    int Executor::ld_rr_nn()
+    int Processor::ld_rr_nn()
     {
         uint16_t val = getImmediate16();
 
@@ -90,7 +90,7 @@ namespace cpu
     }
 
     template<Registers::Paired NAME>
-    int Executor::push_rr()
+    int Processor::push_rr()
     {
         uint16_t val = m_registers.read16<NAME>();
         push(val);
@@ -99,7 +99,7 @@ namespace cpu
     }
 
     template<Registers::Paired NAME>
-    int Executor::pop_rr()
+    int Processor::pop_rr()
     {
         uint16_t val = pop();
         m_registers.write16<NAME>(val);
@@ -108,7 +108,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int Executor::add_r()
+    int Processor::add_r()
     {
         int a = (int8_t) m_registers.read8<Registers::A>();
         int b = (int8_t) m_registers.read8<NAME>();
@@ -118,7 +118,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int Executor::adc_r()
+    int Processor::adc_r()
     {
         int a = (int8_t) m_registers.read8<Registers::A>();
         int b = (int8_t) m_registers.read8<NAME>();
@@ -128,7 +128,7 @@ namespace cpu
     }
     
     template<Registers::Names NAME>
-    int Executor::sub_r()
+    int Processor::sub_r()
     {
         int a = (int8_t)m_registers.read8<Registers::A>();
         int b = (int8_t)m_registers.read8<NAME>();
@@ -138,7 +138,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int Executor::sbc_r()
+    int Processor::sbc_r()
     {
         int a = (int8_t)m_registers.read8<Registers::A>();
         int b = (int8_t)m_registers.read8<NAME>();
@@ -148,7 +148,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int Executor::cp_r()
+    int Processor::cp_r()
     {
         int a = (int8_t)m_registers.read8<Registers::A>();
         int b = (int8_t)m_registers.read8<NAME>();
@@ -158,7 +158,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int Executor::inc_r()
+    int Processor::inc_r()
     {
         int b = (int8_t)m_registers.read8<NAME>();
         int8_t r = b + 1;
@@ -171,7 +171,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int Executor::dec_r()
+    int Processor::dec_r()
     {
         int b = (int8_t)m_registers.read8<NAME>();
         int8_t r = b - 1;
@@ -184,7 +184,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int Executor::and_r()
+    int Processor::and_r()
     {
         uint8_t a = m_registers.read8<Registers::A>();
         uint8_t b = m_registers.read8<NAME>();
@@ -198,7 +198,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int Executor::or_r()
+    int Processor::or_r()
     {
         uint8_t a = m_registers.read8<Registers::A>();
         uint8_t b = m_registers.read8<NAME>();
@@ -212,7 +212,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int Executor::xor_r()
+    int Processor::xor_r()
     {
         uint8_t a = m_registers.read8<Registers::A>();
         uint8_t b = m_registers.read8<NAME>();
@@ -226,7 +226,7 @@ namespace cpu
     }
 
     template<Registers::Paired NAME>
-    int Executor::add_HL_rr()
+    int Processor::add_HL_rr()
     {
         int hl = m_registers.read16<Registers::HL>();
         int rr = m_registers.read16<NAME>();
@@ -241,7 +241,7 @@ namespace cpu
     }
 
     template<Registers::Paired NAME>
-    int Executor::inc_rr()
+    int Processor::inc_rr()
     {
         uint16_t rr = m_registers.read16<NAME>();
         rr++;
@@ -251,7 +251,7 @@ namespace cpu
     }
 
     template<Registers::Paired NAME>
-    int Executor::dec_rr()
+    int Processor::dec_rr()
     {
         uint16_t rr = m_registers.read16<NAME>();
         rr--;
@@ -261,7 +261,7 @@ namespace cpu
     }
 
     template<Registers::Flag f>
-    int Executor::jp_cc_nn()
+    int Processor::jp_cc_nn()
     {
         uint16_t immediate = getImmediate16();
         if (m_registers.isSetFlag(f))
@@ -276,7 +276,7 @@ namespace cpu
     }
 
     template<Registers::Flag f>
-    int Executor::jp_ncc_nn()
+    int Processor::jp_ncc_nn()
     {
         uint16_t immediate = getImmediate16();
         if (!m_registers.isSetFlag(f))
@@ -291,7 +291,7 @@ namespace cpu
     }
 
     template<Registers::Flag f>
-    int Executor::jr_cc_n()
+    int Processor::jr_cc_n()
     {
         int8_t immediate = (int8_t) getImmediate8();
         if (m_registers.isSetFlag(f))
@@ -307,7 +307,7 @@ namespace cpu
     }
 
     template<Registers::Flag f>
-    int Executor::jr_ncc_n()
+    int Processor::jr_ncc_n()
     {
         int8_t immediate = (int8_t)getImmediate8();
         if (!m_registers.isSetFlag(f))
@@ -323,7 +323,7 @@ namespace cpu
     }
 
     template<Registers::Flag f>
-    int Executor::call_cc_nn()
+    int Processor::call_cc_nn()
     {
         uint16_t addr = getImmediate16();
         if (m_registers.isSetFlag(f))
@@ -341,7 +341,7 @@ namespace cpu
     }
 
     template<Registers::Flag f>
-    int Executor::call_ncc_nn()
+    int Processor::call_ncc_nn()
     {
         uint16_t addr = getImmediate16();
         if (!m_registers.isSetFlag(f))
@@ -359,7 +359,7 @@ namespace cpu
     }
 
     template<Registers::Flag f>
-    int Executor::ret_cc()
+    int Processor::ret_cc()
     {
         if (m_registers.isSetFlag(f))
         {
@@ -375,7 +375,7 @@ namespace cpu
     }
 
     template<Registers::Flag f>
-    int Executor::ret_ncc()
+    int Processor::ret_ncc()
     {
         if (!m_registers.isSetFlag(f))
         {
@@ -391,7 +391,7 @@ namespace cpu
     }
 
     template<uint8_t n>
-    int Executor::rst()
+    int Processor::rst()
     {
         uint16_t pc = m_registers.getPC();
         push(pc);
@@ -402,7 +402,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int Executor::rlc_r()
+    int Processor::rlc_r()
     {
         uint8_t r = m_registers.read8<NAME>();
         bool c = (r & 0x80) == 0x80;
@@ -421,7 +421,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int Executor::rrc_r()
+    int Processor::rrc_r()
     {
         uint8_t r = m_registers.read8<NAME>();
         bool c = (r & 0x01) == 0x01;
@@ -440,7 +440,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int Executor::rl_r()
+    int Processor::rl_r()
     {
         uint8_t r = m_registers.read8<NAME>();
         bool c = (r & 0x80) == 0x80;
@@ -456,7 +456,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int Executor::rr_r()
+    int Processor::rr_r()
     {
         uint8_t r = m_registers.read8<NAME>();
         bool c = (r & 1) == 1;
@@ -472,7 +472,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int Executor::sla_r()
+    int Processor::sla_r()
     {
         uint8_t r = m_registers.read8<NAME>();
         bool c = (r & 0x80) == 0x80;
@@ -485,7 +485,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int Executor::sra_r()
+    int Processor::sra_r()
     {
         uint8_t r = m_registers.read8<NAME>();
         bool c = (r & 1) == 1;
@@ -506,7 +506,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int Executor::srl_r()
+    int Processor::srl_r()
     {
         uint8_t r = m_registers.read8<NAME>();
         bool c = (r & 1) == 1;
@@ -519,7 +519,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int cpu::Executor::swap_r()
+    int cpu::Processor::swap_r()
     {
         uint8_t r = m_registers.read8<NAME>();
         r = (r << 4) | (r >> 4);
@@ -531,7 +531,7 @@ namespace cpu
     }
 
     template<uint8_t n, Registers::Names NAME>
-    int Executor::bit_n_r()
+    int Processor::bit_n_r()
     {
         static_assert(n < 8);
 
@@ -542,7 +542,7 @@ namespace cpu
     }
 
     template<uint8_t n>
-    int Executor::bit_n_HL()
+    int Processor::bit_n_HL()
     {
         static_assert(n < 8);
         
@@ -553,7 +553,7 @@ namespace cpu
     }
 
     template<uint8_t n, Registers::Names NAME>
-    int Executor::res_n_r()
+    int Processor::res_n_r()
     {
         static_assert(n < 8);
 
@@ -566,7 +566,7 @@ namespace cpu
     }
 
     template<uint8_t n>
-    int Executor::res_n_HL()
+    int Processor::res_n_HL()
     {
         static_assert(n < 8);
 
@@ -579,7 +579,7 @@ namespace cpu
     }
 
     template<uint8_t n, Registers::Names NAME>
-    int Executor::set_n_r()
+    int Processor::set_n_r()
     {
         static_assert(n < 8);
         
@@ -592,7 +592,7 @@ namespace cpu
     }
 
     template<uint8_t n>
-    int Executor::set_n_HL()
+    int Processor::set_n_HL()
     {
         static_assert(n < 8);
 
