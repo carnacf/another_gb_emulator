@@ -15,7 +15,13 @@ add_library(anothergbemulator STATIC
  "include/memory/memory.h"
  "include/utils/global.h"
  "include/utils/utils.h"
- "include/cpu/instruction_utils.h")
+ "include/cpu/instruction_utils.h" 
+ "include/memory/rom.h" 
+ "src/memory/cartridge.cpp" 
+ "include/video/screen.h" 
+ "src/memory/memory.cpp" 
+ "include/memory/mmio.h" 
+ "src/memory/mmio.cpp")
 
 target_include_directories(anothergbemulator
     PUBLIC 
