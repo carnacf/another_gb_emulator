@@ -6,11 +6,21 @@
 #include "registery.h"
 
 #include <string>
+#include <optional>
 
 class Memory;
 
 namespace cpu
 {
+enum class Interrupt
+{
+    VBlank,
+    LCD_STAT,
+    Timer,
+    Serial,
+    Joypad
+};
+
 class Registers;
 
 class Processor
@@ -21,23 +31,16 @@ public:
     Processor() = delete;
     Processor(Registers& regist, Memory& mem);
 
-    template<bool disassemble>
-    int execute(uint8_t opCode)
-    {
-        m_registers.incrementPC();
-        int numberOfCycles = (this->*m_instructionSet[opCode])();
-        if constexpr (disassemble)
-        {
-            std::cout << m_tracer(opCode);
-        }
+    void runNextInstruction(bool trace);
 
-        return numberOfCycles;
-    }
-
+    void handleInterrupt(Interrupt interruptType);
+    std::optional<Interrupt> pendingInterrupt() const;
+    void updateClocks(int ticks);
 private:
     void fillInstructionSet();
     void fillCbInstructionSet();
     
+    std::optional<int> getTIMANbCycles() const;
     int unhandled();
 
     uint8_t getImmediate8();
@@ -279,6 +282,9 @@ private:
 
     Instruction m_instructionSet[256];
     Instruction m_cbInstructionSet[256];
+
+    int m_divCycleCounter = 0;
+    int m_timaCycleCounter = 0;
 
     bool m_IME = false;
     bool m_isHalt = false;

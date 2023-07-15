@@ -5,9 +5,22 @@
 
 #include <utility>
 #include <limits>
+#include <iostream>
+#include <chrono>
+#include <thread>
 
 namespace cpu
 {
+    constexpr size_t cpu_frequency = 4'194'304; // Hz
+    constexpr size_t DIV_frequency = 16'384; // Hz
+    constexpr std::chrono::microseconds cycle_duration = std::chrono::microseconds((1 / cpu_frequency) * 1'000'000);
+
+    template<int frequency>
+    constexpr int number_of_cycle()
+    {
+        return  cpu_frequency / frequency;
+    }
+
     Processor::Processor(Registers& regist, Memory& mem): 
         m_tracer(regist, mem),
         m_registers(regist), 
@@ -17,6 +30,141 @@ namespace cpu
         fillCbInstructionSet();
     }
     
+    void Processor::runNextInstruction(bool trace)
+    {
+        auto start = std::chrono::system_clock::now();
+        std::optional<Interrupt> interrupt = pendingInterrupt();
+        if (m_IME && interrupt.has_value())
+        {
+            handleInterrupt(interrupt.value());
+        }
+
+        uint8_t opCode = m_memory.read8(m_registers.getPC());
+        m_registers.incrementPC();
+        int numberOfCycles = (this->*m_instructionSet[opCode])();
+        updateClocks(numberOfCycles);
+        if (trace)
+        {
+            std::cout << "PC=" << m_registers.getPC() << " : " << m_tracer(opCode);
+        }
+
+        auto end = std::chrono::system_clock::now();
+
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+        auto waitTime = std::max((duration - cycle_duration*numberOfCycles).count(), 0ll);
+        std::this_thread::sleep_for(std::chrono::microseconds(waitTime));
+    }
+
+    std::optional<int> Processor::getTIMANbCycles() const
+    {
+        uint8_t tac_flag = m_memory.read8(0xFF07);
+        if (tac_flag & 0x02)
+        {
+            return std::nullopt;
+        }
+
+        switch (tac_flag & 0x03)
+        {
+        case 0x00:
+            return cpu_frequency / 1024;
+        case 0x01:
+            return cpu_frequency / 16;
+        case 0x02:
+            return cpu_frequency / 64;
+        case 0x03:
+            return cpu_frequency / 256;
+        }
+
+        return std::nullopt;
+    }
+
+    void Processor::handleInterrupt(Interrupt interruptType)
+    {
+        m_IME = false;
+        push(m_registers.getPC());
+
+        uint8_t ifFlag = m_memory.read8(0xFF0F);
+        switch (interruptType)
+        {
+        case Interrupt::VBlank:
+            m_memory.write8(0xFF0F, ifFlag & ~0x01);
+            m_registers.setPC(0x40);
+            break;
+        case Interrupt::LCD_STAT:
+            m_memory.write8(0xFF0F, ifFlag & ~0x02);
+            m_registers.setPC(0x48);
+            break;
+        case Interrupt::Timer:
+            m_memory.write8(0xFF0F, ifFlag & ~0x04);
+            m_registers.setPC(0x50);
+            break;
+        case Interrupt::Serial:
+            m_memory.write8(0xFF0F, ifFlag & ~0x08);
+            m_registers.setPC(0x58);
+            break;
+        case Interrupt::Joypad:
+            m_memory.write8(0xFF0F, ifFlag & ~0x10);
+            m_registers.setPC(0x60);
+            break;
+        }
+    }
+    
+    void Processor::updateClocks(int ticks)
+    {
+        m_divCycleCounter += ticks;
+        constexpr auto div_nb_cycles = number_of_cycle<DIV_frequency>();
+        if (m_divCycleCounter >= div_nb_cycles)
+        {
+            m_memory.incrementDIV();
+            m_divCycleCounter = m_divCycleCounter % div_nb_cycles;
+        }
+
+        std::optional<int> timaNbCycles = getTIMANbCycles();
+        if (timaNbCycles.has_value())
+        {
+            m_timaCycleCounter += ticks;
+            if (m_timaCycleCounter >= timaNbCycles.value())
+            {
+                m_timaCycleCounter = m_timaCycleCounter % div_nb_cycles;
+                uint8_t tima = m_memory.read8(0xFF05);
+                m_memory.write8(0xFF05, tima + 1);
+            }
+        }
+    }
+
+    std::optional<Interrupt> Processor::pendingInterrupt() const
+    {
+        if (m_IME == false)
+        {
+            return std::nullopt;
+        }
+        uint8_t if_flag = m_memory.read8(0xFF0F);
+        uint8_t ie_flag = m_memory.read8(0xFFFF);
+        if_flag = if_flag & ie_flag;
+        if ((if_flag & 0x01) == 0x01)
+        {
+            return Interrupt::VBlank;
+        }
+        if ((if_flag & 0x02) == 0x02)
+        {
+            return Interrupt::LCD_STAT;
+        }
+        if ((if_flag & 0x04) == 0x04)
+        {
+            return Interrupt::Timer;
+        }
+        if ((if_flag & 0x08) == 0x08)
+        {
+            return Interrupt::Serial;
+        }
+        if ((if_flag & 0x10) == 0x10)
+        {
+            return Interrupt::Joypad;
+        }
+
+        return std::nullopt;
+    }
+
     void Processor::fillInstructionSet()
     {
         std::fill_n(m_instructionSet, 256, &Processor::unhandled);

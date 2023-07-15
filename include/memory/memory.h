@@ -35,7 +35,12 @@ public:
         m_bootROMEnabled = false;
     }
 
+
+    void incrementDIV();
+
 private:
+    friend MMIO;
+
     bool loadBootROM(const char* filename);
 
     MMIO m_mmio;

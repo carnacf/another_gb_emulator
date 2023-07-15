@@ -2,6 +2,7 @@
 
 #include "cartridge.h"
 #include "registery.h"
+#include "memory.h"
 
 Memory::Memory(const Cartridge& cartridge, cpu::Registers& registers, const char* bootROMPath):
     m_mmio(registers, *this), 
@@ -87,6 +88,11 @@ bool Memory::loadROM(const char* filename)
     file.close();
 
     return readSuccess;
+}
+
+void Memory::incrementDIV()
+{
+    m_memoryMap[0xFF04] += 1;
 }
 
 bool Memory::loadBootROM(const char* filename)

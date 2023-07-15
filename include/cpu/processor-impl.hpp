@@ -519,7 +519,7 @@ namespace cpu
     }
 
     template<Registers::Names NAME>
-    int cpu::Processor::swap_r()
+    int Processor::swap_r()
     {
         uint8_t r = m_registers.read8<NAME>();
         r = (r << 4) | (r >> 4);
