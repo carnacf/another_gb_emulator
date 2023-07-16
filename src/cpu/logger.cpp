@@ -68,7 +68,7 @@ namespace cpu
         m_instructionSet[0x2E] = &Logger::ld_r_n_8<0x2E>;
         m_instructionSet[0x2F] = &Logger::cpl;
         m_instructionSet[0x30] = &Logger::jr_nc_n;
-        m_instructionSet[0x31] = &Logger::ld_SP_rr;
+        m_instructionSet[0x31] = &Logger::ld_SP_nn;
         m_instructionSet[0x32] = &Logger::ld_HLd_A;
         m_instructionSet[0x33] = &Logger::inc_SP;
         m_instructionSet[0x34] = &Logger::inc_HL;
@@ -537,74 +537,74 @@ namespace cpu
         return std::to_string(opCode) + " : NOP;\n";
     }
 
-    std::string Logger::ld_A_nn(uint8_t /*opCode*/)
+    std::string Logger::ld_A_nn(uint8_t opCode)
     {
-        return "LD A, nn;\n";
+        return std::to_string(opCode) + " : LD A, nn;\n";
     }
 
     std::string Logger::ld_nn_A(uint8_t opCode)
     {
-        return "LD nn, A;";
+        return std::to_string(opCode) + " : LD nn, A;";
     }
 
     std::string Logger::ldh_A_aC(uint8_t opCode)
     {
-        return "LDH A, (C);\n";
+        return std::to_string(opCode) + " : LDH A, (C);\n";
     }
 
     std::string Logger::ldh_aC_A(uint8_t opCode)
     {
-        return "LDH (C), A;\n";
+        return std::to_string(opCode) + " : LDH (C), A;\n";
     }
 
     std::string Logger::ldh_A_an(uint8_t opCode)
     {
-        return "LDH A, (n);\n";
+        return std::to_string(opCode) + " : LDH A, (n);\n";
     }
 
     std::string Logger::ldh_an_A(uint8_t opCode)
     {
-        return "LDH (n), A;\n";
+        return std::to_string(opCode) + " : LDH (n), A;\n";
     }
 
     std::string Logger::ld_HLd_A(uint8_t opCode)
     {
-        return "LD (HL-), A;\n";
+        return std::to_string(opCode) + " : LD (HL-), A;\n";
     }
 
     std::string Logger::ld_A_HLd(uint8_t opCode)
     {
-        return "LD A, (HL-);\n";
+        return std::to_string(opCode) + " : LD A, (HL-);\n";
     }
 
     std::string Logger::ld_HLi_A(uint8_t opCode)
     {
-        return "LD (HL+), A;\n";
+        return std::to_string(opCode) + " : LD (HL+), A;\n";
     }
 
     std::string Logger::ld_A_HLi(uint8_t opCode)
     {
-        return "LD A, (HL+);\n";
+        return std::to_string(opCode) + " : LD A, (HL+);\n";
     }
 
-    std::string Logger::ld_SP_rr(uint8_t opCode)
+    std::string Logger::ld_SP_nn(uint8_t opCode)
     {
-        return "LD rr, SP;\n";
+        return std::to_string(opCode) + " : LD SP, nn;\n";
     }
 
     std::string Logger::ld_nn_SP(uint8_t opCode)
     {
-        return "LD SP, rr;\n";
+        return std::to_string(opCode) + " : LD SP, rr;\n";
     }
 
     std::string Logger::ld_SP_HL(uint8_t opCode)
     {
-        return "LD SP, HL;\n";
+        return std::to_string(opCode) + " : LD SP, HL;\n";
     }
 
     std::string Logger::ld_HL_SP_r8(uint8_t opCode)
     {
-        return "LD HL, SP + r8;\n";
+        return std::to_string(opCode) + " : LD HL, SP + r8;\n";
     }
 
     std::string Logger::add_HL(uint8_t opCode)
@@ -929,7 +929,7 @@ namespace cpu
 
     std::string Logger::cb(uint8_t)
     {
-        uint8_t n = m_memory.read8(m_registers.getPC());
-        return " : CB " + ((this->*m_cbInstructionSet[n]))(n);
+        uint8_t n = m_memory.read8(m_registers.getPC() + 1);
+        return "CB " + ((this->*m_cbInstructionSet[n]))(n);
     }
 }

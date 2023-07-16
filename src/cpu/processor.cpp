@@ -40,13 +40,14 @@ namespace cpu
         }
 
         uint8_t opCode = m_memory.read8(m_registers.getPC());
-        m_registers.incrementPC();
-        int numberOfCycles = (this->*m_instructionSet[opCode])();
-        updateClocks(numberOfCycles);
         if (trace)
         {
             std::cout << "PC=" << m_registers.getPC() << " : " << m_tracer(opCode);
         }
+
+        m_registers.incrementPC();
+        int numberOfCycles = (this->*m_instructionSet[opCode])();
+        updateClocks(numberOfCycles);
 
         auto end = std::chrono::system_clock::now();
 
@@ -218,7 +219,7 @@ namespace cpu
         m_instructionSet[0x2E] = &Processor::ld_r_n_8<0x2E>;
         m_instructionSet[0x2F] = &Processor::cpl;
         m_instructionSet[0x30] = &Processor::jr_ncc_n<Registers::Flag::C>;
-        m_instructionSet[0x31] = &Processor::ld_SP_rr;
+        m_instructionSet[0x31] = &Processor::ld_SP_nn;
         m_instructionSet[0x32] = &Processor::ld_HLd_A;
         m_instructionSet[0x33] = &Processor::inc_SP;
         m_instructionSet[0x34] = &Processor::inc_HL;
@@ -819,7 +820,7 @@ namespace cpu
         return 2;
     }
 
-    int Processor::ld_SP_rr()
+    int Processor::ld_SP_nn()
     {
         uint16_t val = getImmediate16();
 

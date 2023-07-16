@@ -61,7 +61,7 @@ namespace cpu
         // 16bits loads
         template<Registers::Paired NAME>
         std::string ld_rr_nn(uint8_t opCode);
-        std::string ld_SP_rr(uint8_t opCode);
+        std::string ld_SP_nn(uint8_t opCode);
         std::string ld_nn_SP(uint8_t opCode);
         std::string ld_SP_HL(uint8_t opCode);
         std::string ld_HL_SP_r8(uint8_t opCode);

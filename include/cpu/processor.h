@@ -78,7 +78,7 @@ private:
     // 16bits loads
     template<Registers::Paired NAME>
     int ld_rr_nn();
-    int ld_SP_rr();
+    int ld_SP_nn();
     int ld_nn_SP();
     int ld_SP_HL();
     int ld_HL_SP_r8();

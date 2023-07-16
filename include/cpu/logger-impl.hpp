@@ -58,7 +58,7 @@ namespace cpu
     template<Registers::Paired NAME>
     std::string Logger::ld_rr_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LD rr, " + m_registers.register16ToStr(NAME) + ";\n";
+        return std::to_string(opCode) + " : LD " + m_registers.register16ToStr(NAME) + ", nn;\n";
     }
 
     template<Registers::Paired NAME>
