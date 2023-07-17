@@ -13,7 +13,7 @@ namespace cpu
 {
     constexpr size_t cpu_frequency = 4'194'304; // Hz
     constexpr size_t DIV_frequency = 16'384; // Hz
-    constexpr std::chrono::microseconds cycle_duration = std::chrono::microseconds((1 / cpu_frequency) * 1'000'000);
+    constexpr std::chrono::nanoseconds cycle_duration = std::chrono::nanoseconds(1'000'000'000 / cpu_frequency);
 
     template<int frequency>
     constexpr int number_of_cycle()
@@ -53,13 +53,13 @@ namespace cpu
 
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
         auto waitTime = std::max((duration - cycle_duration*numberOfCycles).count(), 0ll);
-        std::this_thread::sleep_for(std::chrono::microseconds(waitTime));
+        //std::this_thread::sleep_for(std::chrono::microseconds(waitTime));
     }
 
     std::optional<int> Processor::getTIMANbCycles() const
     {
         uint8_t tac_flag = m_memory.read8(0xFF07);
-        if (tac_flag & 0x02)
+        if (tac_flag & 0x04)
         {
             return std::nullopt;
         }

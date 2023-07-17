@@ -8,7 +8,7 @@ MMIO::MMIO(cpu::Registers& registers, Memory& memory) :
 	m_memory(memory),
 	m_registers(registers)
 {
-	std::fill_n(std::begin(m_mappedIOs), 71, &MMIO::empty);
+	std::fill_n(std::begin(m_mappedIOs), 128, &MMIO::writeValue);
 	// Joypad Input
 	m_mappedIOs[0] = &MMIO::writeValue;
 	m_mappedIOs[0x04] = &MMIO::resetDIV;
@@ -24,7 +24,8 @@ uint8_t MMIO::read(uint16_t addr) const
 
 void MMIO::write(uint16_t addr, uint8_t val)
 {
-	(this->*m_mappedIOs[addr |= 0x0000])(addr, val);
+	auto actualAddr = addr & 0x00FF;
+	(this->*m_mappedIOs[actualAddr])(addr, val);
 }
 
 void MMIO::empty(uint16_t, uint8_t)

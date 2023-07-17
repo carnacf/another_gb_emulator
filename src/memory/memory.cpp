@@ -16,9 +16,40 @@ Memory::~Memory()
     delete[] m_bootROM;
 }
 
-void Memory::write8(uint16_t index, uint8_t val)
+void Memory::write8(uint16_t addr, uint8_t val)
 {
-    m_memoryMap[index] = val;
+    if (addr < 0x8000)
+    {
+        m_memoryMap[addr] = val;
+        //return m_romBank->read(addr);
+    }
+    else if (addr < 0xA000)
+    {
+        // Video Ram
+        m_memoryMap[addr] = val;
+    }
+    else if (addr < 0xE000)
+    {
+        m_memoryMap[addr] = val;
+        //return m_romBank->read(addr);
+    }
+    else if (addr < 0xFEA0)
+    {
+        // Object attribute memory
+        m_memoryMap[addr] = val;
+    }
+    else if (addr < 0xFF80 && addr > 0xFEFF)
+    {
+        // MMIO
+        m_mmio.write(addr, val);
+    }
+    else if (addr < 0xFFFF)
+    {
+        m_memoryMap[addr] = val;
+        //return m_romBank->read(addr);
+    }
+
+    m_memoryMap[addr] = val;
 }
 
 uint8_t Memory::read8(uint16_t addr)
