@@ -14,11 +14,15 @@ namespace cpu
 class Registers;
 }
 class Rom;
+namespace video
+{
+class Screen;
+}
 
 class Memory
 {
 public:
-    Memory(const Cartridge& cartridge, cpu::Registers& registers, 
+    Memory(const Cartridge& cartridge, cpu::Registers& registers, video::Screen& screen, 
         const char* bootROMPath);
     ~Memory();
 
@@ -34,7 +38,6 @@ public:
     {
         m_bootROMEnabled = false;
     }
-
 
     void incrementDIV();
 

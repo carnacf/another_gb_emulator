@@ -2,10 +2,13 @@
 
 #include "cartridge.h"
 #include "registery.h"
-#include "memory.h"
 
-Memory::Memory(const Cartridge& cartridge, cpu::Registers& registers, const char* bootROMPath):
-    m_mmio(registers, *this), 
+#include "video/screen.h"
+
+Memory::Memory(const Cartridge& cartridge, cpu::Registers& registers,
+    video::Screen& screen,
+    const char* bootROMPath):
+    m_mmio(registers, *this, screen), 
     m_romBank(Cartridge::buildRomFromCartridge(cartridge))
 {
     loadBootROM(bootROMPath);

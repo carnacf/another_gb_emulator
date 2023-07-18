@@ -7,6 +7,9 @@ set(CMAKE_CXX_STANDARD 20)
 add_library(anothergbemulator STATIC 
  "src/cpu/processor.cpp"
  "src/cpu/logger.cpp"
+ "src/memory/cartridge.cpp" 
+ "src/memory/memory.cpp" 
+ "src/memory/mmio.cpp"
  "include/cpu/processor.h"
  "include/cpu/processor-impl.hpp"
  "include/cpu/registery.h"
@@ -17,11 +20,9 @@ add_library(anothergbemulator STATIC
  "include/utils/utils.h"
  "include/cpu/instruction_utils.h" 
  "include/memory/rom.h" 
- "src/memory/cartridge.cpp" 
  "include/video/screen.h" 
- "src/memory/memory.cpp" 
  "include/memory/mmio.h" 
- "src/memory/mmio.cpp")
+ "src/video/screen.cpp")
 
 target_include_directories(anothergbemulator
     PUBLIC 
