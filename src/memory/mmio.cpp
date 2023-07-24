@@ -10,18 +10,23 @@ MMIO::MMIO(cpu::Registers& registers, Memory& memory, video::Screen& screen) :
 	m_screen(screen),
 	m_registers(registers)
 {
-	std::fill_n(std::begin(m_mappedIOs), 128, &MMIO::writeValue);
+	std::fill_n(std::begin(m_mappedIOsW), 128, &MMIO::writeValue);
 	// Joypad Input
-	m_mappedIOs[0] = &MMIO::writeValue;
-	m_mappedIOs[0x04] = &MMIO::resetDIV;
-	m_mappedIOs[0x05] = &MMIO::incrementTIMA;
+	m_mappedIOsW[0] = &MMIO::writeValue;
+	m_mappedIOsW[0x04] = &MMIO::resetDIV;
+	m_mappedIOsW[0x05] = &MMIO::incrementTIMA;
 	
-	m_mappedIOs[0x40] = &MMIO::lcdControl;
-	m_mappedIOs[0x42] = &MMIO::scy;
-	m_mappedIOs[0x43] = &MMIO::scx;
-	m_mappedIOs[0x4A] = &MMIO::wy;
-	m_mappedIOs[0x4B] = &MMIO::wx;
-	m_mappedIOs[0x50] = &MMIO::disableBootROM;
+	m_mappedIOsW[0x40] = &MMIO::lcdControl;
+	m_mappedIOsW[0x42] = &MMIO::scy;
+	m_mappedIOsW[0x43] = &MMIO::scx;
+	m_mappedIOsW[0x44] = &MMIO::empty;
+	m_mappedIOsW[0x45] = &MMIO::lyc;
+	m_mappedIOsW[0x4A] = &MMIO::wy;
+	m_mappedIOsW[0x4B] = &MMIO::wx;
+	m_mappedIOsW[0x50] = &MMIO::disableBootROM;
+
+	std::fill_n(std::begin(m_mappedIOsR), 128, &MMIO::read);
+	m_mappedIOsR[0x44] = &MMIO::ly;
 }
 
 uint8_t MMIO::read(uint16_t addr) const
@@ -32,7 +37,7 @@ uint8_t MMIO::read(uint16_t addr) const
 void MMIO::write(uint16_t addr, uint8_t val)
 {
 	auto actualAddr = addr & 0x00FF;
-	(this->*m_mappedIOs[actualAddr])(addr, val);
+	(this->*m_mappedIOsW[actualAddr])(addr, val);
 }
 
 void MMIO::empty(uint16_t, uint8_t)
@@ -75,10 +80,10 @@ void MMIO::lcdControl(uint16_t addr, uint8_t val)
 	m_screen.enableWindow((val & 0x20) == 0x20);
 
 	uint16_t tileDataArea = ((val & 0x10) == 0x10) ? 0x8800 : 0x8800;
-	m_screen.setTileDataArea(tileMapAddr);
+	m_screen.setTileDataArea(tileDataArea);
 
 	uint16_t bgTileMapArea = ((val & 0x08) == 0x08) ? 0x9C00 : 0x9800;
-	m_screen.setBgTileMapAddr(tileMapAddr);
+	m_screen.setBgTileMapAddr(bgTileMapArea);
 
 	uint8_t objSize = ((val & 0x04) == 0x04) ? 16 : 8;
 	m_screen.setObjSize(objSize);
@@ -100,6 +105,12 @@ void MMIO::scx(uint16_t addr, uint8_t val)
 	m_screen.setSCX(m_memory.m_memoryMap[addr]);
 }
 
+void MMIO::lyc(uint16_t addr, uint8_t val)
+{
+	m_memory.m_memoryMap[addr] = val;
+	m_screen.setLYC(val);
+}
+
 void MMIO::wy(uint16_t addr, uint8_t val)
 {
 	m_memory.m_memoryMap[addr] = val > 143 ? val % 143 : val;
@@ -110,6 +121,11 @@ void MMIO::wx(uint16_t addr, uint8_t val)
 {
 	m_memory.m_memoryMap[addr] = val > 166 ? val % 166 : val;
 	m_screen.setWX(m_memory.m_memoryMap[addr]);
+}
+
+uint8_t MMIO::ly(uint16_t addr) const
+{
+	return m_screen.getLY();
 }
 
 void MMIO::disableBootROM(uint16_t addr, uint8_t val)

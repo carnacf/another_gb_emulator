@@ -15,21 +15,25 @@ class Screen;
 class MMIO
 {
 public:
-	using mapped_io = void (MMIO::*)(uint16_t, uint8_t);
+	using mapped_ioW = void (MMIO::*)(uint16_t, uint8_t);
+	using mapped_ioR = uint8_t (MMIO::*)(uint16_t) const;
 	
 	MMIO(cpu::Registers& registers, Memory& memory, video::Screen& screen);
 
 	uint8_t read(uint16_t addr) const;
 	void write(uint16_t addr, uint8_t val);
 
+	// Read-only address
 	void empty(uint16_t, uint8_t);
 
 	void resetDIV(uint16_t addr, uint8_t val);
 	void lcdControl(uint16_t addr, uint8_t val);
 	void scy(uint16_t addr, uint8_t val);
 	void scx(uint16_t addr, uint8_t val);
+	void lyc(uint16_t addr, uint8_t val);
 	void wy(uint16_t addr, uint8_t val);
 	void wx(uint16_t addr, uint8_t val);
+	uint8_t ly(uint16_t addr) const;
 	void incrementTIMA(uint16_t addr, uint8_t val);
 	void disableBootROM(uint16_t addr, uint8_t val);
 
@@ -39,7 +43,8 @@ private:
 	Memory& m_memory;
 	video::Screen& m_screen;
 
-	mapped_io m_mappedIOs[128];
+	mapped_ioW m_mappedIOsW[128];
+	mapped_ioR m_mappedIOsR[128];
 
 	cpu::Registers& m_registers;
 };
