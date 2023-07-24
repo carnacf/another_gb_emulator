@@ -21,23 +21,30 @@ MMIO::MMIO(cpu::Registers& registers, Memory& memory, video::Screen& screen) :
 	m_mappedIOsW[0x43] = &MMIO::scx;
 	m_mappedIOsW[0x44] = &MMIO::empty;
 	m_mappedIOsW[0x45] = &MMIO::lyc;
+	m_mappedIOsW[0x46] = &MMIO::dma;
 	m_mappedIOsW[0x4A] = &MMIO::wy;
 	m_mappedIOsW[0x4B] = &MMIO::wx;
 	m_mappedIOsW[0x50] = &MMIO::disableBootROM;
 
-	std::fill_n(std::begin(m_mappedIOsR), 128, &MMIO::read);
+	std::fill_n(std::begin(m_mappedIOsR), 128, &MMIO::readAddress);
 	m_mappedIOsR[0x44] = &MMIO::ly;
 }
 
 uint8_t MMIO::read(uint16_t addr) const
 {
-	return m_memory.m_memoryMap[addr];
+	auto actualAddr = addr & 0x00FF;
+	return (this->*m_mappedIOsR[actualAddr])(addr);
 }
 
 void MMIO::write(uint16_t addr, uint8_t val)
 {
 	auto actualAddr = addr & 0x00FF;
 	(this->*m_mappedIOsW[actualAddr])(addr, val);
+}
+
+uint8_t MMIO::readAddress(uint16_t addr) const
+{
+	return m_memory.m_memoryMap[addr];
 }
 
 void MMIO::empty(uint16_t, uint8_t)
@@ -121,6 +128,15 @@ void MMIO::wx(uint16_t addr, uint8_t val)
 {
 	m_memory.m_memoryMap[addr] = val > 166 ? val % 166 : val;
 	m_screen.setWX(m_memory.m_memoryMap[addr]);
+}
+
+void MMIO::dma(uint16_t /*addr*/, uint8_t val)
+{
+	uint16_t srcAddr = val * 100;
+	for (int i = 0; i <= 0x9F; i++)
+	{
+		m_memory.m_memoryMap[0xFE00 + i] = m_memory.m_memoryMap[srcAddr + i];
+	}
 }
 
 uint8_t MMIO::ly(uint16_t addr) const

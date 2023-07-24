@@ -23,6 +23,12 @@ public:
 	uint8_t read(uint16_t addr) const;
 	void write(uint16_t addr, uint8_t val);
 
+	void incrementTIMA(uint16_t addr, uint8_t val);
+	void disableBootROM(uint16_t addr, uint8_t val);
+
+private:
+	uint8_t readAddress(uint16_t addr) const;
+
 	// Read-only address
 	void empty(uint16_t, uint8_t);
 
@@ -33,9 +39,8 @@ public:
 	void lyc(uint16_t addr, uint8_t val);
 	void wy(uint16_t addr, uint8_t val);
 	void wx(uint16_t addr, uint8_t val);
+	void dma(uint16_t addr, uint8_t val);
 	uint8_t ly(uint16_t addr) const;
-	void incrementTIMA(uint16_t addr, uint8_t val);
-	void disableBootROM(uint16_t addr, uint8_t val);
 
 	void writeValue(uint16_t addr, uint8_t value);
 
