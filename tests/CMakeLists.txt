@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.21)
+
 include(FetchContent)
 
 FetchContent_Declare(
@@ -17,6 +19,7 @@ add_executable(tests
 	registers_tests.cpp)
 
 target_link_libraries(tests anothergbemulator gtest)
+
 include(GoogleTest)
 
 gtest_discover_tests(tests)

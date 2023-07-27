@@ -37,6 +37,13 @@ add_subdirectory(tests)
 
 add_executable(app main.cpp)
 
-target_link_libraries(app PRIVATE anothergbemulator)
+add_subdirectory(3rd_parties)
 
-
+target_link_libraries(app 
+    PRIVATE 
+        anothergbemulator
+        sfml-audio
+        sfml-graphics
+        sfml-system
+        sfml-window
+)
