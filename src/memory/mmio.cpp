@@ -22,12 +22,14 @@ MMIO::MMIO(cpu::Registers& registers, Memory& memory, video::Screen& screen) :
 	m_mappedIOsW[0x44] = &MMIO::empty;
 	m_mappedIOsW[0x45] = &MMIO::lyc;
 	m_mappedIOsW[0x46] = &MMIO::dma;
+	m_mappedIOsW[0x47] = &MMIO::updateBGPalette;
 	m_mappedIOsW[0x4A] = &MMIO::wy;
 	m_mappedIOsW[0x4B] = &MMIO::wx;
 	m_mappedIOsW[0x50] = &MMIO::disableBootROM;
 
 	std::fill_n(std::begin(m_mappedIOsR), 128, &MMIO::readAddress);
 	m_mappedIOsR[0x44] = &MMIO::ly;
+	m_mappedIOsR[0x47] = &MMIO::readBGPalette;
 }
 
 uint8_t MMIO::read(uint16_t addr) const
@@ -137,6 +139,16 @@ void MMIO::dma(uint16_t /*addr*/, uint8_t val)
 	{
 		m_memory.m_memoryMap[0xFE00 + i] = m_memory.m_memoryMap[srcAddr + i];
 	}
+}
+
+void MMIO::updateBGPalette(uint16_t addr, uint8_t val)
+{
+	m_screen.setBGPalette(val);
+}
+
+uint8_t MMIO::readBGPalette(uint16_t addr) const
+{
+	return m_screen.getBGPalette();
 }
 
 uint8_t MMIO::ly(uint16_t addr) const

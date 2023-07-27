@@ -40,6 +40,9 @@ private:
 	void wy(uint16_t addr, uint8_t val);
 	void wx(uint16_t addr, uint8_t val);
 	void dma(uint16_t addr, uint8_t val);
+
+	void updateBGPalette(uint16_t addr, uint8_t val);
+	uint8_t readBGPalette(uint16_t addr) const;
 	uint8_t ly(uint16_t addr) const;
 
 	void writeValue(uint16_t addr, uint8_t value);
