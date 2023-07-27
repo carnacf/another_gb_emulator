@@ -1282,7 +1282,7 @@ namespace cpu
     int Processor::rla()
     {
         rl_r<Registers::A>();
-
+        m_registers.setFlag(Registers::Flag::Z, false);
         return 1;
     }
 
