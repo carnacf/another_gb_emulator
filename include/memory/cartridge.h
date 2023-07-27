@@ -18,14 +18,14 @@ public:
 	};
 
 	Cartridge(const char* filePath);
-	uint8_t romSize() const
+	uint8_t nbRomBank() const
 	{
-		return m_romSize;
+		return m_nbRomBank;
 	}
 
-	uint8_t ramSize()
+	uint8_t nbRamBank()
 	{
-		return m_ramSize;
+		return m_nbRamBank;
 	}
 
 	static std::unique_ptr<Rom> buildRomFromCartridge(const Cartridge& cartridge);
@@ -34,8 +34,8 @@ private:
 	void loadCartidge(const char* filePath);
 
 	std::string m_title;
-	//Type m_cartridgeType = Type::ROM_ONLY;
+	Type m_cartridgeType = Type::ROM_ONLY;
 
-	uint8_t m_romSize;
-	uint8_t m_ramSize;
+	uint8_t m_nbRomBank;
+	uint8_t m_nbRamBank;
 };
