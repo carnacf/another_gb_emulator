@@ -1180,26 +1180,43 @@ namespace cpu
 
     int Processor::daa()
     {
-        uint8_t a = m_registers.read8<Registers::A>();
+        int a = m_registers.read8<Registers::A>();
         bool isSub = m_registers.isSetFlag(Registers::Flag::N);
 
-        if ( (a&0x0F) > 9 || m_registers.isSetFlag(Registers::Flag::H) )
+        if (!isSub)
         {
-            isSub ? a -= 0x06 : a += 0x06;
+            if ((a & 0x0F) > 9 || m_registers.isSetFlag(Registers::Flag::H))
+            {
+                a += 0x06;
+            }
+
+            if (a  > 0x9F || m_registers.isSetFlag(Registers::Flag::C))
+            {
+                a += 0x60;
+            }
+        }
+        else
+        {
+            if (m_registers.isSetFlag(Registers::Flag::H))
+            {
+                a = (a - 0x06) & 0xFF;
+            }
+
+            if (m_registers.isSetFlag(Registers::Flag::C))
+            {
+                a -= 0x60;
+            }
         }
 
-        if ((a & 0xF0) > 0x90 || m_registers.isSetFlag(Registers::Flag::C))
-        {
-            isSub ? a -= 0x60 : a += 0x60;
-            m_registers.setFlag(Registers::Flag::C, true);
-        }
 
-        if (a == 0)
-        {
-            m_registers.setFlag(Registers::Flag::Z, true);
-        }
         m_registers.setFlag(Registers::Flag::H, false);
+        if ((a & 0x100) == 0x100)
+        {
+            m_registers.setFlag(Registers::Flag::C, (a & 0x100) == 0x100);
+        }
 
+        a &= 0xFF;
+        m_registers.setFlag(Registers::Flag::Z, a==0);
         m_registers.write8<Registers::A>(a);
 
         return 1;
