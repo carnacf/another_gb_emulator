@@ -213,7 +213,7 @@ namespace cpu
         m_instructionSet[0x28] = &Processor::jr_cc_n<Registers::Flag::Z>;
         m_instructionSet[0x29] = &Processor::add_HL_rr<Registers::HL>;
         m_instructionSet[0x2A] = &Processor::ld_A_HLi;
-        m_instructionSet[0x2B] = &Processor::inc_rr<Registers::HL>;
+        m_instructionSet[0x2B] = &Processor::dec_rr<Registers::HL>;
         m_instructionSet[0x2C] = &Processor::inc_r<Registers::L>;
         m_instructionSet[0x2D] = &Processor::dec_r<Registers::L>;
         m_instructionSet[0x2E] = &Processor::ld_r_n_8<0x2E>;
@@ -386,7 +386,7 @@ namespace cpu
         m_instructionSet[0xD6] = &Processor::sub_n;
         m_instructionSet[0xD7] = &Processor::rst<0x10>;
         m_instructionSet[0xD8] = &Processor::ret_cc<Registers::Flag::C>;
-        m_instructionSet[0xD8] = &Processor::reti;
+        m_instructionSet[0xD9] = &Processor::reti;
         m_instructionSet[0xDA] = &Processor::jp_cc_nn<Registers::Flag::C>;
         m_instructionSet[0xDC] = &Processor::call_cc_nn<Registers::Flag::C>;
         m_instructionSet[0xDE] = &Processor::sbc_n;
@@ -531,7 +531,7 @@ namespace cpu
         m_cbInstructionSet[0x6C] = &Processor::bit_n_r<5, Registers::H>;
         m_cbInstructionSet[0x6D] = &Processor::bit_n_r<5, Registers::L>;
         m_cbInstructionSet[0x6E] = &Processor::bit_n_HL<5>;
-        m_cbInstructionSet[0x6F] = &Processor::bit_n_r<6, Registers::A>;
+        m_cbInstructionSet[0x6F] = &Processor::bit_n_r<5, Registers::A>;
         m_cbInstructionSet[0x70] = &Processor::bit_n_r<6, Registers::B>;
         m_cbInstructionSet[0x71] = &Processor::bit_n_r<6, Registers::C>;
         m_cbInstructionSet[0x72] = &Processor::bit_n_r<6, Registers::D>;
@@ -595,7 +595,7 @@ namespace cpu
         m_cbInstructionSet[0xAC] = &Processor::res_n_r<5, Registers::H>;
         m_cbInstructionSet[0xAD] = &Processor::res_n_r<5, Registers::L>;
         m_cbInstructionSet[0xAE] = &Processor::res_n_HL<5>;
-        m_cbInstructionSet[0xAF] = &Processor::res_n_r<6, Registers::A>;
+        m_cbInstructionSet[0xAF] = &Processor::res_n_r<5, Registers::A>;
         m_cbInstructionSet[0xB0] = &Processor::res_n_r<6, Registers::B>;
         m_cbInstructionSet[0xB1] = &Processor::res_n_r<6, Registers::C>;
         m_cbInstructionSet[0xB2] = &Processor::res_n_r<6, Registers::D>;
@@ -659,7 +659,7 @@ namespace cpu
         m_cbInstructionSet[0xEC] = &Processor::set_n_r<5, Registers::H>;
         m_cbInstructionSet[0xED] = &Processor::set_n_r<5, Registers::L>;
         m_cbInstructionSet[0xEE] = &Processor::set_n_HL<5>;
-        m_cbInstructionSet[0xEF] = &Processor::set_n_r<6, Registers::A>;
+        m_cbInstructionSet[0xEF] = &Processor::set_n_r<5, Registers::A>;
         m_cbInstructionSet[0xF0] = &Processor::set_n_r<6, Registers::B>;
         m_cbInstructionSet[0xF1] = &Processor::set_n_r<6, Registers::C>;
         m_cbInstructionSet[0xF2] = &Processor::set_n_r<6, Registers::D>;
@@ -1226,9 +1226,15 @@ namespace cpu
 
         int res = sp + n;
 
-        int carryBits = sp ^ n ^ res;
+        int carryBits = sp ^ n ^ (res & 0xFFFF);
         m_registers.setFlag(Registers::Flag::Z, false);
-        updateFlagsWithCarry16bit(carryBits, true, false);
+        
+        bool h = (carryBits & 0x10) == 0x10;
+        bool c = ((carryBits & 0x100) == 0x100);
+
+        m_registers.setFlag(Registers::Flag::N, false);
+        m_registers.setFlag(Registers::Flag::H, h);
+        m_registers.setFlag(Registers::Flag::C, c);
 
         m_registers.setSP((uint16_t)res);
 
@@ -1256,7 +1262,7 @@ namespace cpu
     int Processor::rlca()
     {
         rlc_r<Registers::A>();
-
+        m_registers.setFlag(Registers::Flag::Z, false);
         return 1;
     }
 
@@ -1303,7 +1309,7 @@ namespace cpu
     int Processor::rrca()
     {
         rrc_r<Registers::A>();
-
+        m_registers.setFlag(Registers::Flag::Z, false);
         return 1;
     }
     int Processor::rrc_HL()
@@ -1405,7 +1411,7 @@ namespace cpu
     void Processor::bit_n(uint8_t n, uint16_t r)
     {
         uint16_t b = 1 << n;
-        bool isSet = (b | r) == b;
+        bool isSet = (b & r) == 0;
 
         m_registers.setFlag(Registers::Flag::Z, isSet);
         m_registers.setFlag(Registers::Flag::N, 0);
