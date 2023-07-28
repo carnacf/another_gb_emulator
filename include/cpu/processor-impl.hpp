@@ -547,7 +547,8 @@ namespace cpu
         static_assert(n < 8);
         
         uint16_t hl = m_registers.read16<Registers::HL>();
-        bit_n(n, hl);
+        uint8_t val = m_memory.read8(hl);
+        bit_n(n, val);
 
         return 3;
     }
@@ -571,9 +572,10 @@ namespace cpu
         static_assert(n < 8);
 
         uint16_t hl = m_registers.read16<Registers::HL>();
-        hl = hl & ~(1 << n);
+        uint8_t val = m_memory.read8(hl);
+        val = val & ~(1 << n);
 
-        m_registers.write16<Registers::HL>(hl);
+        m_memory.write8(hl, val);
 
         return 4;
     }
@@ -597,9 +599,10 @@ namespace cpu
         static_assert(n < 8);
 
         uint16_t hl = m_registers.read16<Registers::HL>();
-        hl = hl | (1 << n);
+        uint8_t val = m_memory.read8(hl);
+        val = val | (1 << n);
 
-        m_registers.write16<Registers::HL>(hl);
+        m_memory.write8(hl, val);
 
         return 4;
     }

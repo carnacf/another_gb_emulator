@@ -1269,17 +1269,18 @@ namespace cpu
     int Processor::rlc_HL()
     {
         uint16_t hl = m_registers.read16<Registers::HL>();
-        bool c = (hl & 0x8000) == 0x8000;
+        uint8_t val = m_memory.read8(hl);
+        bool c = (val & 0x80) == 0x80;
 
-        hl <<= 1;
+        val <<= 1;
         if (c)
         {
-            hl |= 1;
+            val |= 1;
         }
 
-        updateFlags(hl, false, false, c);
+        updateFlags(val, false, false, c);
 
-        m_registers.write16<Registers::HL>(hl);
+        m_memory.write8(hl, val);
 
         return 4;
     }
@@ -1293,15 +1294,16 @@ namespace cpu
 
     int Processor::rl_HL()
     {
-        uint16_t r = m_registers.read16<Registers::HL>();
-        bool c = (r & 0x8000) == 0x8000;
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        uint8_t val = m_memory.read8(hl);
+        bool c = (val & 0x80) == 0x80;
         uint16_t oldCarry = m_registers.isSetFlag(Registers::Flag::C) ? 1 : 0;
-        r <<= 1;
-        r |= oldCarry;
+        val <<= 1;
+        val |= oldCarry;
 
-        updateFlags(r, false, false, c);
+        updateFlags(val, false, false, c);
 
-        m_registers.write16<Registers::HL>(r);
+        m_memory.write8(hl, val);
 
         return 4;
     }
@@ -1315,17 +1317,18 @@ namespace cpu
     int Processor::rrc_HL()
     {
         uint16_t hl = m_registers.read16<Registers::HL>();
-        bool c = (hl & 1) == 1;
+        uint8_t val = m_memory.read8(hl);
+        bool c = (val & 1) == 1;
 
-        hl >>= 1;
+        val >>= 1;
         if (c)
         {
-            hl |= 0x8000;
+            val |= 0x80;
         }
 
-        updateFlags(hl, false, false, c);
+        updateFlags(val, false, false, c);
 
-        m_registers.write16<Registers::HL>(hl);
+        m_memory.write8(hl, val);
 
         return 4;
     }
@@ -1340,70 +1343,75 @@ namespace cpu
     
     int Processor::rr_HL()
     {
-        uint16_t r = m_registers.read16<Registers::HL>();
-        bool c = (r & 1) == 1;
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        uint8_t val = m_memory.read8(hl);
+        bool c = (val & 1) == 1;
         uint16_t oldCarry = m_registers.isSetFlag(Registers::Flag::C) ? 0X8000 : 0;
-        r >>= 1;
-        r |= oldCarry;
+        val >>= 1;
+        val |= oldCarry;
 
-        updateFlags(r, false, false, c);
+        updateFlags(val, false, false, c);
 
-        m_registers.write16<Registers::HL>(r);
+        m_memory.write8(hl, val);
 
         return 4;
     }
 
     int Processor::sla_HL()
     {
-        uint16_t r = m_registers.read16<Registers::HL>();
-        bool c = (r & 0x8000) == 0x8000;
-        r <<= 1;
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        uint8_t val = m_memory.read8(hl);
+        bool c = (hl & 0x80) == 0x80;
+        hl <<= 1;
 
-        updateFlags(r, false, false, c);
-        m_registers.write16<Registers::HL>(r);
+        updateFlags(val, false, false, c);
+        m_memory.write8(hl, val);
 
         return 4;
     }
 
     int Processor::sra_HL()
     {
-        uint16_t r = m_registers.read16<Registers::HL>();
-        bool c = (r & 1) == 1;
-        if ((r & 0x8000) != 0)
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        uint8_t val = m_memory.read8(hl);
+        bool c = (val & 1) == 1;
+        if ((val & 0x80) != 0)
         {
-            r >>= 1;
-            r |= 0x80;
+            val >>= 1;
+            val |= 0x80;
         }
         else
         {
-            r >>= 1;
+            val >>= 1;
         }
         
-        updateFlags(r, false, false, c);
-        m_registers.write16<Registers::HL>(r);
+        updateFlags(val, false, false, c);
+        m_memory.write8(hl, val);
 
         return 4;
     }
 
     int Processor::srl_HL()
     {
-        uint16_t r = m_registers.read16<Registers::HL>();
-        bool c = (r & 1) == 1;
-        r >>= 1;
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        uint8_t val = m_memory.read8(hl);
+        bool c = (val & 1) == 1;
+        val >>= 1;
 
-        updateFlags(r, false, false, c);
-        m_registers.write16<Registers::HL>(r);
+        updateFlags(val, false, false, c);
+        m_memory.write8(hl, val);
 
         return 4;
     }
 
     int Processor::swap_HL()
     {
-        uint16_t r = m_registers.read16<Registers::HL>();
-        r = (r << 8) | (r >> 8);
+        uint16_t hl = m_registers.read16<Registers::HL>();
+        uint8_t val = m_memory.read8(hl);
+        val = (val << 4) | (val >> 4);
 
-        updateFlags(r, false, false, false);
-        m_registers.write16<Registers::HL>(r);
+        updateFlags(val, false, false, false);
+        m_memory.write8(hl, val);
 
         return 4;
     }
