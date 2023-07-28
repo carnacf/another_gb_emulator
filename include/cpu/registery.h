@@ -76,14 +76,18 @@ public:
     template<Paired NAME>
     void write16(uint16_t val)
     {
-        m_registers[(int)NAME] = utils::high(val);
-        m_registers[(int)NAME + 1] = utils::low(val);
+        write8<(Names)((int)NAME)>(utils::high(val));
+        write8<(Names)((int)NAME + 1)>(utils::low(val));
     }
 
     template<Names NAME>
-    void write8(uint8_t val1)
+    void write8(uint8_t val)
     {
-        m_registers[(int)NAME] = val1;
+        if constexpr (NAME == Names::F)
+        {
+            val = val & 0xF0;
+        }
+        m_registers[(int)NAME] = val;
     }
   
     template<Paired NAME>
@@ -200,8 +204,8 @@ public:
         return "";
     }
 private:
-    uint8_t m_registers[8] = {};
-    uint16_t m_sp = 0;
-    uint16_t m_pc = 0; // TODO: add reset method
+    uint8_t m_registers[8] = {0x01, 0xB0, 0x00, 0x13, 0x00, 0xD8, 0x01, 0x4D};
+    uint16_t m_sp = 0xFFFE;
+    uint16_t m_pc = 0x0100;
 };
 }
