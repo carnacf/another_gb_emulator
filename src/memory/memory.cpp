@@ -85,7 +85,7 @@ uint8_t Memory::read8(uint16_t addr)
     else if (addr < 0xFF80 && addr > 0xFEFF)
     {
         // MMIO
-        m_mmio.read(addr);
+        return m_mmio.read(addr);
     }
     else if (addr < 0xFFFF)
     {
