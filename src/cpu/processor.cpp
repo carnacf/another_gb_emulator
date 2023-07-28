@@ -353,7 +353,7 @@ namespace cpu
         m_instructionSet[0xB4] = &Processor::or_r<Registers::H>;
         m_instructionSet[0xB5] = &Processor::or_r<Registers::L>;
         m_instructionSet[0xB6] = &Processor::or_HL;
-        m_instructionSet[0xA7] = &Processor::or_r<Registers::A>;
+        m_instructionSet[0xB7] = &Processor::or_r<Registers::A>;
         m_instructionSet[0xB8] = &Processor::cp_r<Registers::B>;
         m_instructionSet[0xB9] = &Processor::cp_r<Registers::C>;
         m_instructionSet[0xBA] = &Processor::cp_r<Registers::D>;
@@ -778,22 +778,21 @@ namespace cpu
     int Processor::ld_HLd_A()
     {
         uint16_t hl = m_registers.read16<Registers::HL>();
-        uint8_t val = m_memory.read8(hl);
+        uint8_t a = m_registers.read8<Registers::A>();
+        m_memory.write8(hl, a);
 
         m_registers.write16<Registers::HL>(--hl);
-        m_registers.write8<Registers::A>(val);
 
         return 2;
-
     }
         
     int Processor::ld_A_HLd()
     {
         uint16_t hl = m_registers.read16<Registers::HL>();
-        uint8_t a = m_registers.read8<Registers::A>();
-        m_memory.write8(hl, a);
+        uint8_t val = m_memory.read8(hl);
 
         m_registers.write16<Registers::HL>(--hl);
+        m_registers.write8<Registers::A>(val);
 
         return 2;
     }
@@ -801,10 +800,10 @@ namespace cpu
     int Processor::ld_HLi_A()
     {
         uint16_t hl = m_registers.read16<Registers::HL>();
-        uint8_t val = m_memory.read8(hl);
+        uint8_t a = m_registers.read8<Registers::A>();
+        m_memory.write8(hl, a);
 
         m_registers.write16<Registers::HL>(++hl);
-        m_registers.write8<Registers::A>(val);
 
         return 2;
     }
@@ -812,10 +811,10 @@ namespace cpu
     int Processor::ld_A_HLi()
     {
         uint16_t hl = m_registers.read16<Registers::HL>();
-        uint8_t a = m_registers.read8<Registers::A>();
-        m_memory.write8(hl, a);
+        uint8_t val = m_memory.read8(hl);
 
         m_registers.write16<Registers::HL>(++hl);
+        m_registers.write8<Registers::A>(val);
 
         return 2;
     }
@@ -1059,7 +1058,7 @@ namespace cpu
         m_memory.write8(hl, r);
 
         int carryBits = val ^ 1 ^ r;
-        updateFlagsWithCarry8bit(carryBits, r, false, false);
+        updateFlagsWithCarry8bit(carryBits, r, false, true);
 
         return 3;
     }
@@ -1329,7 +1328,7 @@ namespace cpu
     int Processor::rra()
     {
         rr_r<Registers::A>();
-
+        m_registers.setFlag(Registers::Flag::Z, false);
         return 1;
     }
     

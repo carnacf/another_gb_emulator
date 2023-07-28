@@ -8,8 +8,8 @@ namespace cpu
     int Processor::ld_r_r_8()
     {
         constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
-        uint8_t A = m_registers.read8<operands.first>();
-        m_registers.write8<operands.second>(A);
+        uint8_t A = m_registers.read8<operands.second>();
+        m_registers.write8<operands.first>(A);
 
         return 1;
     }
@@ -228,8 +228,8 @@ namespace cpu
     template<Registers::Paired NAME>
     int Processor::add_HL_rr()
     {
-        int hl = m_registers.read16<Registers::HL>();
-        int rr = m_registers.read16<NAME>();
+        int hl = (int16_t) m_registers.read16<Registers::HL>();
+        int rr = (int16_t) m_registers.read16<NAME>();
         int res = hl + rr;
 
         int carryBits = hl ^ rr ^ res;

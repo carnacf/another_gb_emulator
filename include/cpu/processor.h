@@ -167,7 +167,7 @@ private:
     // 16-bit arithmetic
     void updateFlagsWithCarry16bit(int carryBits, bool carryFlag, bool n)
     {
-        bool h = (carryBits & 0x100) == 0x100;
+        bool h = (carryBits & 0x1000) == 0x1000;
         bool c = carryFlag && ((carryBits & 0x10000) == 0x10000);
 
         m_registers.setFlag(Registers::Flag::N, n);
