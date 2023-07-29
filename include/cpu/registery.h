@@ -204,8 +204,8 @@ public:
         return "";
     }
 private:
-    uint8_t m_registers[8] = {0x01, 0xB0, 0x00, 0x13, 0x00, 0xD8, 0x01, 0x4D};
-    uint16_t m_sp = 0xFFFE;
-    uint16_t m_pc = 0x0100;
+    uint8_t m_registers[8] = {};
+    uint16_t m_sp = 0;
+    uint16_t m_pc = 0;
 };
 }
