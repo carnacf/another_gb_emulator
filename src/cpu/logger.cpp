@@ -73,7 +73,7 @@ namespace cpu
         m_instructionSet[0x33] = &Logger::inc_SP;
         m_instructionSet[0x34] = &Logger::inc_HL;
         m_instructionSet[0x35] = &Logger::dec_HL;
-        m_instructionSet[0x36] = &Logger::ld_HL_n_8<0x36>;
+        m_instructionSet[0x36] = &Logger::ld_HL_n_8;
         m_instructionSet[0x37] = &Logger::scf;
         m_instructionSet[0x38] = &Logger::jr_c_n;
         m_instructionSet[0x39] = &Logger::add_HL_SP;
@@ -527,409 +527,416 @@ namespace cpu
         m_cbInstructionSet[0xFF] = &Logger::set_n_r<7, Registers::A>;
     }
 
-    std::string Logger::unhandled(uint8_t opCode)
+    void Logger::unhandled(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : Not handled yet;\n";
+        printf("0x%2X : Not handled yet;\n", opCode);
     }
 
-    std::string Logger::nop(uint8_t opCode)
+    void Logger::nop(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : NOP;\n";
+        printf("0x%2X : NOP;\n", opCode);
     }
 
-    std::string Logger::ld_A_nn(uint8_t opCode)
+    void Logger::ld_HL_n_8(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LD A, nn;\n";
+        printf("0x%2X : LD (HL), n; \n", opCode);
     }
 
-    std::string Logger::ld_nn_A(uint8_t opCode)
+    void Logger::ld_A_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LD nn, A;";
+        printf("0x%2X : LD A, nn;\n", opCode);
     }
 
-    std::string Logger::ldh_A_aC(uint8_t opCode)
+    void Logger::ld_nn_A(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LDH A, (C);\n";
+        printf("0x%2X : LD nn, A;\n", opCode);
     }
 
-    std::string Logger::ldh_aC_A(uint8_t opCode)
+    void Logger::ldh_A_aC(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LDH (C), A;\n";
+        printf("0x%2X : : LDH A, (C);\n", opCode);
     }
 
-    std::string Logger::ldh_A_an(uint8_t opCode)
+    void Logger::ldh_aC_A(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LDH A, (n);\n";
+        printf("0x%2X : LDH (C), A;\n", opCode);
     }
 
-    std::string Logger::ldh_an_A(uint8_t opCode)
+    void Logger::ldh_A_an(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LDH (n), A;\n";
+        printf("0x%2X : LDH A, (n);\n", opCode);
     }
 
-    std::string Logger::ld_HLd_A(uint8_t opCode)
+    void Logger::ldh_an_A(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LD (HL-), A;\n";
+        printf("0x%2X : LDH (n), A;\n", opCode);
     }
 
-    std::string Logger::ld_A_HLd(uint8_t opCode)
+    void Logger::ld_HLd_A(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LD A, (HL-);\n";
+        printf("0x%2X : LD (HL-), A;\n", opCode);
     }
 
-    std::string Logger::ld_HLi_A(uint8_t opCode)
+    void Logger::ld_A_HLd(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LD (HL+), A;\n";
+        printf("0x%2X : LD A, (HL-);\n", opCode);
     }
 
-    std::string Logger::ld_A_HLi(uint8_t opCode)
+    void Logger::ld_HLi_A(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LD A, (HL+);\n";
+        printf("0x%2X : LD (HL+), A;\n", opCode);
     }
 
-    std::string Logger::ld_SP_nn(uint8_t opCode)
+    void Logger::ld_A_HLi(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LD SP, nn;\n";
+        printf("0x%2X : LD A, (HL+);\n", opCode);
     }
 
-    std::string Logger::ld_nn_SP(uint8_t opCode)
+    void Logger::ld_SP_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LD SP, rr;\n";
+        printf("0x%2X : LD SP, nn;\n", opCode);
     }
 
-    std::string Logger::ld_SP_HL(uint8_t opCode)
+    void Logger::ld_nn_SP(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LD SP, HL;\n";
+        printf("0x%2X : LD SP, rr;\n", opCode);
     }
 
-    std::string Logger::ld_HL_SP_r8(uint8_t opCode)
+    void Logger::ld_SP_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LD HL, SP + r8;\n";
+        printf("0x%2X : LD SP, HL;\n", opCode);
     }
 
-    std::string Logger::add_HL(uint8_t opCode)
+    void Logger::ld_HL_SP_r8(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : ADD (HL);\n";
+        printf("0x%2X : LD HL, SP + r8;\n", opCode);
     }
 
-    std::string Logger::add_n(uint8_t opCode)
+    void Logger::add_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : ADD n;\n";
+        printf("0x%2X : ADD (HL);\n", opCode);
     }
 
-    std::string Logger::adc_HL(uint8_t opCode)
+    void Logger::add_n(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : ADC (HL);\n";
+        printf("0x%2X : ADD n;\n", opCode);
     }
 
-    std::string Logger::adc_n(uint8_t opCode)
+    void Logger::adc_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : ADC n;\n";
+        printf("0x%2X : ADC (HL);\n", opCode);
     }
 
-    std::string Logger::sub_HL(uint8_t opCode)
+    void Logger::adc_n(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SUB (HL);\n";
+        printf("0x%2X : ADC n;\n", opCode);
     }
 
-    std::string Logger::sub_n(uint8_t opCode)
+    void Logger::sub_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SUB n;\n";
+        printf("0x%2X : SUB (HL);\n", opCode);
     }
 
-    std::string Logger::sbc_HL(uint8_t opCode)
+    void Logger::sub_n(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SBC (HL);\n";
+        printf("0x%2X : SUB n;\n", opCode);
     }
 
-    std::string Logger::sbc_n(uint8_t opCode)
+    void Logger::sbc_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SBC n;\n";
+        printf("0x%2X : SBC (HL);\n", opCode);
     }
 
-    std::string Logger::cp_HL(uint8_t opCode)
+    void Logger::sbc_n(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : CP (HL);\n";
+        printf("0x%2X : SBC n;\n", opCode);
     }
 
-    std::string Logger::cp_n(uint8_t opCode)
+    void Logger::cp_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : CP n;\n";
+        printf("0x%2X : CP (HL);\n", opCode);
     }
 
-    std::string Logger::inc_HL(uint8_t opCode)
+    void Logger::cp_n(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : DEC (HL);\n";
+        printf("0x%2X : CP n;\n", opCode);
     }
 
-    std::string Logger::dec_HL(uint8_t opCode)
+    void Logger::inc_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : INC (HL);\n";
+        printf("0x%2X : DEC (HL);\n", opCode);
     }
 
-    std::string Logger::and_HL(uint8_t opCode)
+    void Logger::dec_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : AND (HL);\n";
+        printf("0x%2X : INC (HL);\n", opCode);
     }
 
-    std::string Logger::and_n(uint8_t opCode)
+    void Logger::and_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : AND n;\n";
+        printf("0x%2X : AND (HL);\n", opCode);
     }
 
-    std::string Logger::or_HL(uint8_t opCode)
+    void Logger::and_n(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : OR (HL);\n";
+        printf("0x%2X : AND n;\n", opCode);
     }
 
-    std::string Logger::or_n(uint8_t opCode)
+    void Logger::or_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : OR n;\n";
+        printf("0x%2X : OR (HL);\n", opCode);
     }
 
-    std::string Logger::xor_HL(uint8_t opCode)
+    void Logger::or_n(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : XOR (HL);\n";
+        printf("0x%2X : OR n;\n", opCode);
     }
 
-    std::string Logger::xor_n(uint8_t opCode)
+    void Logger::xor_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : XOR n;\n";
+        printf("0x%2X : XOR (HL);\n", opCode);
     }
 
-    std::string Logger::scf(uint8_t opCode)
+    void Logger::xor_n(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : CCF;\n";
+        printf("0x%2X : XOR n;\n", opCode);
     }
 
-    std::string Logger::ccf(uint8_t opCode)
+    void Logger::scf(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SCF;\n";
+        printf("0x%2X : CCF;\n", opCode);
     }
 
-    std::string Logger::cpl(uint8_t opCode)
+    void Logger::ccf(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : CPL;\n";
+        printf("0x%2X : SCF;\n", opCode);
     }
 
-    std::string Logger::daa(uint8_t opCode)
+    void Logger::cpl(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : DAA;\n";
+        printf("0x%2X : CPL;\n", opCode);
     }
 
-    std::string Logger::add_HL_SP(uint8_t opCode)
+    void Logger::daa(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : ADD HL SP;\n";
+        printf("0x%2X : DAA;\n", opCode);
     }
 
-    std::string Logger::add_SP_n(uint8_t opCode)
+    void Logger::add_HL_SP(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : ADD SP n;\n";
+        printf("0x%2X : ADD HL SP;\n", opCode);
     }
 
-    std::string Logger::inc_SP(uint8_t opCode)
+    void Logger::add_SP_n(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : INC SP;\n";
+        printf("0x%2X : ADD SP n;\n", opCode);
     }
 
-    std::string Logger::dec_SP(uint8_t opCode)
+    void Logger::inc_SP(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : DEC SP;\n";
+        printf("0x%2X : INC SP;\n", opCode);
     }
 
-    std::string Logger::rlca(uint8_t opCode)
+    void Logger::dec_SP(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RLCA;\n";
+        printf("0x%2X : DEC SP;\n", opCode);
     }
 
-    std::string Logger::rlc_HL(uint8_t opCode)
+    void Logger::rlca(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RLC HL;\n";
+        printf("0x%2X : RLCA;\n", opCode);
     }
 
-    std::string Logger::rla(uint8_t opCode)
+    void Logger::rlc_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RLA;\n";
+        printf("0x%2X : RLC HL;\n", opCode);
     }
 
-    std::string Logger::rl_HL(uint8_t opCode)
+    void Logger::rla(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RL HL;\n";
+        printf("0x%2X : RLA;\n", opCode);
     }
 
-    std::string Logger::rrca(uint8_t opCode)
+    void Logger::rl_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RRCA;\n";
+        printf("0x%2X : RL HL;\n", opCode);
     }
 
-    std::string Logger::rrc_HL(uint8_t opCode)
+    void Logger::rrca(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RRC HL;\n";
+        printf("0x%2X : RRCA;\n", opCode);
     }
 
-    std::string Logger::rra(uint8_t opCode)
+    void Logger::rrc_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RRA;\n";
+        printf("0x%2X : RRC HL;\n", opCode);
     }
 
-    std::string Logger::rr_HL(uint8_t opCode)
+    void Logger::rra(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RR HL;\n";
+        printf("0x%2X : RRA;\n", opCode);
     }
 
-    std::string Logger::sla_HL(uint8_t opCode)
+    void Logger::rr_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SLA HL;\n";
+        printf("0x%2X : RR HL;\n", opCode);
     }
 
-    std::string Logger::sra_HL(uint8_t opCode)
+    void Logger::sla_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SRA HL;\n";
+        printf("0x%2X : SLA HL;\n", opCode);
     }
 
-    std::string Logger::swap_HL(uint8_t opCode)
+    void Logger::sra_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SWAP HL;\n";
+        printf("0x%2X : SRA HL;\n", opCode);
     }
 
-    std::string Logger::srl_HL(uint8_t opCode)
+    void Logger::swap_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SRL HL;\n";
+        printf("0x%2X : SWAP HL;\n", opCode);
     }
 
-    std::string Logger::jp_nn(uint8_t opCode)
+    void Logger::srl_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JP nn;\n";
+        printf("0x%2X : SRL HL;\n", opCode);
     }
 
-    std::string Logger::jp_HL(uint8_t opCode)
+    void Logger::jp_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JP HL;\n";
+        printf("0x%2X : JP nn;\n", opCode);
     }
 
-    std::string Logger::jp_nz_nn(uint8_t opCode)
+    void Logger::jp_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JP NZ, nn;\n";
+        printf("0x%2X : JP HL;\n", opCode);
     }
 
-    std::string Logger::jp_z_nn(uint8_t opCode)
+    void Logger::jp_nz_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JP Z, nn;\n";
+        printf("0x%2X : JP NZ, nn;\n", opCode);
     }
 
-    std::string Logger::jp_nc_nn(uint8_t opCode)
+    void Logger::jp_z_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JP NC, nn;\n";
+        printf("0x%2X : JP Z, nn;\n", opCode);
     }
 
-    std::string Logger::jp_c_nn(uint8_t opCode)
+    void Logger::jp_nc_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JP C, nn;\n";
+        printf("0x%2X : JP NC, nn;\n", opCode);
     }
 
-    std::string Logger::jr_e(uint8_t opCode)
+    void Logger::jp_c_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JR e;\n";
+        printf("0x%2X : JP C, nn;\n", opCode);
     }
 
-    std::string Logger::jr_nz_n(uint8_t opCode)
+    void Logger::jr_e(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JR NZ, nn;\n";
+        printf("0x%2X : JR e;\n", opCode);
     }
 
-    std::string Logger::jr_z_n(uint8_t opCode)
+    void Logger::jr_nz_n(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JR Z, nn;\n";
+        printf("0x%2X : JR NZ, nn;\n", opCode);
     }
 
-    std::string Logger::jr_nc_n(uint8_t opCode)
+    void Logger::jr_z_n(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JR NC, nn;\n";
+        printf("0x%2X : JR Z, nn;\n", opCode);
     }
 
-    std::string Logger::jr_c_n(uint8_t opCode)
+    void Logger::jr_nc_n(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : JR C, nn;\n";
+        printf("0x%2X : JR NC, nn;\n", opCode);
     }
 
-    std::string Logger::call_nn(uint8_t opCode)
+    void Logger::jr_c_n(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : CALL nn;\n";
+        printf("0x%2X : JR C, nn;\n", opCode);
     }
 
-    std::string Logger::call_nz_nn(uint8_t opCode)
+    void Logger::call_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : CALL NZ, nn;\n";
+        printf("0x%2X : CALL nn;\n", opCode);
     }
 
-    std::string Logger::call_z_nn(uint8_t opCode)
+    void Logger::call_nz_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : CALL Z, nn;\n";
+        printf("0x%2X : CALL NZ, nn;\n", opCode);
     }
 
-    std::string Logger::call_nc_nn(uint8_t opCode)
+    void Logger::call_z_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : CALL NC, nn;\n";
+        printf("0x%2X : CALL Z, nn;\n", opCode);
     }
 
-    std::string Logger::call_c_nn(uint8_t opCode)
+    void Logger::call_nc_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : CALL C, nn;\n";
+        printf("0x%2X : CALL NC, nn;\n", opCode);
     }
 
-    std::string Logger::ret(uint8_t opCode)
+    void Logger::call_c_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RET;\n";
+        printf("0x%2X : CALL C, nn;\n", opCode);
     }
 
-    std::string Logger::ret_nz(uint8_t opCode)
+    void Logger::ret(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RET NZ;\n";
+        printf("0x%2X : RET;\n", opCode);
     }
 
-    std::string Logger::ret_z(uint8_t opCode)
+    void Logger::ret_nz(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RET Z;\n";
+        printf("0x%2X : RET NZ;\n", opCode);
     }
 
-    std::string Logger::ret_nc(uint8_t opCode)
+    void Logger::ret_z(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RET C;\n";
+        printf("0x%2X : RET Z;\n", opCode);
     }
 
-    std::string Logger::ret_c(uint8_t opCode)
+    void Logger::ret_nc(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RET NC;\n";
+        printf("0x%2X : RET C;\n", opCode);
     }
 
-    std::string Logger::reti(uint8_t opCode)
+    void Logger::ret_c(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RETI;\n";
+        printf("0x%2X : RET NC;\n", opCode);
+    }
+
+    void Logger::reti(uint8_t opCode)
+    {
+        printf("0x%2X : RETI;\n", opCode);
     }
     
-    std::string Logger::di(uint8_t opCode)
+    void Logger::di(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : DI;\n";
+        printf("0x%2X : DI;\n", opCode);
     }
     
-    std::string Logger::ei(uint8_t opCode)
+    void Logger::ei(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : EI;\n";
+        printf("0x%2X : EI;\n", opCode);
     }
 
-    std::string Logger::halt(uint8_t opCode)
+    void Logger::halt(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : HALT;\n";
+        printf("0x%2X : HALT;\n", opCode);
     }
 
-    std::string Logger::stop(uint8_t opCode)
+    void Logger::stop(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : STOP;\n";
+        printf("0x%2X : STOP;\n", opCode);
     }
 
-    std::string Logger::cb(uint8_t)
+    void Logger::cb(uint8_t)
     {
+        printf("CB ");
+        
         uint8_t n = m_memory.read8(m_registers.getPC() + 1);
-        return "CB " + ((this->*m_cbInstructionSet[n]))(n);
+        ((this->*m_cbInstructionSet[n]))(n);
     }
 }

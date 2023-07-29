@@ -42,7 +42,8 @@ namespace cpu
         uint8_t opCode = m_memory.read8(m_registers.getPC());
         if (trace)
         {
-            std::cout << "PC=" << m_registers.getPC() << " : " << m_tracer(opCode);
+            printf("PC=0x%04X : ", m_registers.getPC());
+            m_tracer(opCode);
         }
 
         m_registers.incrementPC();

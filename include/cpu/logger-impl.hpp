@@ -5,239 +5,233 @@
 namespace cpu
 {
     template<uint8_t opcode>
-    std::string Logger::ld_r_r_8(uint8_t opCode)
+    void Logger::ld_r_r_8(uint8_t opCode)
     {
         constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
 
-        return std::to_string(opcode) + " : LD " + Registers::register8ToStr(operands.first) + ", " +
-            Registers::register8ToStr(operands.second) + "; \n";
+        printf("0x%2X : LD %s, %s;\n", opCode, 
+            Registers::register8ToStr(operands.first).c_str(),
+            Registers::register8ToStr(operands.second).c_str());
     }
 
     template<uint8_t opcode>
-    std::string Logger::ld_r_n_8(uint8_t opCode)
+    void Logger::ld_r_n_8(uint8_t opCode)
     {
         constexpr Registers::Names opA = opAFromOpCode<opcode>();
-
-        return std::to_string(opcode) + " : LD " + Registers::register8ToStr(opA) + ", n; \n";
+        printf("0x%2X : LD %s, n;\n", opCode, Registers::register8ToStr(opA).c_str());
     }
 
     template<uint8_t opcode>
-    std::string Logger::ld_HL_n_8(uint8_t opCode)
-    {
-        return std::to_string(opcode) + " : LD (HL), n; \n";
-    }
-
-    template<uint8_t opcode>
-    std::string Logger::ld_r_HL(uint8_t opCode)
+    void Logger::ld_r_HL(uint8_t opCode)
     {
         constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
 
-        return std::to_string(opcode) + " : LD " + Registers::register8ToStr(operands.first) + ", (HL); \n";
+        printf("0x%2X : LD %s, (HL);\n", opCode, Registers::register8ToStr(operands.first).c_str());
     }
 
     template<uint8_t opcode>
-    std::string Logger::ld_HL_r(uint8_t opCode)
+    void Logger::ld_HL_r(uint8_t opCode)
     {
         constexpr std::pair<Registers::Names, Registers::Names> operands = extractLDRROperands<opcode>();
 
-        return std::to_string(opcode) + " : LD (HL), " + Registers::register8ToStr(operands.first) + "; \n";
+        printf("0x%2X : LD (HL), %s;\n", opCode, Registers::register8ToStr(operands.first).c_str());
     }
 
     template<Registers::Paired NAME>
-    std::string Logger::ld_A_r16(uint8_t opCode)
+    void Logger::ld_A_r16(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LD A, (" + Registers::register16ToStr(NAME) + "); \n";
+        printf("0x%2X : LD A, (%s);\n", opCode, Registers::register16ToStr(NAME).c_str());
     }
 
     template<Registers::Paired NAME>
-    std::string Logger::ld_r16_A(uint8_t opCode)
+    void Logger::ld_r16_A(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LD (" + Registers::register16ToStr(NAME) + "), A; \n";
+        printf("0x%2X : LD (%s), A;\n", opCode, Registers::register16ToStr(NAME).c_str());
     }
 
     template<Registers::Paired NAME>
-    std::string Logger::ld_rr_nn(uint8_t opCode)
+    void Logger::ld_rr_nn(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : LD " + m_registers.register16ToStr(NAME) + ", nn;\n";
+        printf("0x%2X : LD %s, nn;\n", opCode, Registers::register16ToStr(NAME).c_str());
     }
 
     template<Registers::Paired NAME>
-    std::string Logger::push(uint8_t opCode)
+    void Logger::push(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : PUSH " + m_registers.register16ToStr(NAME) + ";\n";
+        printf("0x%2X : PUSH %s;\n", opCode, Registers::register16ToStr(NAME).c_str());
     }
 
     template<Registers::Paired NAME>
-    std::string Logger::pop(uint8_t opCode)
+    void Logger::pop(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : POP " + m_registers.register16ToStr(NAME) + ";\n";
+        printf("0x%2X : POP %s;\n", opCode, Registers::register16ToStr(NAME).c_str());
     }
 
     template<Registers::Names NAME>
-    std::string Logger::add_r(uint8_t opCode)
+    void Logger::add_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : ADD " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : ADD %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<Registers::Names NAME>
-    std::string Logger::adc_r(uint8_t opCode)
+    void Logger::adc_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : ADC " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : ADC %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<Registers::Names NAME>
-    std::string Logger::sub_r(uint8_t opCode)
+    void Logger::sub_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SUB " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : SUB %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<Registers::Names NAME>
-    std::string Logger::sbc_r(uint8_t opCode)
+    void Logger::sbc_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SBC " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : SBC %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<Registers::Names NAME>
-    std::string Logger::cp_r(uint8_t opCode)
+    void Logger::cp_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : CP " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : CP %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<Registers::Names NAME>
-    std::string Logger::inc_r(uint8_t opCode)
+    void Logger::inc_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : INC " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : INC %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<Registers::Names NAME>
-    std::string Logger::dec_r(uint8_t opCode)
+    void Logger::dec_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : DEC " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : DEC %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<Registers::Names NAME>
-    std::string Logger::and_r(uint8_t opCode)
+    void Logger::and_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : AND " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : AND %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<Registers::Names NAME>
-    std::string Logger::or_r(uint8_t opCode)
+    void Logger::or_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : OR " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : OR %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<Registers::Names NAME>
-    std::string Logger::xor_r(uint8_t opCode)
+    void Logger::xor_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : XOR " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : XOR %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<Registers::Paired NAME>
-    std::string Logger::add_HL_rr(uint8_t opCode)
+    void Logger::add_HL_rr(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : ADD HL " + m_registers.register16ToStr(NAME) + ";\n";
+        printf("0x%2X : ADD HL %s;\n", opCode, m_registers.register16ToStr(NAME).c_str());
     }
 
     template<Registers::Paired NAME>
-    std::string Logger::inc_rr(uint8_t opCode)
+    void Logger::inc_rr(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : INC " + m_registers.register16ToStr(NAME) + ";\n";
+        printf("0x%2X : INC %s;\n", opCode, m_registers.register16ToStr(NAME).c_str());
     }
 
     template<Registers::Paired NAME>
-    std::string Logger::dec_rr(uint8_t opCode)
+    void Logger::dec_rr(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : DEC " + m_registers.register16ToStr(NAME) + ";\n";
+        printf("0x%2X : DEC %s;\n", opCode, m_registers.register16ToStr(NAME).c_str());
     }
 
     template<uint8_t n>
-    std::string Logger::rst(uint8_t opCode)
+    void Logger::rst(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RST " + std::to_string(n) + ";\n";
+        printf("0x%2X : RST %u;\n", opCode, n);
     }
 
     template<Registers::Names NAME>
-    std::string Logger::rlc_r(uint8_t opCode)
+    void Logger::rlc_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RLC " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : RLC %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<Registers::Names NAME>
-    std::string Logger::rrc_r(uint8_t opCode)
+    void Logger::rrc_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RRC " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : RRC %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<Registers::Names NAME>
-    std::string Logger::rl_r(uint8_t opCode)
+    void Logger::rl_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RL " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : RL %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<Registers::Names NAME>
-    std::string Logger::rr_r(uint8_t opCode)
+    void Logger::rr_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RR " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : RR %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<Registers::Names NAME>
-    std::string Logger::sla_r(uint8_t opCode)
+    void Logger::sla_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SLA " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : SLA %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<Registers::Names NAME>
-    std::string Logger::sra_r(uint8_t opCode)
+    void Logger::sra_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SRA " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : SRA %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<Registers::Names NAME>
-    std::string Logger::swap_r(uint8_t opCode)
+    void Logger::swap_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SWAP " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : SWAP %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<Registers::Names NAME>
-    std::string cpu::Logger::srl_r(uint8_t opCode)
+    void cpu::Logger::srl_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SRL " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : SRL %s;\n", opCode, m_registers.register8ToStr(NAME).c_str());
     }
    
     template<uint8_t n, Registers::Names NAME>
-    std::string Logger::bit_n_r(uint8_t opCode)
+    void Logger::bit_n_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : BIT " + std::to_string(n)+ ", " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : BIT %u, %s;\n", opCode, n, m_registers.register8ToStr(NAME).c_str());
     }
     
     template<uint8_t n>
-    std::string Logger::bit_n_HL(uint8_t opCode)
+    void Logger::bit_n_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : BIT " + std::to_string(n) + ", HL;\n";;
+        printf("0x%2X : BIT %u, HL;\n", opCode, n);
     }
 
     template<uint8_t n, Registers::Names NAME>
-    std::string Logger::res_n_r(uint8_t opCode)
+    void Logger::res_n_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RES " + std::to_string(n) + ", " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : RES %u, %s;\n", opCode, n, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<uint8_t n>
-    std::string Logger::res_n_HL(uint8_t opCode)
+    void Logger::res_n_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : RES " + std::to_string(n) + ", HL;\n";
+        printf("0x%2X : RES %u, HL;\n", opCode, n);
     }
 
     template<uint8_t n, Registers::Names NAME>
-    std::string Logger::set_n_r(uint8_t opCode)
+    void Logger::set_n_r(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SET " + std::to_string(n) + ", " + m_registers.register8ToStr(NAME) + ";\n";
+        printf("0x%2X : SET %u, %s;\n", opCode, n, m_registers.register8ToStr(NAME).c_str());
     }
 
     template<uint8_t n>
-    std::string Logger::set_n_HL(uint8_t opCode)
+    void Logger::set_n_HL(uint8_t opCode)
     {
-        return std::to_string(opCode) + " : SET " + std::to_string(n) + ", HL;\n";
+        printf("0x%2X : SET %u, HL;\n", opCode, n);
     }
 }

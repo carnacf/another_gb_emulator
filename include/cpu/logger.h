@@ -4,8 +4,6 @@
 
 #include "registery.h"
 
-#include <string>
-
 class Memory;
 
 namespace cpu
@@ -15,12 +13,12 @@ namespace cpu
     class Logger
     {
     public:
-        using Disassembly = std::string(Logger::*)(uint8_t);
+        using Disassembly = void (Logger::*)(uint8_t);
 
         Logger() = delete;
         Logger(Registers& regist, Memory& mem);
 
-        std::string operator()(uint8_t opCode)
+        void operator()(uint8_t opCode)
         {
             return ((this->*m_instructionSet[opCode]))(opCode);
         }
@@ -28,202 +26,201 @@ namespace cpu
         void fillInstructionSet();
         void fillCbInstructionSet();
 
-        std::string unhandled(uint8_t opcode);
+        void unhandled(uint8_t opcode);
 
-        std::string nop(uint8_t opcode);
-        std::string cb(uint8_t opcode);
+        void nop(uint8_t opcode);
+        void cb(uint8_t opcode);
         // 8bit Loads
         template<uint8_t opcode>
-        std::string ld_r_r_8(uint8_t opCode);
+        void ld_r_r_8(uint8_t opCode);
         template<uint8_t opcode>
-        std::string ld_r_n_8(uint8_t opCode);
+        void ld_r_n_8(uint8_t opCode);
+        void ld_HL_n_8(uint8_t opCode);
         template<uint8_t opcode>
-        std::string ld_HL_n_8(uint8_t opCode);
+        void ld_r_HL(uint8_t opCode);
         template<uint8_t opcode>
-        std::string ld_r_HL(uint8_t opCode);
-        template<uint8_t opcode>
-        std::string ld_HL_r(uint8_t opCode);
+        void ld_HL_r(uint8_t opCode);
         template<Registers::Paired NAME>
-        std::string ld_A_r16(uint8_t opCode);
+        void ld_A_r16(uint8_t opCode);
         template<Registers::Paired NAME>
-        std::string ld_r16_A(uint8_t opCode);
-        std::string ld_A_nn(uint8_t opCode);
-        std::string ld_nn_A(uint8_t opCode);
-        std::string ldh_A_aC(uint8_t opCode);
-        std::string ldh_aC_A(uint8_t opCode);
-        std::string ldh_A_an(uint8_t opCode);
-        std::string ldh_an_A(uint8_t opCode);
-        std::string ld_HLd_A(uint8_t opCode);
-        std::string ld_A_HLd(uint8_t opCode);
-        std::string ld_HLi_A(uint8_t opCode);
-        std::string ld_A_HLi(uint8_t opCode);
+        void ld_r16_A(uint8_t opCode);
+        void ld_A_nn(uint8_t opCode);
+        void ld_nn_A(uint8_t opCode);
+        void ldh_A_aC(uint8_t opCode);
+        void ldh_aC_A(uint8_t opCode);
+        void ldh_A_an(uint8_t opCode);
+        void ldh_an_A(uint8_t opCode);
+        void ld_HLd_A(uint8_t opCode);
+        void ld_A_HLd(uint8_t opCode);
+        void ld_HLi_A(uint8_t opCode);
+        void ld_A_HLi(uint8_t opCode);
 
         // 16bits loads
         template<Registers::Paired NAME>
-        std::string ld_rr_nn(uint8_t opCode);
-        std::string ld_SP_nn(uint8_t opCode);
-        std::string ld_nn_SP(uint8_t opCode);
-        std::string ld_SP_HL(uint8_t opCode);
-        std::string ld_HL_SP_r8(uint8_t opCode);
+        void ld_rr_nn(uint8_t opCode);
+        void ld_SP_nn(uint8_t opCode);
+        void ld_nn_SP(uint8_t opCode);
+        void ld_SP_HL(uint8_t opCode);
+        void ld_HL_SP_r8(uint8_t opCode);
 
         template<Registers::Paired NAME>
-        std::string push(uint8_t opCode);
+        void push(uint8_t opCode);
         template<Registers::Paired NAME>
-        std::string pop(uint8_t opCode);
+        void pop(uint8_t opCode);
 
         // 8-bit arithmetic and logical instructions
         template<Registers::Names NAME>
-        std::string add_r(uint8_t opCode);
-        std::string add_HL(uint8_t opCode);
-        std::string add_n(uint8_t opCode);
+        void add_r(uint8_t opCode);
+        void add_HL(uint8_t opCode);
+        void add_n(uint8_t opCode);
 
         template<Registers::Names NAME>
-        std::string adc_r(uint8_t opCode);
-        std::string adc_HL(uint8_t opCode);
-        std::string adc_n(uint8_t opCode);
+        void adc_r(uint8_t opCode);
+        void adc_HL(uint8_t opCode);
+        void adc_n(uint8_t opCode);
 
         template<Registers::Names NAME>
-        std::string sub_r(uint8_t opCode);
-        std::string sub_HL(uint8_t opCode);
-        std::string sub_n(uint8_t opCode);
+        void sub_r(uint8_t opCode);
+        void sub_HL(uint8_t opCode);
+        void sub_n(uint8_t opCode);
         
         template<Registers::Names NAME>
-        std::string sbc_r(uint8_t opCode);
-        std::string sbc_HL(uint8_t opCode);
-        std::string sbc_n(uint8_t opCode);
+        void sbc_r(uint8_t opCode);
+        void sbc_HL(uint8_t opCode);
+        void sbc_n(uint8_t opCode);
 
         template<Registers::Names NAME>
-        std::string cp_r(uint8_t opCode);
-        std::string cp_HL(uint8_t opCode);
-        std::string cp_n(uint8_t opCode);
+        void cp_r(uint8_t opCode);
+        void cp_HL(uint8_t opCode);
+        void cp_n(uint8_t opCode);
 
         template<Registers::Names NAME>
-        std::string inc_r(uint8_t opCode);
-        std::string inc_HL(uint8_t opCode);
+        void inc_r(uint8_t opCode);
+        void inc_HL(uint8_t opCode);
 
         template<Registers::Names NAME>
-        std::string dec_r(uint8_t opCode);
-        std::string dec_HL(uint8_t opCode);
+        void dec_r(uint8_t opCode);
+        void dec_HL(uint8_t opCode);
 
         template<Registers::Names NAME>
-        std::string and_r(uint8_t opCode);
-        std::string and_HL(uint8_t opCode);
-        std::string and_n(uint8_t opCode);
+        void and_r(uint8_t opCode);
+        void and_HL(uint8_t opCode);
+        void and_n(uint8_t opCode);
 
         template<Registers::Names NAME>
-        std::string or_r(uint8_t opCode);
-        std::string or_HL(uint8_t opCode);
-        std::string or_n(uint8_t opCode);
+        void or_r(uint8_t opCode);
+        void or_HL(uint8_t opCode);
+        void or_n(uint8_t opCode);
 
         template<Registers::Names NAME>
-        std::string xor_r(uint8_t opCode);
-        std::string xor_HL(uint8_t opCode);
-        std::string xor_n(uint8_t opCode);
+        void xor_r(uint8_t opCode);
+        void xor_HL(uint8_t opCode);
+        void xor_n(uint8_t opCode);
 
-        std::string scf(uint8_t opCode);
-        std::string ccf(uint8_t opCode);
-        std::string cpl(uint8_t opCode);
-        std::string daa(uint8_t opCode);
+        void scf(uint8_t opCode);
+        void ccf(uint8_t opCode);
+        void cpl(uint8_t opCode);
+        void daa(uint8_t opCode);
 
         // 16-bit arithmetic
         template<Registers::Paired NAME>
-        std::string add_HL_rr(uint8_t opCode);
-        std::string add_HL_SP(uint8_t opCode);
-        std::string add_SP_n(uint8_t opCode);
+        void add_HL_rr(uint8_t opCode);
+        void add_HL_SP(uint8_t opCode);
+        void add_SP_n(uint8_t opCode);
         template<Registers::Paired NAME>
-        std::string inc_rr(uint8_t opCode);
-        std::string inc_SP(uint8_t opCode);
+        void inc_rr(uint8_t opCode);
+        void inc_SP(uint8_t opCode);
         template<Registers::Paired NAME>
-        std::string dec_rr(uint8_t opCode);
-        std::string dec_SP(uint8_t opCode);
+        void dec_rr(uint8_t opCode);
+        void dec_SP(uint8_t opCode);
 
         // Rotates and shifts
-        std::string rlca(uint8_t opCode);
+        void rlca(uint8_t opCode);
         template<Registers::Names NAME>
-        std::string rlc_r(uint8_t opCode);
-        std::string rlc_HL(uint8_t opCode);
+        void rlc_r(uint8_t opCode);
+        void rlc_HL(uint8_t opCode);
 
-        std::string rla(uint8_t opCode);
+        void rla(uint8_t opCode);
         template<Registers::Names NAME>
-        std::string rl_r(uint8_t opCode);
-        std::string rl_HL(uint8_t opCode);
+        void rl_r(uint8_t opCode);
+        void rl_HL(uint8_t opCode);
 
-        std::string rrca(uint8_t opCode);
+        void rrca(uint8_t opCode);
         template<Registers::Names NAME>
-        std::string rrc_r(uint8_t opCode);
-        std::string rrc_HL(uint8_t opCode);
+        void rrc_r(uint8_t opCode);
+        void rrc_HL(uint8_t opCode);
 
-        std::string rra(uint8_t opCode);
+        void rra(uint8_t opCode);
         template<Registers::Names NAME>
-        std::string rr_r(uint8_t opCode);
-        std::string rr_HL(uint8_t opCode);
-
-        template<Registers::Names NAME>
-        std::string sla_r(uint8_t opCode);
-        std::string sla_HL(uint8_t opCode);
+        void rr_r(uint8_t opCode);
+        void rr_HL(uint8_t opCode);
 
         template<Registers::Names NAME>
-        std::string sra_r(uint8_t opCode);
-        std::string sra_HL(uint8_t opCode);
+        void sla_r(uint8_t opCode);
+        void sla_HL(uint8_t opCode);
 
         template<Registers::Names NAME>
-        std::string swap_r(uint8_t opCode);
-        std::string swap_HL(uint8_t opCode);
+        void sra_r(uint8_t opCode);
+        void sra_HL(uint8_t opCode);
 
         template<Registers::Names NAME>
-        std::string srl_r(uint8_t opCode);
-        std::string srl_HL(uint8_t opCode);
+        void swap_r(uint8_t opCode);
+        void swap_HL(uint8_t opCode);
+
+        template<Registers::Names NAME>
+        void srl_r(uint8_t opCode);
+        void srl_HL(uint8_t opCode);
 
         // Single - bit Operation instructions
         template<uint8_t n, Registers::Names NAME>
-        std::string bit_n_r(uint8_t opCode);
+        void bit_n_r(uint8_t opCode);
         template<uint8_t n>
-        std::string bit_n_HL(uint8_t opCode);
+        void bit_n_HL(uint8_t opCode);
 
         template<uint8_t n, Registers::Names NAME>
-        std::string res_n_r(uint8_t opCode);
+        void res_n_r(uint8_t opCode);
         template<uint8_t n>
-        std::string res_n_HL(uint8_t opCode);
+        void res_n_HL(uint8_t opCode);
 
         template<uint8_t n, Registers::Names NAME>
-        std::string set_n_r(uint8_t opCode);
+        void set_n_r(uint8_t opCode);
         template<uint8_t n>
-        std::string set_n_HL(uint8_t opCode);
+        void set_n_HL(uint8_t opCode);
 
         // Control flow instructions
-        std::string jp_nn(uint8_t opCode);
-        std::string jp_HL(uint8_t opCode);
-        std::string jp_nz_nn(uint8_t opCode);
-        std::string jp_z_nn(uint8_t opCode);
-        std::string jp_nc_nn(uint8_t opCode);
-        std::string jp_c_nn(uint8_t opCode);
+        void jp_nn(uint8_t opCode);
+        void jp_HL(uint8_t opCode);
+        void jp_nz_nn(uint8_t opCode);
+        void jp_z_nn(uint8_t opCode);
+        void jp_nc_nn(uint8_t opCode);
+        void jp_c_nn(uint8_t opCode);
         
-        std::string jr_e(uint8_t opCode);
-        std::string jr_nz_n(uint8_t opCode);
-        std::string jr_z_n(uint8_t opCode);
-        std::string jr_nc_n(uint8_t opCode);
-        std::string jr_c_n(uint8_t opCode);
+        void jr_e(uint8_t opCode);
+        void jr_nz_n(uint8_t opCode);
+        void jr_z_n(uint8_t opCode);
+        void jr_nc_n(uint8_t opCode);
+        void jr_c_n(uint8_t opCode);
 
-        std::string call_nn(uint8_t opCode);
-        std::string call_nz_nn(uint8_t opCode);
-        std::string call_z_nn(uint8_t opCode);
-        std::string call_nc_nn(uint8_t opCode);
-        std::string call_c_nn(uint8_t opCode);
+        void call_nn(uint8_t opCode);
+        void call_nz_nn(uint8_t opCode);
+        void call_z_nn(uint8_t opCode);
+        void call_nc_nn(uint8_t opCode);
+        void call_c_nn(uint8_t opCode);
 
-        std::string ret(uint8_t opCode);
-        std::string ret_nz(uint8_t opCode);
-        std::string ret_z(uint8_t opCode);
-        std::string ret_nc(uint8_t opCode);
-        std::string ret_c(uint8_t opCode);
-        std::string reti(uint8_t opCode);
+        void ret(uint8_t opCode);
+        void ret_nz(uint8_t opCode);
+        void ret_z(uint8_t opCode);
+        void ret_nc(uint8_t opCode);
+        void ret_c(uint8_t opCode);
+        void reti(uint8_t opCode);
 
         template<uint8_t n>
-        std::string rst(uint8_t opCode);
+        void rst(uint8_t opCode);
 
-        std::string di(uint8_t opCode);
-        std::string ei(uint8_t opCode);
-        std::string halt(uint8_t opCode);
-        std::string stop(uint8_t opCode);
+        void di(uint8_t opCode);
+        void ei(uint8_t opCode);
+        void halt(uint8_t opCode);
+        void stop(uint8_t opCode);
     private:
         Registers& m_registers;
         Memory& m_memory;
