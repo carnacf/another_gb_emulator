@@ -101,9 +101,16 @@ private:
     void updateFlagsWithCarry8bit(int carryBits, uint8_t res, bool carryFlag, bool n)
     {
         bool h = (carryBits & 0x10) == 0x10;
-        bool c = carryFlag && ((carryBits & 0x100) == 0x100);
+        bool c = (carryBits & 0x100) == 0x100;
         
-        updateFlags(res, n, h, c);
+        m_registers.setFlag(Registers::Flag::Z, res == 0);
+        m_registers.setFlag(Registers::Flag::N, n);
+        m_registers.setFlag(Registers::Flag::H, h);
+        
+        if (carryFlag)
+        {
+            m_registers.setFlag(Registers::Flag::C, c);
+        }
     }
 
     void add(int a, int b);
